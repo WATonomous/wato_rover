@@ -7,83 +7,7 @@ from launch_ros.actions import Node
 import os
 
 def generate_launch_description():
-    ld = LaunchDescription() # Begin building a launch description
-
-    #################### Costmap Node #####################
-    costmap_pkg_prefix = get_package_share_directory('costmap')
-    costmap_param_file = os.path.join(
-        costmap_pkg_prefix, 'config', 'params.yaml')
-    
-    costmap_param = DeclareLaunchArgument(
-        'costmap_param_file',
-        default_value=costmap_param_file,
-        description='Path to config file for producer node'
-    )
-    costmap_node = Node(
-        package='costmap',
-        name='costmap_node',
-        executable='costmap_node',
-        parameters=[LaunchConfiguration('costmap_param_file')],
-    )
-    ld.add_action(costmap_param)
-    ld.add_action(costmap_node)
-
-    #################### Map Memory Node #####################
-    map_memory_pkg_prefix = get_package_share_directory('map_memory')
-    map_memory_param_file = os.path.join(
-        map_memory_pkg_prefix, 'config', 'params.yaml')
-    
-    map_memory_param = DeclareLaunchArgument(
-        'map_memory_param_file',
-        default_value=map_memory_param_file,
-        description='Path to config file for producer node'
-    )
-    map_memory_node = Node(
-        package='map_memory',
-        name='map_memory_node',
-        executable='map_memory_node',
-        parameters=[LaunchConfiguration('map_memory_param_file')],
-    )
-    ld.add_action(map_memory_param)
-    ld.add_action(map_memory_node)
-    
-    ##################### Planner Node #####################
-    planner_pkg_prefix = get_package_share_directory('planner')
-    planner_param_file = os.path.join(
-        planner_pkg_prefix, 'config', 'params.yaml')
-    
-    planner_param = DeclareLaunchArgument(
-        'planner_param_file',
-        default_value=planner_param_file,
-        description='Path to config file for producer node'
-    )
-    planner_node = Node(
-        package='planner',
-        name='planner_node',
-        executable='planner_node',
-        parameters=[LaunchConfiguration('planner_param_file')],
-    )
-    ld.add_action(planner_param)
-    ld.add_action(planner_node)
-    
-    ##################### Control Node #####################
-    control_pkg_prefix = get_package_share_directory('control')
-    control_param_file = os.path.join(
-        control_pkg_prefix, 'config', 'params.yaml')
-    
-    control_param = DeclareLaunchArgument(
-        'control_param_file',
-        default_value=control_param_file,
-        description='Path to config file for producer node'
-    )
-    control_node = Node(
-        package='control',
-        name='control_node',
-        executable='control_node',
-        parameters=[LaunchConfiguration('control_param_file')],
-    )
-    ld.add_action(control_param)
-    ld.add_action(control_node)
+    ld = LaunchDescription()  # Begin building a launch description
 
     #################### Odometry Spoof Node #####################
     odometry_spoof_node = Node(
@@ -92,5 +16,35 @@ def generate_launch_description():
         executable='odometry_spoof',
     )
     ld.add_action(odometry_spoof_node)
+
+    #################### RealSense D435 Node #####################
+    realsense_node = Node(
+        package='realsense2_camera',
+        executable='realsense2_camera_node',
+        name='realsense_d435',
+        output='screen',
+        parameters=[
+            {'serial_no': ''},  # Leave blank to use the first connected camera, or specify the serial number
+            {'usb_port_id': ''},  # Leave blank unless targeting a specific USB port
+            {'enable_pointcloud': True},  # Enable point cloud output
+            {'pointcloud_ordered': True},  # Ordered point cloud (optional, for better visualization)
+            {'depth_module.profile': '1280x720x30'},  # Depth stream: 1280x720 at 30 FPS
+            {'rgb_camera.profile': '640x480x30'},  # RGB stream: 640x480 at 30 FPS (optional)
+            {'enable_color': True},  # Enable RGB stream (optional)
+            {'enable_depth': True},  # Enable depth stream
+            {'align_depth.enable': True},  # Align depth to RGB (optional, affects point cloud)
+            {'base_frame_id': 'camera_link'},  # TF frame for the camera base
+            {'depth_frame_id': 'camera_depth_frame'},  # TF frame for depth
+            {'pointcloud_frame_id': 'camera_depth_frame'},  # TF frame for point cloud
+        ],
+        remappings=[
+            ('/pointcloud', '/realsense/depth/points'),  # Remap to match your simulation naming
+            ('/depth/image_rect_raw', '/realsense/depth/image'),  # Remap depth image
+            ('/color/image_raw', '/realsense/color/image'),  # Optional RGB image
+            ('/depth/camera_info', '/realsense/depth/camera_info'),  # Depth camera info
+            ('/color/camera_info', '/realsense/color/camera_info'),  # RGB camera info
+        ]
+    )
+    ld.add_action(realsense_node)
 
     return ld
