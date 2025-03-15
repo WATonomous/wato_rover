@@ -29,7 +29,7 @@ def generate_launch_description():
                    '/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
                    '/imu@sensor_msgs/msg/Imu@ignition.msgs.IMU',
                 #    '/lidar/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
-                   '/lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
+                #    '/lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
                    '/model/robot/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
                    '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
                    '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo'],
