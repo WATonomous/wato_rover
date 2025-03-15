@@ -31,8 +31,10 @@ def generate_launch_description():
                 #    '/lidar/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
                 #    '/lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
                    '/model/robot/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-                   '/camera@sensor_msgs/msg/Image@ignition.msgs.Image',
-                   '/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo'],
+                   '/realsense/depth/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',
+                   '/realsense/depth/image@sensor_msgs/msg/Image@ignition.msgs.Image',
+                   '/realsense/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo'
+                   ],
         parameters=[{'qos_overrides./model/vehicle_blue.subscriber.reliability': 'reliable'}],
         output='screen',
         remappings=[
