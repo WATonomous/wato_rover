@@ -11,6 +11,8 @@
     <depend>rclcpp</depend>
     <depend>realsense2_camera</depend>
     <depend>sensor_msgs</depend>
+    <depend>librealsense2</depend>
+
 
     <export>
         <build_type>ament_cmake</build_type>
