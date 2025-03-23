@@ -7,12 +7,7 @@ WORKDIR ${AMENT_WS}/src
 
 # Copy in source code 
 COPY src/robot/odometry_spoof odometry_spoof
-# COPY src/robot/costmap costmap
-# COPY src/robot/map_memory map_memory
-# COPY src/robot/planner planner
-# COPY src/robot/control control
 COPY src/robot/bringup_robot bringup_robot
-COPY src/robot/realsense realsense
 
 # Scan for rosdeps
 RUN apt-get -qq update && rosdep update && \
