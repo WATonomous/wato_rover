@@ -7,11 +7,8 @@ WORKDIR ${AMENT_WS}/src
 
 # Copy in source code 
 COPY src/robot/odometry_spoof odometry_spoof
-COPY src/robot/costmap costmap
-COPY src/robot/map_memory map_memory
-COPY src/robot/planner planner
-COPY src/robot/control control
 COPY src/robot/bringup_robot bringup_robot
+COPY src/robot/camera_fallback camera_fallback
 
 # Scan for rosdeps
 RUN apt-get -qq update && rosdep update && \
@@ -23,11 +20,12 @@ RUN apt-get -qq update && rosdep update && \
 ################################# Dependencies ################################
 FROM ${BASE_IMAGE} AS dependencies
 
-# ADD MORE DEPENDENCIES HERE
 
 # Install Rosdep requirements
 COPY --from=source /tmp/colcon_install_list /tmp/colcon_install_list
-RUN apt-fast install -qq -y --no-install-recommends $(cat /tmp/colcon_install_list)
+RUN apt-get -qq update && apt-fast install -qq -y --no-install-recommends $(cat /tmp/colcon_install_list) && \
+    # fallback that installs librealsense2 ROS packages if not in colcon_install_list
+    apt-get -qq install -y --no-install-recommends ros-humble-librealsense2* || true
 
 # Copy in source code from source stage
 WORKDIR ${AMENT_WS}
