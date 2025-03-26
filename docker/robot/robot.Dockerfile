@@ -8,6 +8,7 @@ WORKDIR ${AMENT_WS}/src
 # Copy in source code 
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/bringup_robot bringup_robot
+COPY src/robot/camera_fallback camera_fallback
 
 # Scan for rosdeps
 RUN apt-get -qq update && rosdep update && \

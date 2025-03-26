@@ -620,13 +620,13 @@
                 <pose>0.8 0 0.5 0 0 0</pose>
             </frame> -->
 
-            <frame name="depth_camera_frame" attached_to='chassis'>
+            <!-- Frame for the simulated depth camera -->
+            <frame name="sim_depth_camera_frame" attached_to='chassis'>
                 <pose>0.8 0 0.5 0 0 0</pose>
             </frame>
 
-            <frame name="depth_camera_optical_frame" attached_to='depth_camera_frame'>
-                <pose>0 0 0 -1.57 0 -1.57</pose> <!-- Optical frame convention: Z forward, X right, Y
-                down -->
+            <frame name="sim_depth_camera_optical_frame" attached_to='sim_depth_camera_frame'>
+                <pose>0 0 0 -1.57 0 -1.57</pose>
             </frame>
 
 
@@ -673,49 +673,18 @@
                     <visualize>true</visualize>
                     <topic>imu</topic>
                 </sensor>
-                <!-- <sensor name='lidar' type='gpu_lidar'>" <pose relative_to='lidar_frame'>0 0 0 0
-                0 0</pose>
-                    <topic>
-                    lidar</topic>
-                    <update_rate>10</update_rate>
-                    <ray>
-                        <scan>
-                            <horizontal>
-                                <samples>256</samples>
-                                <resolution>1</resolution>
-                                <min_angle>-3.14159</min_angle>
-                                <max_angle>3.14159</max_angle>
-                            </horizontal>
-                            <vertical>
-                                <samples>1</samples>
-                                <resolution>1</resolution>
-                                <min_angle>0</min_angle>
-                                <max_angle>0</max_angle>
-                            </vertical>
-                        </scan>
-                        <range>
-                            <min>0.08</min>
-                            <max>20.0</max>
-                            <resolution>0.01</resolution>
-                        </range>
-                    </ray>
-                    <alwaysOn>
-                    1</alwaysOn>
-                    <visualize>true</visualize>
-                </sensor> -->
+                
 
-                <sensor name="realsense_d435" type="rgbd_camera">
+                <!-- Simulated RealSense D435 -->
+                <sensor name="sim_realsense_d435" type="rgbd_camera">
                     <update_rate>15</update_rate>
                     <camera name="camera">
                         <horizontal_fov>1.0472</horizontal_fov>
                         <lens>
                             <intrinsics>
-                                <!-- fx = fy = width / ( 2 * tan (hfov / 2 ) ) -->
                                 <fx>554.25469</fx>
                                 <fy>554.25469</fy>
-                                <!-- cx = ( width + 1 ) / 2 -->
                                 <cx>320.5</cx>
-                                <!-- cy = ( height + 1 ) / 2 -->
                                 <cy>240.5</cy>
                                 <s>0</s>
                             </intrinsics>
@@ -742,7 +711,7 @@
                                 <near>0.1</near>
                                 <far>10</far>
                             </clip>
-                            <pointCloudTopicName>/realsense/depth/points</pointCloudTopicName>
+                            <pointCloudTopicName>/sim/realsense/depth/points</pointCloudTopicName>
                         </depth_camera>
                         <noise>
                             <type>gaussian</type>
@@ -750,7 +719,7 @@
                             <stddev>0.007</stddev>
                         </noise>
                     </camera>
-                    <topic>realsense/depth</topic>
+                    <topic>/sim/realsense/depth</topic>
                 </sensor>
 
             </link>

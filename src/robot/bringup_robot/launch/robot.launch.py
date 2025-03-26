@@ -33,4 +33,12 @@ def generate_launch_description():
     )
     ld.add_action(realsense_launch)
 
+    #################### Camera Fallback Node #####################
+    camera_fallback_node = Node(
+        package='camera_fallback',
+        name='camera_fallback_node',
+        executable='camera_fallback_node',
+    )
+    ld.add_action(camera_fallback_node)
+
     return ld
