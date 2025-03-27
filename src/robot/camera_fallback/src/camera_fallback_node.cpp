@@ -1,12 +1,14 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
+#include <tf2_ros/static_transform_broadcaster.h>
+#include <geometry_msgs/msg/transform_stamped.hpp>
 #include <chrono>
 
 class CameraFallbackNode : public rclcpp::Node
 {
 public:
   CameraFallbackNode()
-  : Node("camera_fallback_node"), use_real_camera_(false), last_real_msg_time_(0.0), timeout_(30.0)
+  : Node("camera_fallback_node"), use_real_camera_(false), last_real_msg_time_(0.0), timeout_(1.0)
   {
     // Publishers
     unified_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/camera/depth/points", 10);
@@ -23,6 +25,12 @@ public:
     timer_ = this->create_wall_timer(
       std::chrono::milliseconds(100),
       std::bind(&CameraFallbackNode::check_camera_activity, this));
+
+    // Static transform broadcaster
+    tf_broadcaster_ = std::make_shared<tf2_ros::StaticTransformBroadcaster>(this);
+
+    // Publish static transform from chassis to camera_link
+    publish_static_transform();
   }
 
 private:
@@ -51,10 +59,29 @@ private:
     }
   }
 
+  void publish_static_transform()
+  {
+    geometry_msgs::msg::TransformStamped transform;
+    transform.header.stamp = this->get_clock()->now();
+    transform.header.frame_id = "robot/chassis";
+    transform.child_frame_id = "camera_link";
+    transform.transform.translation.x = 0.8;
+    transform.transform.translation.y = 0.0;
+    transform.transform.translation.z = 0.5;
+    transform.transform.rotation.x = 0.0;
+    transform.transform.rotation.y = 0.0;
+    transform.transform.rotation.z = 0.0;
+    transform.transform.rotation.w = 1.0;
+
+    tf_broadcaster_->sendTransform(transform);
+    RCLCPP_INFO(this->get_logger(), "Published static transform from chassis to camera_link");
+  }
+
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr unified_pub_;
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr real_sub_;
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr sim_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
+  std::shared_ptr<tf2_ros::StaticTransformBroadcaster> tf_broadcaster_;
   bool use_real_camera_;
   double last_real_msg_time_;
   double timeout_;
