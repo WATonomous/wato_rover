@@ -9,6 +9,8 @@ WORKDIR ${AMENT_WS}/src
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/bringup_robot bringup_robot
 COPY src/robot/camera_fallback camera_fallback
+COPY src/robot/robot_navigation robot_navigation
+
 
 # Scan for rosdeps
 RUN apt-get -qq update && rosdep update && \

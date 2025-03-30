@@ -14,12 +14,12 @@
   <depend>realsense2_camera_msgs</depend>
   <depend>realsense2_description</depend>
   <depend>camera_fallback</depend>
+  <depend>robot_navigation</depend>
   <!-- <depend>rviz2</depend> -->
   <!-- <depend>costmap</depend>
   <depend>map_memory</depend>
   <depend>planner</depend>
   <depend>control</depend> -->
-
   <export>
     <build_type>ament_cmake</build_type>
   </export>

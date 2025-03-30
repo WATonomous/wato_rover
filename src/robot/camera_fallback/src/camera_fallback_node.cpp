@@ -63,6 +63,8 @@ private:
   {
     geometry_msgs::msg::TransformStamped transform;
     transform.header.stamp = this->get_clock()->now();
+    
+    // Transform from chassis to camera_link (already present)
     transform.header.frame_id = "robot/chassis";
     transform.child_frame_id = "camera_link";
     transform.transform.translation.x = 0.8;
@@ -72,9 +74,21 @@ private:
     transform.transform.rotation.y = 0.0;
     transform.transform.rotation.z = 0.0;
     transform.transform.rotation.w = 1.0;
-
     tf_broadcaster_->sendTransform(transform);
-    RCLCPP_INFO(this->get_logger(), "Published static transform from chassis to camera_link");
+
+    // Transform from chassis to imu_link
+    transform.header.frame_id = "robot/chassis";
+    transform.child_frame_id = "imu_link";
+    transform.transform.translation.x = 0.0;  // Adjust these values based on your robot's geometry
+    transform.transform.translation.y = 0.0;
+    transform.transform.translation.z = 0.0;
+    transform.transform.rotation.x = 0.0;
+    transform.transform.rotation.y = 0.0;
+    transform.transform.rotation.z = 0.0;
+    transform.transform.rotation.w = 1.0;
+    tf_broadcaster_->sendTransform(transform);
+
+    RCLCPP_INFO(this->get_logger(), "Published static transforms from chassis to camera_link and imu_link");
   }
 
   rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr unified_pub_;

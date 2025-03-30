@@ -672,6 +672,7 @@
                     <update_rate>1</update_rate>
                     <visualize>true</visualize>
                     <topic>imu</topic>
+                    <frame_name>imu_link</frame_name>
                 </sensor>
                 
 

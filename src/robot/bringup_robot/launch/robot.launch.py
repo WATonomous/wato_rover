@@ -42,4 +42,13 @@ def generate_launch_description():
     )
     ld.add_action(camera_fallback_node)
 
+
+    #################### Navigation node #####################
+    navigation_node = Node(
+        package='camera_fallback',
+        name='navigation_node',
+        executable='navigation_node',
+    )
+    ld.add_action(navigation_node)
+
     return ld

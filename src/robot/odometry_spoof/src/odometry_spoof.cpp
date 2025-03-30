@@ -24,7 +24,7 @@ void OdometrySpoofNode::timerCallback() {
     // We'll look up the transform from sim_world -> robot/chassis/lidar,
     // note robot frame is usually not the lidar sensor, but we do so to make
     // this assignment easier
-    const std::string target_frame = "robot/chassis";
+    const std::string target_frame = "imu_link";
     const std::string source_frame = "sim_world";
 
     geometry_msgs::msg::TransformStamped transform_stamped;
