@@ -21,7 +21,7 @@ public:
 
     // Timer to check real camera activity
     timer_ = this->create_wall_timer(
-      std::chrono::milliseconds(100),
+      std::chrono::milliseconds(120000),
       std::bind(&CameraFallbackNode::check_camera_activity, this));
   }
 
