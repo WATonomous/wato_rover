@@ -723,7 +723,8 @@
                 </sensor>
 
 
-            </link>
+            </link><!--chassis
+            link -->
 
             <!--let's
             build the left wheel-->
@@ -829,9 +830,9 @@
                         </sphere>
                     </geometry>
                     <material>
-                        <ambient>0.0 1 0.0 1</ambient>
-                        <diffuse>0.0 1 0.0 1</diffuse>
-                        <specular>0.0 1 0.0 1</specular>
+                        <ambient>1.0 0.0 0.0 1</ambient>
+                        <diffuse>1.0 0.0 0.0 1</diffuse>
+                        <specular>1.0 0.0 0.0 1</specular>
                     </material>
                 </visual>
                 <collision name='collision'>
