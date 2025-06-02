@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<robot name="mars_environment">
+
+  <link name="sim_world"/>
+
+  <joint name="boulder1_joint" type="fixed">
+    <parent link="sim_world"/>
+    <child link="boulder1_link"/>
+    <origin xyz="3 2 0"/>
+  </joint>
+  <link name="boulder1_link">
+    <visual>
+      <geometry>
+        <cylinder radius="1.0" length="1.0"/>
+      </geometry>
+      <material name="mars_brown">
+        <color rgba="0.6 0.3 0.2 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="boulder2_joint" type="fixed">
+    <parent link="sim_world"/>
+    <child link="boulder2_link"/>
+    <origin xyz="-4 -2 0"/>
+  </joint>
+  <link name="boulder2_link">
+    <visual>
+      <geometry>
+        <sphere radius="1.2"/>
+      </geometry>
+      <material name="mars_reddish">
+        <color rgba="0.7 0.4 0.2 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="boulder3_joint" type="fixed">
+    <parent link="sim_world"/>
+    <child link="boulder3_link"/>
+    <origin xyz="0 -5 0"/>
+  </joint>
+  <link name="boulder3_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.8" length="0.5"/>
+      </geometry>
+      <material name="mars_dark">
+        <color rgba="0.4 0.2 0.1 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="boulder4_joint" type="fixed">
+    <parent link="sim_world"/>
+    <child link="boulder4_link"/>
+    <origin xyz="5 -3 0"/>
+  </joint>
+  <link name="boulder4_link">
+    <visual>
+      <geometry>
+        <sphere radius="0.9"/>
+      </geometry>
+      <material name="mars_brown"/>
+    </visual>
+  </link>
+
+  <joint name="boulder5_joint" type="fixed">
+    <parent link="sim_world"/>
+    <child link="boulder5_link"/>
+    <origin xyz="-3 4 0"/>
+  </joint>
+  <link name="boulder5_link">
+    <visual>
+      <geometry>
+        <cylinder radius="1.1" length="0.7"/>
+      </geometry>
+      <material name="mars_reddish"/>
+    </visual>
+  </link>
+
+</robot>

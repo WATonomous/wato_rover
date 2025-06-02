@@ -1,0 +1,512 @@
+{
+  "configById": {
+    "RawMessages!r2z55s": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/camera/depth/points",
+      "fontSize": 12
+    },
+    "3D!185ho2t": {
+      "cameraState": {
+        "perspective": true,
+        "distance": 38.96037486732765,
+        "phi": 18.78104903386726,
+        "thetaOffset": 93.99607673170378,
+        "targetOffset": [
+          -2.294411885459279,
+          -2.322301950195235,
+          0.9171607980147721
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "followTf": "sim_world",
+      "scene": {
+        "enableStats": false,
+        "ignoreColladaUpAxis": false,
+        "transforms": {
+          "editable": true
+        }
+      },
+      "transforms": {
+        "frame:robot/right_wheel": {
+          "visible": false
+        },
+        "frame:robot/left_wheel": {
+          "visible": false
+        },
+        "frame:robot/chassis/imu_sensor": {
+          "visible": false
+        },
+        "frame:robot/caster": {
+          "visible": true
+        },
+        "frame:robot/chassis/camera": {
+          "visible": true
+        },
+        "frame:cyl2": {
+          "visible": false
+        },
+        "frame:cyl1": {
+          "visible": false
+        },
+        "frame:box5": {
+          "visible": false
+        },
+        "frame:box4": {
+          "visible": false
+        },
+        "frame:box3": {
+          "visible": false
+        },
+        "frame:box2": {
+          "visible": false
+        },
+        "frame:box1": {
+          "visible": false
+        },
+        "frame:sim_world": {
+          "visible": true
+        },
+        "frame:robot/chassis/sim_realsense_d435_color": {
+          "visible": true
+        },
+        "frame:robot/chassis/sim_realsense_d435_2_color": {
+          "visible": true
+        },
+        "frame:robot/chassis/sim_realsense_d435_1_color": {
+          "visible": true,
+          "rpyCoefficient": [
+            0,
+            0,
+            0
+          ],
+          "xyzOffset": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "topics": {
+        "/lidar": {
+          "visible": true,
+          "colorField": "range",
+          "colorMode": "gradient",
+          "colorMap": "turbo",
+          "pointSize": 13.66,
+          "gradient": [
+            "#c41212ff",
+            "#36ff00ff"
+          ],
+          "pointShape": "circle"
+        },
+        "/lidar/points": {
+          "visible": true,
+          "colorField": "ring",
+          "colorMode": "gradient",
+          "colorMap": "turbo",
+          "pointSize": 9,
+          "pointShape": "circle",
+          "gradient": [
+            "rgba(100, 47, 105, 1)",
+            "#718ab7ff"
+          ]
+        },
+        "/camera": {
+          "visible": false
+        },
+        "/occupancy": {
+          "visible": false,
+          "colorMode": "costmap"
+        },
+        "/path_marker": {
+          "visible": false,
+          "color": "#ff000073",
+          "showOutlines": true
+        },
+        "/map": {
+          "visible": true,
+          "colorMode": "costmap",
+          "alpha": 0.5016
+        },
+        "/costmap": {
+          "visible": true,
+          "colorMode": "costmap",
+          "alpha": 1
+        },
+        "/path": {
+          "visible": true,
+          "gradient": [
+            "#90ff6bff",
+            "#eeff6b80"
+          ]
+        },
+        "/camera/camera/depth/color/points": {
+          "visible": false
+        },
+        "/sim/realsense/depth/points": {
+          "visible": true,
+          "colorField": "rgb",
+          "colorMode": "rgb",
+          "colorMap": "turbo"
+        },
+        "/sim/realsense/depth/image": {
+          "visible": false,
+          "frameLocked": true,
+          "cameraInfoTopic": "/sim/realsense/depth/camera_info",
+          "distance": 1,
+          "planarProjectionFactor": 0,
+          "color": "#ffffff"
+        },
+        "/camera/depth/points": {
+          "visible": false,
+          "colorField": "rgb",
+          "colorMode": "rgb",
+          "colorMap": "turbo"
+        },
+        "/goal_pose": {
+          "visible": true
+        },
+        "/sim/realsense2/depth/image": {
+          "visible": false,
+          "frameLocked": true,
+          "cameraInfoTopic": "/sim/realsense2/depth/camera_info",
+          "distance": 1,
+          "planarProjectionFactor": 0,
+          "color": "#ffffff"
+        },
+        "/sim/realsense1/depth/points": {
+          "visible": true,
+          "colorField": "rgb",
+          "colorMode": "rgb",
+          "colorMap": "turbo"
+        },
+        "/sim/realsense2/depth/points": {
+          "visible": true,
+          "colorField": "rgb",
+          "colorMode": "rgb",
+          "colorMap": "turbo"
+        },
+        "/sim/realsense2/depth/camera_info": {
+          "visible": false
+        }
+      },
+      "layers": {
+        "9e830917-d6fe-4f25-8e7b-25afa5a47d21": {
+          "visible": true,
+          "frameLocked": true,
+          "label": "URDF",
+          "instanceId": "9e830917-d6fe-4f25-8e7b-25afa5a47d21",
+          "layerId": "foxglove.Urdf",
+          "sourceType": "url",
+          "url": "https://raw.githubusercontent.com/WATonomous/wato_asd_training/refs/heads/main/src/gazebo/launch/robot.urdf",
+          "filePath": "",
+          "parameter": "",
+          "topic": "",
+          "framePrefix": "",
+          "displayMode": "auto",
+          "fallbackColor": "#ffffff",
+          "order": 1
+        },
+        "6387c3f4-066a-4fb9-a043-d9bbb06d4697": {
+          "visible": true,
+          "frameLocked": true,
+          "label": "Grid",
+          "instanceId": "6387c3f4-066a-4fb9-a043-d9bbb06d4697",
+          "layerId": "foxglove.Grid",
+          "divisions": 30,
+          "color": "#ff7f24ff",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "order": 2,
+          "size": 30,
+          "lineWidth": 1
+        },
+        "cadf14d8-072e-4af6-8fd0-60bf81d00399": {
+          "visible": true,
+          "frameLocked": true,
+          "label": "URDF",
+          "instanceId": "cadf14d8-072e-4af6-8fd0-60bf81d00399",
+          "layerId": "foxglove.Urdf",
+          "sourceType": "url",
+          "url": "https://raw.githubusercontent.com/WATonomous/wato_asd_training/refs/heads/main/src/gazebo/launch/env.urdf",
+          "filePath": "",
+          "parameter": "",
+          "topic": "",
+          "framePrefix": "",
+          "displayMode": "auto",
+          "fallbackColor": "#454545",
+          "order": 3
+        },
+        "cfe20e67-fff3-481a-9a11-76c83d4106e3": {
+          "displayMode": "auto",
+          "fallbackColor": "#ffffff",
+          "showAxis": false,
+          "axisScale": 1,
+          "showOutlines": true,
+          "opacity": 1,
+          "visible": false,
+          "frameLocked": true,
+          "instanceId": "cfe20e67-fff3-481a-9a11-76c83d4106e3",
+          "label": "URDF",
+          "layerId": "foxglove.Urdf",
+          "sourceType": "url",
+          "url": "https://raw.githubusercontent.com/WATonomous/wato_rover/add-second-sim-camera/src/gazebo/launch/mars_env.urdf",
+          "filePath": "",
+          "parameter": "",
+          "topic": "",
+          "framePrefix": "",
+          "order": 4
+        }
+      },
+      "publish": {
+        "type": "point",
+        "poseTopic": "/goal_pose",
+        "pointTopic": "/goal_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {}
+    },
+    "3D!xzfbk4": {
+      "cameraState": {
+        "perspective": true,
+        "distance": 25.847108697932068,
+        "phi": 43.38824250791747,
+        "thetaOffset": -108.39546367026085,
+        "targetOffset": [
+          -0.5258667723080778,
+          7.000488013308792,
+          5.948721209171829e-16
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {
+        "transforms": {
+          "editable": true,
+          "enablePreloading": true,
+          "visible": true,
+          "showLabel": true
+        }
+      },
+      "transforms": {
+        "frame:robot/caster": {
+          "visible": true
+        },
+        "frame:sim_world": {
+          "visible": true
+        },
+        "frame:robot": {
+          "visible": true
+        },
+        "frame:robot/chassis": {
+          "visible": true
+        },
+        "frame:robot/chassis/imu_sensor": {
+          "visible": true
+        },
+        "frame:robot/chassis/sim_realsense_d435_color": {
+          "visible": true
+        },
+        "frame:robot/left_wheel": {
+          "visible": true
+        },
+        "frame:robot/right_wheel": {
+          "visible": true
+        },
+        "frame:robot/chassis/sim_realsense_d435_1_color": {
+          "visible": true
+        },
+        "frame:robot/chassis/sim_realsense_d435_2_color": {
+          "visible": true
+        }
+      },
+      "topics": {
+        "/camera/camera/depth/color/points": {
+          "visible": false
+        },
+        "/camera/depth/points": {
+          "visible": true,
+          "colorField": "rgb",
+          "colorMode": "rgb",
+          "colorMap": "turbo"
+        },
+        "/sim/realsense/depth/points": {
+          "visible": true,
+          "colorField": "rgb",
+          "colorMode": "rgb",
+          "colorMap": "turbo"
+        },
+        "/sim/realsense2/depth/points": {
+          "visible": true,
+          "colorField": "rgb",
+          "colorMode": "rgb",
+          "colorMap": "turbo"
+        }
+      },
+      "layers": {
+        "grid": {
+          "visible": true,
+          "frameLocked": true,
+          "label": "Grid",
+          "instanceId": "955c5c51-01ee-4270-ac7b-df2de3e0cfba",
+          "layerId": "foxglove.Grid",
+          "size": 30,
+          "divisions": 30,
+          "lineWidth": 1,
+          "color": "#248eff",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {}
+    },
+    "Teleop!1rfn0xj": {
+      "topic": "/cmd_vel",
+      "publishRate": 1,
+      "upButton": {
+        "field": "linear-x",
+        "value": 1
+      },
+      "downButton": {
+        "field": "linear-x",
+        "value": 0
+      },
+      "leftButton": {
+        "field": "angular-z",
+        "value": 1
+      },
+      "rightButton": {
+        "field": "angular-z",
+        "value": -1
+      }
+    },
+    "Image!2c95gcu": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": 45,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/sim/realsense1/depth/image",
+        "calibrationTopic": "/sim/realsense1/depth/camera_info"
+      }
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "first": "RawMessages!r2z55s",
+    "second": {
+      "first": {
+        "first": "3D!185ho2t",
+        "second": "3D!xzfbk4",
+        "direction": "column",
+        "splitPercentage": 55.543595263724434
+      },
+      "second": {
+        "first": "Teleop!1rfn0xj",
+        "second": "Image!2c95gcu",
+        "direction": "column"
+      },
+      "direction": "row",
+      "splitPercentage": 63.34763948497854
+    },
+    "direction": "row",
+    "splitPercentage": 25.272610647851184
+  }
+}

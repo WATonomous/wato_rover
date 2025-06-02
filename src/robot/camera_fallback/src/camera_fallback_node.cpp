@@ -16,12 +16,12 @@ public:
       "/camera/camera/depth/color/points", 10,
       std::bind(&CameraFallbackNode::real_callback, this, std::placeholders::_1));
     sim_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-      "/sim/realsense/depth/points", 10,
+      "/sim/realsense1/depth/points", 10,
       std::bind(&CameraFallbackNode::sim_callback, this, std::placeholders::_1));
 
     // Timer to check real camera activity
     timer_ = this->create_wall_timer(
-      std::chrono::milliseconds(100),
+      std::chrono::milliseconds(120000),
       std::bind(&CameraFallbackNode::check_camera_activity, this));
   }
 

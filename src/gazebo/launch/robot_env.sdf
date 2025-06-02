@@ -621,13 +621,17 @@
             </frame> -->
 
             <!-- Frame for the simulated depth camera -->
-            <frame name="sim_depth_camera_frame" attached_to='chassis'>
-                <pose>0.8 0 0.5 0 0 0</pose>
+            <frame name="sim_depth_camera_1_frame" attached_to='chassis'>
+                <pose>0.5 0.2 0.5 0 0 0.383</pose>
             </frame>
 
-            <frame name="sim_depth_camera_optical_frame" attached_to='sim_depth_camera_frame'>
-                <pose>0 0 0 -1.57 0 -1.57</pose>
+            <frame name="sim_depth_camera_2_frame" attached_to='chassis'>
+                <pose>0.5 -0.2 0.5 0 0 -0.383</pose>
             </frame>
+
+            <!-- <frame name="sim_depth_camera_optical_frame" attached_to='sim_depth_camera_frame'>
+                <pose>0 0 0 -1.57 0 -1.57</pose>
+            </frame> -->
 
 
             <link name='chassis'>
@@ -673,19 +677,25 @@
                     <visualize>true</visualize>
                     <topic>imu</topic>
                 </sensor>
-                
+
 
                 <!-- Simulated RealSense D435 -->
-                <sensor name="sim_realsense_d435" type="rgbd_camera">
-                    <update_rate>15</update_rate>
-                    <camera name="camera">
-                        <horizontal_fov>1.0472</horizontal_fov>
+                <sensor name="sim_realsense_d435_1_color" type="rgbd_camera">
+                    <pose relative_to="sim_depth_camera_1_frame">0 0 0 0 0 0</pose>
+                    <update_rate>30</update_rate>
+                    <camera name="color_camera">
+                        <horizontal_fov>0.9686</horizontal_fov>
+                        <image>
+                            <width>320</width>
+                            <height>240</height>
+                            <format>R8G8B8</format>
+                        </image>
                         <lens>
                             <intrinsics>
-                                <fx>554.25469</fx>
-                                <fy>554.25469</fy>
-                                <cx>320.5</cx>
-                                <cy>240.5</cy>
+                                <fx>303.9691</fx>
+                                <fy>303.7607</fy>
+                                <cx>163.6526</cx>
+                                <cy>119.2695</cy>
                                 <s>0</s>
                             </intrinsics>
                         </lens>
@@ -697,21 +707,16 @@
                             <p2>0.0</p2>
                             <center>0.5 0.5</center>
                         </distortion>
-                        <image>
-                            <width>640</width>
-                            <height>480</height>
-                            <format>R8G8B8</format>
-                        </image>
                         <clip>
-                            <near>0.01</near>
-                            <far>300</far>
+                            <near>0.1</near>
+                            <far>100</far>
                         </clip>
                         <depth_camera>
-                            <clip>
+                            <!-- <clip>
                                 <near>0.1</near>
                                 <far>10</far>
                             </clip>
-                            <pointCloudTopicName>/sim/realsense/depth/points</pointCloudTopicName>
+                            <pointCloudTopicName>/sim/realsense1/depth/points</pointCloudTopicName> -->
                         </depth_camera>
                         <noise>
                             <type>gaussian</type>
@@ -719,10 +724,58 @@
                             <stddev>0.007</stddev>
                         </noise>
                     </camera>
-                    <topic>/sim/realsense/depth</topic>
+                    <topic>/sim/realsense1/depth</topic>
                 </sensor>
 
-            </link>
+                <sensor name="sim_realsense_d435_2_color" type="rgbd_camera">
+                    <pose relative_to="sim_depth_camera_2_frame">0 0 0 0 0 0</pose>
+                    <update_rate>30</update_rate>
+                    <camera name="color_camera">
+                        <horizontal_fov>0.9686</horizontal_fov>
+                        <image>
+                            <width>320</width>
+                            <height>240</height>
+                            <format>R8G8B8</format>
+                        </image>
+                        <lens>
+                            <intrinsics>
+                                <fx>303.9691</fx>
+                                <fy>303.7607</fy>
+                                <cx>163.6526</cx>
+                                <cy>119.2695</cy>
+                                <s>0</s>
+                            </intrinsics>
+                        </lens>
+                        <distortion>
+                            <k1>0.0</k1>
+                            <k2>0.0</k2>
+                            <k3>0.0</k3>
+                            <p1>0.0</p1>
+                            <p2>0.0</p2>
+                            <center>0.5 0.5</center>
+                        </distortion>
+                        <clip>
+                            <near>0.1</near>
+                            <far>100</far>
+                        </clip>
+                        <depth_camera>
+                            <!-- <clip>
+                                <near>0.1</near>
+                                <far>10</far>
+                            </clip> -->
+                        </depth_camera>
+                        <noise>
+                            <type>gaussian</type>
+                            <mean>0</mean>
+                            <stddev>0.007</stddev>
+                        </noise>
+                    </camera>
+                    <topic>/sim/realsense2/depth</topic>
+                </sensor>
+
+
+            </link><!--chassis
+            link -->
 
             <!--let's
             build the left wheel-->
@@ -828,9 +881,9 @@
                         </sphere>
                     </geometry>
                     <material>
-                        <ambient>0.0 1 0.0 1</ambient>
-                        <diffuse>0.0 1 0.0 1</diffuse>
-                        <specular>0.0 1 0.0 1</specular>
+                        <ambient>1.0 0.0 0.0 1</ambient>
+                        <diffuse>1.0 0.0 0.0 1</diffuse>
+                        <specular>1.0 0.0 0.0 1</specular>
                     </material>
                 </visual>
                 <collision name='collision'>
