@@ -11,13 +11,13 @@
     "3D!185ho2t": {
       "cameraState": {
         "perspective": true,
-        "distance": 38.96037486732765,
-        "phi": 18.78104903386726,
-        "thetaOffset": 93.99607673170378,
+        "distance": 28.639455620673164,
+        "phi": 18.830087786132676,
+        "thetaOffset": 143.10881232903213,
         "targetOffset": [
-          -2.294411885459279,
-          -2.322301950195235,
-          0.9171607980147721
+          -3.406009427188918,
+          1.3537424176444015,
+          0.9171607980147727
         ],
         "target": [
           0,
@@ -269,13 +269,13 @@
           "axisScale": 1,
           "showOutlines": true,
           "opacity": 1,
-          "visible": false,
+          "visible": true,
           "frameLocked": true,
           "instanceId": "cfe20e67-fff3-481a-9a11-76c83d4106e3",
           "label": "URDF",
           "layerId": "foxglove.Urdf",
           "sourceType": "url",
-          "url": "https://raw.githubusercontent.com/WATonomous/wato_rover/add-second-sim-camera/src/gazebo/launch/mars_env.urdf",
+          "url": "https://raw.githubusercontent.com/WATonomous/wato_rover/environment-terrain/src/gazebo/launch/mars_env.urdf",
           "filePath": "",
           "parameter": "",
           "topic": "",
@@ -297,13 +297,13 @@
     "3D!xzfbk4": {
       "cameraState": {
         "perspective": true,
-        "distance": 25.847108697932068,
-        "phi": 43.38824250791747,
-        "thetaOffset": -108.39546367026085,
+        "distance": 11.376001845500813,
+        "phi": 43.38824250791778,
+        "thetaOffset": -108.39546367026087,
         "targetOffset": [
-          -0.5258667723080778,
-          7.000488013308792,
-          5.948721209171829e-16
+          -3.8330732359231585,
+          3.848382127936893,
+          6.958865714122545e-16
         ],
         "target": [
           0,
