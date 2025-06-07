@@ -12,9 +12,9 @@ class ArcadeDriver : public rclcpp::Node {
 
   private:
     rclcpp::Subscription<geometry_msgs::msg::TwistStamped>::SharedPtr joystick_sub_;
-    rclcpp::Publishe<motor_controller::msg::ArcadeSpeed>::SharedPtr arcade_pub_;
+    rclcpp::Publisher<drivetrain_msgs::msg::ArcadeSpeed>::SharedPtr arcade_pub_;
 
-    motor_controller::msg::ArcadeSpeed joystick_to_speed_mapper(const float joystick_rotate, const float joystick_drive);
+    drivetrain_msgs::msg::ArcadeSpeed joystick_to_speed_mapper(const float joystick_rotate, const float joystick_drive);
     void joystick_callback(const geometry_msgs::msg::TwistStamped::SharedPtr msg);
     bool is_negligible_joystick_change(const float new_joystick_rotate, const float new_joystick_drive);
     const float THRESHOLD = 0.05;

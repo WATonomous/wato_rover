@@ -5,11 +5,11 @@ using namespace std::placeholders;
 
 ArcadeDriver::ArcadeDriver() : Node("arcade_driver") {
     // Create publisher for joystick messages
-    joystick_sub = this->create_subscription<geometry_msgs::msg::TwistStamped>(
+    joystick_sub_ = this->create_subscription<geometry_msgs::msg::TwistStamped>(
         "/cmd_vel", 10,
         std::bind(&ArcadeDriver::joystick_callback, this, _1));
         
-    arcade_pub = this->create_publisher<motor_controller::msg::ArcadeSpeed>(
+    arcade_pub_ = this->create_publisher<drivetrain_msgs::msg::ArcadeSpeed>(
         "/arcade_speed", 10);
 }
 
@@ -22,10 +22,10 @@ bool ArcadeDriver::is_negligible_joystick_change(const float new_joystick_rotate
 
 void ArcadeDriver::joystick_callback(const geometry_msgs::msg::TwistStamped::SharedPtr msg) {
 	// Ignore Twist msg if component is inactive
-	if (this->get_current_state().id() != lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE) {
-		RCLCPP_WARN(get_logger(), "Received twist message while not active, ignoring...");
-		return;
-	}
+	// if (this->get_current_state().id() != lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE) {
+	// 	RCLCPP_WARN(get_logger(), "Received twist message while not active, ignoring...");
+	// 	return;
+	// }
 
 	RCLCPP_INFO(get_logger(), "Received Twist message - linear.x: %.2f, angular.z: %.2f",
 				msg->twist.linear.x, msg->twist.angular.z);
@@ -38,13 +38,13 @@ void ArcadeDriver::joystick_callback(const geometry_msgs::msg::TwistStamped::Sha
 		return;
 	}
 
-	motor_controller::msg::ArcadeSpeed arcade_msg = ArcadeDriver::joystick_to_speed_mapper(joystick_rotate, joystick_drive);
+	drivetrain_msgs::msg::ArcadeSpeed arcade_msg = ArcadeDriver::joystick_to_speed_mapper(joystick_rotate, joystick_drive);
 	RCLCPP_INFO(get_logger(), "Publishing ArcadeSpeed - left: %.2f, right: %.2f",
 				arcade_msg.l, arcade_msg.r);
-	arcade_pub->publish(std::move(arcade_msg));
+	arcade_pub_->publish(std::move(arcade_msg));
 }
 
-motor_controller::msg::ArcadeSpeed ArcadeDriver::joystick_to_speed_mapper(const float joystick_rotate, const float joystick_drive) {
+drivetrain_msgs::msg::ArcadeSpeed ArcadeDriver::joystick_to_speed_mapper(const float joystick_rotate, const float joystick_drive) {
 	const float MAX = fmax(fabs(joystick_drive), fabs(joystick_rotate));
 	const float DIFF = joystick_drive - joystick_rotate;
 	const float TOTAL = joystick_drive + joystick_rotate;
@@ -92,7 +92,7 @@ motor_controller::msg::ArcadeSpeed ArcadeDriver::joystick_to_speed_mapper(const 
 
 	RCLCPP_INFO(rclcpp::get_logger("ArcadeDriver"), "joystick: x=%.2f, y=%.2f, speed: l=%.2f, r=%.2f", joystick_rotate, joystick_drive, left_motor, right_motor);
 
-	auto arcade_msg = motor_controller::msg::ArcadeSpeed();
+	auto arcade_msg = drivetrain_msgs::msg::ArcadeSpeed();
 	arcade_msg.l = left_motor;
 	arcade_msg.r = right_motor;
 	return arcade_msg;

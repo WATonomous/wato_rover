@@ -15,7 +15,8 @@ find_package(std_msgs REQUIRED)
 
 set(msg_files
     msg/ArcadeSpeed.msg)
-rosidl_generate_interfaces(sample_msgs
+
+rosidl_generate_interfaces(drivetrain_msgs
     ${msg_files}
     DEPENDENCIES std_msgs)
 

@@ -10,6 +10,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>odometry_spoof</depend>
+  <depend>arcade_driver</depend>
   <depend>realsense2_camera</depend>
   <depend>realsense2_camera_msgs</depend>
   <depend>realsense2_description</depend>

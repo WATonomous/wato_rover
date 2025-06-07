@@ -9,6 +9,7 @@ WORKDIR ${AMENT_WS}/src
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/bringup_robot bringup_robot
 COPY src/robot/camera_fallback camera_fallback
+COPY src/robot/arcade_driver arcade_driver
 COPY src/wato_msgs/drivetrain_msgs drivetrain_msgs
 
 
