@@ -246,22 +246,6 @@
           "size": 30,
           "lineWidth": 1
         },
-        "cadf14d8-072e-4af6-8fd0-60bf81d00399": {
-          "visible": true,
-          "frameLocked": true,
-          "label": "URDF",
-          "instanceId": "cadf14d8-072e-4af6-8fd0-60bf81d00399",
-          "layerId": "foxglove.Urdf",
-          "sourceType": "url",
-          "url": "https://raw.githubusercontent.com/WATonomous/wato_asd_training/refs/heads/main/src/gazebo/launch/env.urdf",
-          "filePath": "",
-          "parameter": "",
-          "topic": "",
-          "framePrefix": "",
-          "displayMode": "auto",
-          "fallbackColor": "#454545",
-          "order": 3
-        },
         "cfe20e67-fff3-481a-9a11-76c83d4106e3": {
           "displayMode": "auto",
           "fallbackColor": "#ffffff",
