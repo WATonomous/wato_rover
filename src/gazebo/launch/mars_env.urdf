@@ -13,7 +13,7 @@
 <link name="desert">
     <visual>
         <geometry>
-            <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/environment-terrain/src/gazebo/launch/mars.stl" scale="0.1 0.1 0.1"/>
+            <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/master/src/gazebo/launch/mars.stl" scale="0.1 0.1 0.1"/>
         </geometry>
         <material name="beige_brown">
             <color rgba="0.76 0.60 0.42 1"/>
@@ -23,7 +23,7 @@
     <collision>
         <origin xyz="0 0 0" rpy="1.5708 3.1416 0"/>
         <geometry>
-            <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/environment-terrain/src/gazebo/launch/mars.stl" scale="0.1 0.1 0.1"/>
+            <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/master/src/gazebo/launch/mars.stl" scale="0.1 0.1 0.1"/>
         </geometry>
     </collision>
 </link>
