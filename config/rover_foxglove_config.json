@@ -11,13 +11,13 @@
     "3D!185ho2t": {
       "cameraState": {
         "perspective": true,
-        "distance": 38.96037486732765,
-        "phi": 18.78104903386726,
-        "thetaOffset": 93.99607673170378,
+        "distance": 28.639455620673164,
+        "phi": 18.830087786132676,
+        "thetaOffset": 143.10881232903213,
         "targetOffset": [
-          -2.294411885459279,
-          -2.322301950195235,
-          0.9171607980147721
+          -3.406009427188918,
+          1.3537424176444015,
+          0.9171607980147727
         ],
         "target": [
           0,
@@ -215,7 +215,7 @@
           "instanceId": "9e830917-d6fe-4f25-8e7b-25afa5a47d21",
           "layerId": "foxglove.Urdf",
           "sourceType": "url",
-          "url": "https://raw.githubusercontent.com/WATonomous/wato_asd_training/refs/heads/main/src/gazebo/launch/robot.urdf",
+          "url": "https://raw.githubusercontent.com/WATonomous/wato_rover/master/src/gazebo/launch/robot.urdf",
           "filePath": "",
           "parameter": "",
           "topic": "",
@@ -246,22 +246,6 @@
           "size": 30,
           "lineWidth": 1
         },
-        "cadf14d8-072e-4af6-8fd0-60bf81d00399": {
-          "visible": true,
-          "frameLocked": true,
-          "label": "URDF",
-          "instanceId": "cadf14d8-072e-4af6-8fd0-60bf81d00399",
-          "layerId": "foxglove.Urdf",
-          "sourceType": "url",
-          "url": "https://raw.githubusercontent.com/WATonomous/wato_asd_training/refs/heads/main/src/gazebo/launch/env.urdf",
-          "filePath": "",
-          "parameter": "",
-          "topic": "",
-          "framePrefix": "",
-          "displayMode": "auto",
-          "fallbackColor": "#454545",
-          "order": 3
-        },
         "cfe20e67-fff3-481a-9a11-76c83d4106e3": {
           "displayMode": "auto",
           "fallbackColor": "#ffffff",
@@ -269,13 +253,13 @@
           "axisScale": 1,
           "showOutlines": true,
           "opacity": 1,
-          "visible": false,
+          "visible": true,
           "frameLocked": true,
           "instanceId": "cfe20e67-fff3-481a-9a11-76c83d4106e3",
           "label": "URDF",
           "layerId": "foxglove.Urdf",
           "sourceType": "url",
-          "url": "https://raw.githubusercontent.com/WATonomous/wato_rover/add-second-sim-camera/src/gazebo/launch/mars_env.urdf",
+          "url": "https://raw.githubusercontent.com/WATonomous/wato_rover/master/src/gazebo/launch/mars_env.urdf",
           "filePath": "",
           "parameter": "",
           "topic": "",
@@ -297,13 +281,13 @@
     "3D!xzfbk4": {
       "cameraState": {
         "perspective": true,
-        "distance": 25.847108697932068,
-        "phi": 43.38824250791747,
-        "thetaOffset": -108.39546367026085,
+        "distance": 11.376001845500813,
+        "phi": 43.38824250791778,
+        "thetaOffset": -108.39546367026087,
         "targetOffset": [
-          -0.5258667723080778,
-          7.000488013308792,
-          5.948721209171829e-16
+          -3.8330732359231585,
+          3.848382127936893,
+          6.958865714122545e-16
         ],
         "target": [
           0,

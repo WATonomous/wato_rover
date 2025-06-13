@@ -292,328 +292,36 @@
             <direction>-0.5 0.1 -0.9</direction>
         </light>
 
-
-        <model name="environment">
+        <model name="mars_environment">
             <static>true</static>
-            <link name="ground">
-                <collision name="collision">
-                    <geometry>
-                        <plane>
-                            <normal>0 0 1</normal>
-                        </plane>
-                    </geometry>
-                </collision>
+            <link name="desert">
                 <visual name="visual">
                     <geometry>
-                        <plane>
-                            <normal>0 0 1</normal>
-                            <size>100 100</size>
-                        </plane>
+                        <mesh>
+                            <uri>mars.stl</uri>
+                            <scale>0.1 0.1 0.1</scale> 
+                        </mesh>
                     </geometry>
                     <material>
-                        <ambient>0.8 0.8 0.8 1</ambient>
-                        <diffuse>0.8 0.8 0.8 1</diffuse>
-                        <specular>0.8 0.8 0.8 1</specular>
+                        <ambient>0.76 0.60 0.42 1</ambient> 
+                        <diffuse>0.76 0.60 0.42 1</diffuse>
                     </material>
+                    <pose>0 0 0 0 0 3.14159</pose>
                 </visual>
-            </link>
-        </model>
-
-        <model name='wall'>
-            <static>true</static>
-            <pose>0 -15 0 0 0 0</pose>
-            <link name='box'>
-                <visual name='visual'>
+                <collision name="collision">
                     <geometry>
-                        <box>
-                            <size>30 0.5 3.0</size>
-                        </box>
+                    <mesh>
+                        <uri>mars.stl</uri>
+                        <scale>0.1 0.1 0.1</scale>
+                    </mesh>
                     </geometry>
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <box>
-                            <size>30 0.5 3.0</size>
-                        </box>
-                    </geometry>
+                    <pose>0 0 0 0 0 3.14159</pose>
                 </collision>
             </link>
         </model>
-
-        <model name='wall1'>
-            <static>true</static>
-            <pose>0 15 0 0 0 0</pose>
-            <link name='box'>
-                <visual name='visual'>
-                    <geometry>
-                        <box>
-                            <size>30 0.5 3.0</size>
-                        </box>
-                    </geometry>
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <box>
-                            <size>30 0.5 3.0</size>
-                        </box>
-                    </geometry>
-                </collision>
-            </link>
-        </model>
-
-        <model name='wall2'>
-            <static>true</static>
-            <pose>15 0 0 0 0 0</pose>
-            <link name='box'>
-                <visual name='visual'>
-                    <geometry>
-                        <box>
-                            <size>0.5 30 3.0</size>
-                        </box>
-                    </geometry>
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <box>
-                            <size>0.5 30 3.0</size>
-                        </box>
-                    </geometry>
-                </collision>
-            </link>
-        </model>
-
-        <model name='wall3'>
-            <static>true</static>
-            <pose>-15 0 0 0 0 0</pose>
-            <link name='box'>
-                <visual name='visual'>
-                    <geometry>
-                        <box>
-                            <size>0.5 30 3.0</size>
-                        </box>
-                    </geometry>
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <box>
-                            <size>0.5 30 3.0</size>
-                        </box>
-                    </geometry>
-                </collision>
-            </link>
-        </model>
-
-        <model name='box1'>
-            <static>true</static>
-            <pose>7 -6 0 0 0 0</pose>
-            <link name='box'>
-                <visual name='visual'>
-                    <geometry>
-                        <box>
-                            <size>3 3 3.0</size>
-                        </box>
-                    </geometry>
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <box>
-                            <size>3 3 3.0</size>
-                        </box>
-                    </geometry>
-                </collision>
-            </link>
-        </model>
-
-        <model name='box2'>
-            <static>true</static>
-            <pose>-8 6 0 0 0 0</pose>
-            <link name='box'>
-                <visual name='visual'>
-                    <geometry>
-                        <box>
-                            <size>3 3 3.0</size>
-                        </box>
-                    </geometry>
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <box>
-                            <size>3 3 3.0</size>
-                        </box>
-                    </geometry>
-                </collision>
-            </link>
-        </model>
-
-        <model name='box3'>
-            <static>true</static>
-            <pose>4 9 0 0 0 0</pose>
-            <link name='box'>
-                <visual name='visual'>
-                    <geometry>
-                        <box>
-                            <size>3 3 3.0</size>
-                        </box>
-                    </geometry>
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <box>
-                            <size>3 3 3.0</size>
-                        </box>
-                    </geometry>
-                </collision>
-            </link>
-        </model>
-
-
-        <model name='box4'>
-            <static>true</static>
-            <pose>9 3 0 0 0 0</pose>
-            <link name='box'>
-                <visual name='visual'>
-                    <geometry>
-                        <box>
-                            <size>2 2 3.0</size>
-                        </box>
-                    </geometry>
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <box>
-                            <size>2 2 3.0</size>
-                        </box>
-                    </geometry>
-                </collision>
-            </link>
-        </model>
-
-        <model name='box5'>
-            <static>true</static>
-            <pose>1 -10 0 0 0 0</pose>
-            <link name='box'>
-                <visual name='visual'>
-                    <geometry>
-                        <box>
-                            <size>2 2 3.0</size>
-                        </box>
-                    </geometry>
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <box>
-                            <size>2 2 3.0</size>
-                        </box>
-                    </geometry>
-                </collision>
-            </link>
-        </model>
-
-        <model name='cyl1'>
-            <static>true</static>
-            <pose>0 0 0 0 0 0</pose>
-            <link name='box'>
-                <visual name='visual'>
-                    <geometry>
-                        <cylinder>
-                            <radius>3</radius>
-                            <length>3</length>
-                        </cylinder>
-                    </geometry>
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <cylinder>
-                            <radius>3</radius>
-                            <length>3</length>
-                        </cylinder>
-                    </geometry>
-                </collision>
-            </link>
-        </model>
-
-
-        <model name='cyl2'>
-            <static>true</static>
-            <pose>-7 -7 0 0 0 0</pose>
-            <link name='box'>
-                <visual name='visual'>
-                    <geometry>
-                        <cylinder>
-                            <radius>2</radius>
-                            <length>3</length>
-                        </cylinder>
-                    </geometry>
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <cylinder>
-                            <radius>2</radius>
-                            <length>3</length>
-                        </cylinder>
-                    </geometry>
-                </collision>
-            </link>
-        </model>
-
 
         <model name='robot' canonical_link='chassis'>
-            <pose relative_to='world'>-6 0 1 0 0 0</pose>   <!--the
+            <pose relative_to='world'>-6 0 3 0 0 0</pose>   <!--the
             pose is relative to the world by default-->
 
             <!-- <frame name="lidar_frame" attached_to='chassis'>
