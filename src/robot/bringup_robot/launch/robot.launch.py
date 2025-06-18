@@ -49,4 +49,12 @@ def generate_launch_description():
     )
     ld.add_action(arcade_driver_node)
 
+    #################### MotorSpeedController Node #####################
+    motor_speed_controller_node = Node(
+        package='motor_speed_controller',
+        name='motor_speed_controller',
+        executable='motor_speed_controller',
+    )
+    ld.add_action(motor_speed_controller_node)
+
     return ld

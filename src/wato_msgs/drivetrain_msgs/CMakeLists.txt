@@ -14,7 +14,9 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(std_msgs REQUIRED)
 
 set(msg_files
-    msg/ArcadeSpeed.msg)
+    msg/ArcadeSpeed.msg
+    msg/MotorSpeeds.msg)
+    
 
 rosidl_generate_interfaces(drivetrain_msgs
     ${msg_files}

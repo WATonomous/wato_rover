@@ -6,7 +6,7 @@ using namespace std::placeholders;
 ArcadeDriver::ArcadeDriver() : Node("arcade_driver") {
     // Create publisher for joystick messages
     joystick_sub_ = this->create_subscription<geometry_msgs::msg::TwistStamped>(
-        "/cmd_vel", 10,
+        "/cmd_vel_stamped", 10,
         std::bind(&ArcadeDriver::joystick_callback, this, _1));
         
     arcade_pub_ = this->create_publisher<drivetrain_msgs::msg::ArcadeSpeed>(

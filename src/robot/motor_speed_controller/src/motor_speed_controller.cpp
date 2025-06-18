@@ -18,15 +18,12 @@ MotorSpeedController::MotorSpeedController() : Node("motor_speed_controller") {
 void MotorSpeedController::arcade_callback(const drivetrain_msgs::msg::ArcadeSpeed arcade_msg) {
     // Ignore arcade msg if component is inactive. This component shouldn't be inactive
     //  when ArcadeDriver is publishing ArcadeSpeed messages though.
-	if (this->get_current_state().id() != lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE) {
-		RCLCPP_WARN(get_logger(), "Received arcade message while not active, ignoring...");
-		return;
-	}
+
     float arcade_left = arcade_msg.l;
     float arcade_right = arcade_msg.r;
 
     drivetrain_msgs::msg::MotorSpeeds motor_speeds_msg = MotorSpeedController::compute_motor_speeds(arcade_left, arcade_right);
-    motor_speeds_pub->publish(motor_speeds_msg);
+    motor_speeds_pub_->publish(motor_speeds_msg);
     publish_speeds_odrive(motor_speeds_msg);
 }
 
@@ -44,7 +41,7 @@ void MotorSpeedController::publish_speeds_odrive(drivetrain_msgs::msg::MotorSpee
     };
     req_msg.data = req_json.dump();
 
-    odrive_pub->publish(req_msg);
+    odrive_pub_->publish(req_msg);
 }
 
 drivetrain_msgs::msg::MotorSpeeds MotorSpeedController::compute_motor_speeds(const float arcade_l, const float arcade_r) {
@@ -60,7 +57,7 @@ drivetrain_msgs::msg::MotorSpeeds MotorSpeedController::compute_motor_speeds(con
 
 int main(int argc, char **argv) {
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<ArcadeDriver>());
+    rclcpp::spin(std::make_shared<MotorSpeedController>());
     rclcpp::shutdown();
     return 0;
 }

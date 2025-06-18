@@ -15,7 +15,6 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(nlohmann_json REQUIRED)
 find_package(drivetrain_msgs)
 
 # Create ROS2 node executable from source files
@@ -30,6 +29,7 @@ ament_target_dependencies(motor_speed_controller
   # "lifecycle_msgs"
   "geometry_msgs"
   "std_msgs"
+  "drivetrain_msgs"
 )
 
 # Copy executable to installation location
