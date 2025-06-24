@@ -27,6 +27,7 @@ def generate_launch_description():
             '/model/robot/pose@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V',
             '/model/robot/pose_static@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V',
             '/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
+            '/cmd_vel_stamped@geometry_msgs/msg/TwistStamped@ignition.msgs.Twist',
             '/imu@sensor_msgs/msg/Imu@ignition.msgs.IMU',
             '/model/robot/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
             '/sim/realsense1/depth/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked',

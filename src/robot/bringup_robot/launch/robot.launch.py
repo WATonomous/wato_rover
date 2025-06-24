@@ -41,4 +41,20 @@ def generate_launch_description():
     )
     ld.add_action(camera_fallback_node)
 
+    #################### ArcadeDriver Node #####################
+    arcade_driver_node = Node(
+        package='arcade_driver',
+        name='arcade_driver',
+        executable='arcade_driver',
+    )
+    ld.add_action(arcade_driver_node)
+
+    #################### MotorSpeedController Node #####################
+    motor_speed_controller_node = Node(
+        package='motor_speed_controller',
+        name='motor_speed_controller',
+        executable='motor_speed_controller',
+    )
+    ld.add_action(motor_speed_controller_node)
+
     return ld

@@ -9,13 +9,17 @@ WORKDIR ${AMENT_WS}/src
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/bringup_robot bringup_robot
 COPY src/robot/camera_fallback camera_fallback
+COPY src/robot/arcade_driver arcade_driver
+COPY src/robot/motor_speed_controller motor_speed_controller
+COPY src/wato_msgs/drivetrain_msgs drivetrain_msgs
+
 
 # Scan for rosdeps
 RUN apt-get -qq update && rosdep update && \
     rosdep install --from-paths . --ignore-src -r -s \
-        | grep 'apt-get install' \
-        | awk '{print $3}' \
-        | sort  > /tmp/colcon_install_list
+    | grep 'apt-get install' \
+    | awk '{print $3}' \
+    | sort  > /tmp/colcon_install_list
 
 ################################# Dependencies ################################
 FROM ${BASE_IMAGE} AS dependencies
@@ -43,7 +47,7 @@ FROM dependencies AS build
 WORKDIR ${AMENT_WS}
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
     colcon build \
-        --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base ${WATONOMOUS_INSTALL}
+    --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base ${WATONOMOUS_INSTALL}
 
 # Source and Build Artifact Cleanup 
 RUN rm -rf src/* build/* devel/* install/* log/*
