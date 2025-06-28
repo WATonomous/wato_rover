@@ -5,6 +5,9 @@ FROM ${BASE_IMAGE} AS source
 
 WORKDIR ${AMENT_WS}/src
 
+RUN apt-get update && apt-get install -y curl \
+ && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+
 # Copy in source code 
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/bringup_robot bringup_robot
@@ -15,6 +18,9 @@ COPY src/wato_msgs/drivetrain_msgs drivetrain_msgs
 
 
 # Scan for rosdeps
+RUN apt-get update && apt-get install -y curl \
+ && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+
 RUN apt-get -qq update && rosdep update && \
     rosdep install --from-paths . --ignore-src -r -s \
     | grep 'apt-get install' \
@@ -24,6 +30,14 @@ RUN apt-get -qq update && rosdep update && \
 ################################# Dependencies ################################
 FROM ${BASE_IMAGE} AS dependencies
 
+# Clean up and update apt-get, then update rosdep
+
+RUN apt-get update && apt-get install -y curl \
+ && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+
+RUN sudo apt-get clean && \
+    sudo apt-get update && \
+    sudo rosdep update
 
 # Install Rosdep requirements
 COPY --from=source /tmp/colcon_install_list /tmp/colcon_install_list
@@ -42,6 +56,16 @@ RUN apt-get -qq autoremove -y && apt-get -qq autoclean && apt-get -qq clean && \
 
 ################################ Build ################################
 FROM dependencies AS build
+
+
+# Clean up and update apt-get, then update rosdep
+
+RUN apt-get update && apt-get install -y curl \
+ && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+
+RUN sudo apt-get clean && \
+    sudo apt-get update && \
+    sudo rosdep update
 
 # Build ROS2 packages
 WORKDIR ${AMENT_WS}
