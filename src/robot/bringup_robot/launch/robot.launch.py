@@ -28,7 +28,8 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(realsense_launch_file),
         launch_arguments={
             'pointcloud.enable': 'true',
-            'filters': 'spatial'
+            'filters': 'spatial',
+            'enable_tf': 'true',
         }.items()
     )
     ld.add_action(realsense_launch)

@@ -14,6 +14,8 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 # Add executable
 add_executable(camera_fallback_node src/camera_fallback_node.cpp)
@@ -22,6 +24,8 @@ add_executable(camera_fallback_node src/camera_fallback_node.cpp)
 ament_target_dependencies(camera_fallback_node
   rclcpp
   sensor_msgs
+  tf2_ros
+  geometry_msgs
 )
 
 # Install the executable
