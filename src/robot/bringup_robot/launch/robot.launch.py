@@ -57,4 +57,12 @@ def generate_launch_description():
     )
     ld.add_action(motor_speed_controller_node)
 
+    #################### CameraProcessing Node #####################
+    camera_processing_node = Node(
+        package='camera_processing',
+        name='camera_processing_node',
+        executable='camera_processing_node',
+    )
+    ld.add_action(camera_processing_node)
+    
     return ld

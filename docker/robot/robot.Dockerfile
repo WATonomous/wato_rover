@@ -6,7 +6,7 @@ FROM ${BASE_IMAGE} AS source
 WORKDIR ${AMENT_WS}/src
 
 RUN apt-get update && apt-get install -y curl \
- && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 # Copy in source code 
 COPY src/robot/odometry_spoof odometry_spoof
@@ -14,12 +14,14 @@ COPY src/robot/bringup_robot bringup_robot
 COPY src/robot/camera_fallback camera_fallback
 COPY src/robot/arcade_driver arcade_driver
 COPY src/robot/motor_speed_controller motor_speed_controller
+COPY src/robot/camera_processing camera_processing
+
 COPY src/wato_msgs/drivetrain_msgs drivetrain_msgs
 
 
 # Scan for rosdeps
 RUN apt-get update && apt-get install -y curl \
- && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 RUN apt-get -qq update && rosdep update && \
     rosdep install --from-paths . --ignore-src -r -s \
@@ -33,7 +35,7 @@ FROM ${BASE_IMAGE} AS dependencies
 # Clean up and update apt-get, then update rosdep
 
 RUN apt-get update && apt-get install -y curl \
- && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 RUN sudo apt-get clean && \
     sudo apt-get update && \
@@ -61,7 +63,7 @@ FROM dependencies AS build
 # Clean up and update apt-get, then update rosdep
 
 RUN apt-get update && apt-get install -y curl \
- && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 RUN sudo apt-get clean && \
     sudo apt-get update && \

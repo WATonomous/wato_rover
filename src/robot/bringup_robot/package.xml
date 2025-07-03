@@ -16,6 +16,8 @@
   <depend>realsense2_camera_msgs</depend>
   <depend>realsense2_description</depend>
   <depend>camera_fallback</depend>
+  <depend>camera_processing</depend>
+
   <!-- <depend>rviz2</depend> -->
   <!-- <depend>costmap</depend>
   <depend>map_memory</depend>
