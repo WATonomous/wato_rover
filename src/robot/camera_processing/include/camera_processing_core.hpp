@@ -6,15 +6,16 @@
 namespace robot
 {
 
-class CameraProcessingCore {
+  class CameraProcessingCore
+  {
   public:
     // Constructor, we pass in the node's RCLCPP logger to enable logging to terminal
-    CameraProcessingCore(const rclcpp::Logger& logger);
-  
+    CameraProcessingCore(const rclcpp::Logger &logger);
+
   private:
     rclcpp::Logger logger_;
-};
+  };
 
-} 
+}
 
-#endif 
+#endif

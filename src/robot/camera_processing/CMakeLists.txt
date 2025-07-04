@@ -13,6 +13,15 @@ endif()
 # Search for dependencies required for building this package
 find_package(ament_cmake REQUIRED) # ROS2 build tool
 find_package(rclcpp REQUIRED)      # ROS2 C++ package
+find_package(sensor_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_sensor_msgs REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(PCL REQUIRED COMPONENTS filters)
+find_package(pcl_conversions REQUIRED)
+# find_package(pcl_ros REQUIRED)
+find_package(message_filters REQUIRED)
+
 
 # Compiles source files into a library
 # A library is not executed, instead other executables can link
@@ -28,8 +37,11 @@ target_include_directories(camera_processing_lib
 
 # Add ROS2 dependencies required by package
 ament_target_dependencies(camera_processing_lib
-  rclcpp
+  rclcpp sensor_msgs tf2_ros tf2_sensor_msgs tf2_geometry_msgs
+  pcl_conversions message_filters
 )
+
+target_link_libraries(camera_processing_lib ${PCL_LIBRARIES})
 
 # Create ROS2 node executable from source files
 add_executable(camera_processing_node src/camera_processing_node.cpp)
