@@ -27,13 +27,13 @@ void CameraProcessingNode::cloudCallback(
     const sensor_msgs::msg::PointCloud2::ConstSharedPtr &c1,
     const sensor_msgs::msg::PointCloud2::ConstSharedPtr &c2)
 {
-  // 1. Print raw cloud metadata
+  // Print raw pointcloud2 msg metadata
   RCLCPP_INFO(this->get_logger(),
               "Received clouds: cam1=%u points, cam2=%u points",
               c1->width * c1->height,
               c2->width * c2->height);
 
-  // 2. Transform both clouds to "robot/chassis"
+  // transform both clouds to "robot/chassis" (from robot/chassis/sim_realsense_d435_1_color and robot/chassis/sim_realsense_d435_2_color frames)
   sensor_msgs::msg::PointCloud2 c1_transformed;
   sensor_msgs::msg::PointCloud2 c2_transformed;
 
@@ -41,6 +41,7 @@ void CameraProcessingNode::cloudCallback(
   {
     c1_transformed = tf_buffer_->transform(*c1, "robot/chassis", tf2::durationFromSec(0.1));
     c2_transformed = tf_buffer_->transform(*c2, "robot/chassis", tf2::durationFromSec(0.1));
+
     RCLCPP_INFO(this->get_logger(), "c1_transformed: frame_id='%s', stamp=%.3f, width=%u, height=%u, point_step=%u, row_step=%u",
                 c1_transformed.header.frame_id.c_str(),
                 rclcpp::Time(c1_transformed.header.stamp).seconds(),
@@ -59,21 +60,19 @@ void CameraProcessingNode::cloudCallback(
   }
   catch (const tf2::TransformException &ex)
   {
-    RCLCPP_WARN(this->get_logger(), "TF transform failed: %s", ex.what());
+    RCLCPP_WARN(this->get_logger(), "tf2 transform failed: %s", ex.what());
     return;
   }
 
-  float x = 0, y = 0, z = 0;
-  memcpy(&x, &c1_transformed.data[0], sizeof(float));
-  memcpy(&y, &c1_transformed.data[4], sizeof(float));
-  memcpy(&z, &c1_transformed.data[8], sizeof(float));
-  RCLCPP_INFO(this->get_logger(), "First point (raw): x=%.2f y=%.2f z=%.2f", x, y, z);
+  // This code will show you what fields are in a PointCloud2 message.
+  // See https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/PointField.html for more info :)
   for (const auto &field : c1_transformed.fields)
   {
     RCLCPP_INFO(this->get_logger(), "Field name='%s', offset=%u, datatype=%u, count=%u",
                 field.name.c_str(), field.offset, field.datatype, field.count);
   }
-  // 3. Convert to PCL
+
+  // Convert to PointCloud2 messages to PCL (in particular pcl::PointXYZRGB)
   pcl::PointCloud<pcl::PointXYZRGB> cloud1, cloud2;
   pcl::fromROSMsg(c1_transformed, cloud1);
   pcl::fromROSMsg(c2_transformed, cloud2);
@@ -82,8 +81,8 @@ void CameraProcessingNode::cloudCallback(
               "Transformed clouds: cam1=%zu points, cam2=%zu points",
               cloud1.size(), cloud2.size());
 
-  // 4. Check for empty or corrupted clouds
-  // Print first valid point (cloud 1)
+  // Check for empty or corrupted clouds, print first valid point
+  // Cloud 1
   bool found_valid_1 = false;
   for (const auto &pt : cloud1)
   {
@@ -109,9 +108,9 @@ void CameraProcessingNode::cloudCallback(
     }
   }
   if (!found_valid_2)
+  {
     RCLCPP_WARN(this->get_logger(), "Cloud 2 has no valid (non-NaN) points");
-
-  // TODO: transform, costmap update, inflation, publish OccupancyGrid
+  }
 }
 
 int main(int argc, char **argv)
