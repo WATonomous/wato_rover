@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.10)
+project(package_name)
+
+# Set compiler to use C++ 17 standard
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 17)
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+
+add_library(package_name_lib
+  src/package_name_core.cpp)
+target_include_directories(package_name_lib PUBLIC include)
+ament_target_dependencies(package_name_lib rclcpp)
+
+add_executable(package_name_node src/package_name_node.cpp)
+target_link_libraries(package_name_node package_name_lib)
+
+install(TARGETS package_name_node DESTINATION lib/\${PROJECT_NAME})
+install(DIRECTORY config DESTINATION share/\${PROJECT_NAME})
+
+ament_package()

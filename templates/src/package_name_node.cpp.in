@@ -1,0 +1,13 @@
+#include "package_name_node.hpp"
+
+PackageNameNode::PackageNameNode()
+  : Node("package_name"),
+    package_name_(robot::PackageNameCore(this->get_logger())) {}
+
+int main(int argc, char ** argv)
+{
+  rclcpp::init(argc, argv);
+  rclcpp::spin(std::make_shared<PackageNameNode>());
+  rclcpp::shutdown();
+  return 0;
+}

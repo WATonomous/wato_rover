@@ -1,0 +1,16 @@
+#ifndef PACKAGE_NAME_NODE_HPP_
+#define PACKAGE_NAME_NODE_HPP_
+
+#include "rclcpp/rclcpp.hpp"
+#include "package_name_core.hpp"
+
+class PackageNameNode : public rclcpp::Node
+{
+public:
+    PackageNameNode();
+
+private:
+    robot::PackageNameCore package_name_;
+};
+
+#endif
