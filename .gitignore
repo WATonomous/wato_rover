@@ -4,3 +4,4 @@ __pycache__
 
 watod-config.local.sh
 **/.DS_Store
+draft_*

@@ -1,0 +1,8 @@
+#include "package_name_core.hpp"
+
+namespace robot {
+
+PackageNameCore::PackageNameCore(const rclcpp::Logger& logger)
+  : logger_(logger) {}
+
+}  // namespace robot
