@@ -57,4 +57,11 @@ def generate_launch_description():
     )
     ld.add_action(motor_speed_controller_node)
 
+    #################### Object_detection Node #####################
+    object_detection_node = Node(
+        package='object_detection',
+        name='object_detection_node',
+        executable='object_detection_node',
+    )
+    ld.add_action(object_detection_node)
     return ld

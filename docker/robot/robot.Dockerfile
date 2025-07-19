@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y curl \
  && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 # Copy in source code 
+COPY src/robot/object_detection object_detection
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/bringup_robot bringup_robot
 COPY src/robot/camera_fallback camera_fallback
@@ -46,6 +47,7 @@ RUN apt-get -qq update && apt-fast install -qq -y --no-install-recommends $(cat 
     apt-get -qq install -y --no-install-recommends ros-humble-librealsense2* || true
 
 # Copy in source code from source stage
+COPY src/robot/object_detection object_detection
 WORKDIR ${AMENT_WS}
 COPY --from=source ${AMENT_WS}/src src
 
