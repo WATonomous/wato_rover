@@ -84,9 +84,10 @@ class YoloInference(Node):
         detections = self.run(frame)
 
         for x1, y1, x2, y2, conf, cls in detections:
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(frame, f"{cls}:{conf:.2f}", (x1, y1 - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+            cv2.rectangle(frame, (x1, y1), (x2, y2), (128, 0, 128), 1)
+            cv2.putText(frame, f"{cls}: {conf:.2f}", (x1, y1 - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (128, 0, 128), 1)
+            self.get_logger().info(f"Found object {cls} at ({x1}, {y1}), ({x2}, {y2}) with {conf:.2f} confidence")
 
         # Publish the annotated image
         annotated_msg = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
@@ -94,14 +95,45 @@ class YoloInference(Node):
 
         self.get_logger().info(f"Detected {len(detections)} objects")
 
-
     ## helpers
+    def letterbox(self, im, new_shape=(640, 640), color=(114, 114, 114)):
+        """
+        Resize image to fit in a target size with unchanged aspect ratio using padding.
+
+        Args:
+            img (np.ndarray): Input image (HWC format).
+            new_shape (tuple): Desired output shape (height, width).
+            color (tuple): Padding color in (B, G, R) format.
+
+        Returns:
+            np.ndarray: Resized and padded image of shape new_shape.
+        """
+        # calculate new dimensions
+        shape = im.shape[:2]  # current height, width
+        scale_ratio = min(new_shape[0] / shape[0], new_shape[1] / shape[1])
+        new_dims = (int(round(shape[1] * scale_ratio)), int(round(shape[0] * scale_ratio)))
+
+        # calculate new position
+        dw, dh = (new_shape[1] - new_dims[0]) / 2, (new_shape[0] - new_dims[1]) / 2
+        top, bottom = int(round(dh - 0.1)), int(round(dh + 0.1))
+        left, right = int(round(dw - 0.1)), int(round(dw + 0.1))
+
+        # create new scaled image
+        im = cv2.resize(im, new_dims, interpolation=cv2.INTER_LINEAR)
+        im = cv2.copyMakeBorder(im, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)
+
+        return im, scale_ratio, dw, dh
+
     def preprocess(self, img: np.ndarray, torch_tensor=False):
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img = cv2.resize(img, (self.input_size, self.input_size))
+        # use a letterbox resizing function to scale image to 640x640 while preserving aspect ratio
+        img, self.ratio, self.dw, self.dh = self.letterbox(
+            img, new_shape=(self.input_size, self.input_size)
+        )
         img = img.astype(np.float32) / 255.0
-        img = np.transpose(img, (2, 0, 1))   # HWC to CHW
-        img = np.expand_dims(img, 0) # NCHW
+        img = np.transpose(img, (2, 0, 1))  # HWC to CHW
+        img = np.expand_dims(img, 0)        # NCHW
+        img = np.ascontiguousarray(img)
         if torch_tensor:
             import torch
             return torch.from_numpy(img)
@@ -109,33 +141,33 @@ class YoloInference(Node):
 
     def postprocess(self, raw: np.ndarray):
         """
-        Convert YOLOv8 raw output of shape [1, N, 85] to usable boxes.
-        Format: [x_center, y_center, width, height, conf, cls_probs...]
+        YOLOv8 output should be already postprocessed now ...
+        Format: [x, y, w, h, conf, class_id]
         """
-        conf_threshold = 0.5
+        conf_threshold = 0.25
         results = []
 
-        predictions = raw[0]  # shape: [N, 85]
+        predictions = raw[0]
         for det in predictions:
+
+            # filter results
             conf = det[4]
             if conf < conf_threshold:
                 continue
-            class_id = np.argmax(det[5:])
-            class_conf = det[5 + class_id]
-            if class_conf < conf_threshold:
-                continue
 
-            xc, yc, w, h = det[0:4]
-            x1 = int((xc - w / 2) * self.input_size)
-            y1 = int((yc - h / 2) * self.input_size)
-            x2 = int((xc + w / 2) * self.input_size)
-            y2 = int((yc + h / 2) * self.input_size)
+            # scale model results from letterbox to original
+            x1 = int((det[0] - self.dw) / self.ratio)
+            y1 = int((det[1] - self.dh) / self.ratio)
+            x2 = int((det[2] - self.dw) / self.ratio)
+            y2 = int((det[3] - self.dh) / self.ratio)
 
-            results.append((x1, y1, x2, y2, float(class_conf), int(class_id)))
+            cls = "Unknown"
+            if int(det[5]) < 2:
+                cls = ["Mallet", "Bottle"][int(det[5])]
+
+            results.append((x1, y1, x2, y2, float(conf), cls))
 
         return results
-
-
 
 
 def main(args=None):
