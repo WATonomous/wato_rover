@@ -205,6 +205,14 @@
         },
         "/sim/realsense2/depth/camera_info": {
           "visible": false
+        },
+        "/terrain_cloud":{
+          "visible": true,
+          "colorField": "rgb",
+          "colorMode": "rgb",
+          "colorMap": "turbo",
+          "pointSize": 5,
+          "pointShape": "circle"
         }
       },
       "layers": {

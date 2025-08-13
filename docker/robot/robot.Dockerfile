@@ -15,8 +15,8 @@ COPY src/robot/camera_fallback camera_fallback
 COPY src/robot/arcade_driver arcade_driver
 COPY src/robot/motor_speed_controller motor_speed_controller
 COPY src/robot/camera_processing camera_processing
-
 COPY src/wato_msgs/drivetrain_msgs drivetrain_msgs
+COPY src/robot/usgs_pcl usgs_pcl
 
 
 # Scan for rosdeps

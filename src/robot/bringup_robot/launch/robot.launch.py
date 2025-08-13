@@ -64,5 +64,13 @@ def generate_launch_description():
         executable='camera_processing_node',
     )
     ld.add_action(camera_processing_node)
+
+    # usgs_pcl_node = Node(
+    #         package='usgs_pcl',
+    #         executable='usgs_pcl',
+    #         name='usgs_pcl_node',
+    # )
+
+    # ld.add_action(usgs_pcl_node)
     
     return ld
