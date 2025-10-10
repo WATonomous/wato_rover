@@ -11,5 +11,3 @@ From root, run `chmod +x scripts/*.sh`. Then run `scripts/add_robot_package.sh <
 - Creates the  `CMakeLists.txt` and `package.xml` files inside `src/robot/new_package`.
 - Updates [src/robot/bringup_robot](src/robot/bringup_robot)'s `package.xml` file and launch file so that the new package is launched when the `robot` module is brought up (with `watod up` or `watod up robot`).
 - Adds command to `robot.dockerfile` to copy the new package's source code to the image.
-
-

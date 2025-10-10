@@ -1,18 +1,30 @@
+// Copyright (c) 2025-present WATonomous. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#include "producer_node.hpp"
+
 #include <chrono>
 #include <memory>
 #include <vector>
 
-#include "producer_node.hpp"
-
 ProducerNode::ProducerNode(int delay_ms)
-: Node("producer"), producer_(samples::ProducerCore())
+: Node("producer")
+, producer_(samples::ProducerCore())
 {
-  data_pub_ =
-    this->create_publisher<sample_msgs::msg::Unfiltered>("/unfiltered_topic", ADVERTISING_FREQ);
+  data_pub_ = this->create_publisher<sample_msgs::msg::Unfiltered>("/unfiltered_topic", ADVERTISING_FREQ);
 
-  timer_ = this->create_wall_timer(
-    std::chrono::milliseconds(delay_ms),
-    std::bind(&ProducerNode::timer_callback, this));
+  timer_ = this->create_wall_timer(std::chrono::milliseconds(delay_ms), std::bind(&ProducerNode::timer_callback, this));
 
   // Define the default values for parameters if not defined in params.yaml
   this->declare_parameter("pos_x", 0.0);
@@ -28,8 +40,8 @@ ProducerNode::ProducerNode(int delay_ms)
   producer_.update_position(pos_x.as_double(), pos_y.as_double(), pos_z.as_double());
   producer_.update_velocity(velocity.as_double());
 
-  param_cb_ = this->add_on_set_parameters_callback(
-    std::bind(&ProducerNode::parameters_callback, this, std::placeholders::_1));
+  param_cb_ =
+    this->add_on_set_parameters_callback(std::bind(&ProducerNode::parameters_callback, this, std::placeholders::_1));
 }
 
 void ProducerNode::timer_callback()
@@ -37,8 +49,8 @@ void ProducerNode::timer_callback()
   producer_.update_coordinates();
 
   auto msg = sample_msgs::msg::Unfiltered();
-  msg.timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
-    std::chrono::system_clock::now().time_since_epoch()).count();
+  msg.timestamp =
+    std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
   producer_.serialize_coordinates(msg);
 
   RCLCPP_INFO(this->get_logger(), "Publishing: %s", msg.data.c_str());
@@ -53,9 +65,7 @@ rcl_interfaces::msg::SetParametersResult ProducerNode::parameters_callback(
   result.reason = "";
 
   for (const auto & parameter : parameters) {
-    if (parameter.get_name() == "velocity" &&
-      parameter.get_type() == rclcpp::ParameterType::PARAMETER_INTEGER)
-    {
+    if (parameter.get_name() == "velocity" && parameter.get_type() == rclcpp::ParameterType::PARAMETER_INTEGER) {
       producer_.update_velocity(parameter.as_int());
       RCLCPP_INFO(this->get_logger(), "Velocity successfully set to %d", parameter.as_int());
       result.successful = true;

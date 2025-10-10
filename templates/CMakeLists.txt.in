@@ -25,7 +25,7 @@ add_library(package_name_lib
 target_include_directories(package_name_lib
   PUBLIC include)
 # Add ROS2 dependencies required by package
-ament_target_dependencies(package_name_lib 
+ament_target_dependencies(package_name_lib
   rclcpp
 )
 

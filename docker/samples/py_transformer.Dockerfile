@@ -5,7 +5,7 @@ FROM ${BASE_IMAGE} AS source
 
 WORKDIR ${AMENT_WS}/src
 
-# Copy in source code 
+# Copy in source code
 COPY src/samples/python/transformer transformer
 COPY src/wato_msgs/sample_msgs sample_msgs
 
@@ -44,7 +44,7 @@ RUN . /opt/ros/$ROS_DISTRO/setup.sh && \
     colcon build \
     --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base ${WATONOMOUS_INSTALL}
 
-# Source and Build Artifact Cleanup 
+# Source and Build Artifact Cleanup
 RUN rm -rf src/* build/* devel/* install/* log/*
 
 # Entrypoint will run before any CMD on launch. Sources ~/opt/<ROS_DISTRO>/setup.bash and ~/ament_ws/install/setup.bash

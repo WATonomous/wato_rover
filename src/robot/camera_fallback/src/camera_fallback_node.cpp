@@ -1,28 +1,45 @@
+// Copyright (c) 2025-present WATonomous. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#include <chrono>
+
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
-#include <chrono>
 
 class CameraFallbackNode : public rclcpp::Node
 {
 public:
   CameraFallbackNode()
-  : Node("camera_fallback_node"), use_real_camera_(false), last_real_msg_time_(0.0), timeout_(30.0)
+  : Node("camera_fallback_node")
+  , use_real_camera_(false)
+  , last_real_msg_time_(0.0)
+  , timeout_(30.0)
   {
     // Publishers
     unified_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/camera/depth/points", 10);
 
     // Subscribers
     real_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-      "/camera/camera/depth/color/points", 10,
+      "/camera/camera/depth/color/points",
+      10,
       std::bind(&CameraFallbackNode::real_callback, this, std::placeholders::_1));
     sim_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-      "/sim/realsense1/depth/points", 10,
-      std::bind(&CameraFallbackNode::sim_callback, this, std::placeholders::_1));
+      "/sim/realsense1/depth/points", 10, std::bind(&CameraFallbackNode::sim_callback, this, std::placeholders::_1));
 
     // Timer to check real camera activity
     timer_ = this->create_wall_timer(
-      std::chrono::milliseconds(120000),
-      std::bind(&CameraFallbackNode::check_camera_activity, this));
+      std::chrono::milliseconds(120000), std::bind(&CameraFallbackNode::check_camera_activity, this));
   }
 
 private:
