@@ -15,7 +15,7 @@
 #ifndef MAP_MEMORY_NODE_HPP_
 #define MAP_MEMORY_NODE_HPP_
 
-#include "map_memory_core.hpp"
+#include "map_memory/map_memory_core.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 class MapMemoryNode : public rclcpp::Node

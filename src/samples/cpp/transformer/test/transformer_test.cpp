@@ -18,7 +18,7 @@
 
 #include "gtest/gtest.h"
 #include "rclcpp/rclcpp.hpp"
-#include "transformer_core.hpp"
+#include "transformer/transformer_core.hpp"
 
 /**
  * When writing a large number of tests it is desirable to wrap any common

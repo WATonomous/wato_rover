@@ -15,7 +15,7 @@
 #include <memory>
 #include <vector>
 
-#include "aggregator_core.hpp"
+#include "aggregator/aggregator_core.hpp"
 #include "gtest/gtest.h"
 #include "rclcpp/rclcpp.hpp"
 

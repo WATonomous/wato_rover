@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "planner_node.hpp"
+#include "planner/planner_node.hpp"
 
 PlannerNode::PlannerNode()
 : Node("planner")

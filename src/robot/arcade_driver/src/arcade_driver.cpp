@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "arcade_driver.hpp"
+#include "arcade_driver/arcade_driver.hpp"
 
 #include <cmath>
-
-using namespace std::placeholders;
+#include <utility>
 
 ArcadeDriver::ArcadeDriver()
 : Node("arcade_driver")
 {
   // Create publisher for joystick messages
   joystick_sub_ = this->create_subscription<geometry_msgs::msg::TwistStamped>(
-    "/cmd_vel_stamped", 10, std::bind(&ArcadeDriver::joystick_callback, this, _1));
+    "/cmd_vel_stamped", 10, std::bind(&ArcadeDriver::joystick_callback, this, std::placeholders::_1));
 
   arcade_pub_ = this->create_publisher<drivetrain_msgs::msg::ArcadeSpeed>("/arcade_speed", 10);
 }
@@ -40,8 +39,8 @@ void ArcadeDriver::joystick_callback(const geometry_msgs::msg::TwistStamped::Sha
 {
   // Ignore Twist msg if component is inactive
   // if (this->get_current_state().id() != lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE) {
-  // 	RCLCPP_WARN(get_logger(), "Received twist message while not active, ignoring...");
-  // 	return;
+  //   RCLCPP_WARN(get_logger(), "Received twist message while not active, ignoring...");
+  //   return;
   // }
 
   RCLCPP_INFO(

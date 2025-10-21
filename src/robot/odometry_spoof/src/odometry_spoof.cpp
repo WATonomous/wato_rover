@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "odometry_spoof.hpp"
+#include "odometry_spoof/odometry_spoof.hpp"
 
 #include <chrono>
 #include <memory>
+#include <string>
 
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 

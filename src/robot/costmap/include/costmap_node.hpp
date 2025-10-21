@@ -15,7 +15,7 @@
 #ifndef COSTMAP_NODE_HPP_
 #define COSTMAP_NODE_HPP_
 
-#include "costmap_core.hpp"
+#include "costmap/costmap_core.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 class CostmapNode : public rclcpp::Node

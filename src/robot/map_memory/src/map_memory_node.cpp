@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "map_memory_node.hpp"
+#include "map_memory/map_memory_node.hpp"
 
 MapMemoryNode::MapMemoryNode()
 : Node("map_memory")

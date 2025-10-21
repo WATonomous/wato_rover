@@ -17,7 +17,7 @@
 
 #include <vector>
 
-#include "producer_core.hpp"
+#include "producer/producer_core.hpp"
 #include "rcl_interfaces/msg/set_parameters_result.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sample_msgs/msg/unfiltered.hpp"

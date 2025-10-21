@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "control_node.hpp"
+#include "control/control_node.hpp"
 
 ControlNode::ControlNode()
 : Node("control")

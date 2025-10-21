@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "control_core.hpp"
+#include "control/control_core.hpp"
 
 namespace robot
 {

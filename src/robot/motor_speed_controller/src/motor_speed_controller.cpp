@@ -12,16 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "motor_speed_controller.hpp"
-
-using namespace std::placeholders;
+#include "motor_speed_controller/motor_speed_controller.hpp"
 
 MotorSpeedController::MotorSpeedController()
 : Node("motor_speed_controller")
 {
   // Create publisher for joystick messages
   arcade_sub_ = this->create_subscription<drivetrain_msgs::msg::ArcadeSpeed>(
-    "/arcade_speed", 10, std::bind(&MotorSpeedController::arcade_callback, this, _1));
+    "/arcade_speed", 10, std::bind(&MotorSpeedController::arcade_callback, this, std::placeholders::_1));
 
   motor_speeds_pub_ = this->create_publisher<drivetrain_msgs::msg::MotorSpeeds>("/cmd_vel_out", 10);
 

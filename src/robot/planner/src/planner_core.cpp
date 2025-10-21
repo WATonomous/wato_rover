@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "planner_core.hpp"
+#include "planner/planner_core.hpp"
 
 namespace robot
 {

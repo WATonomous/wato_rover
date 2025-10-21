@@ -15,7 +15,7 @@
 #ifndef AGGREGATOR_NODE_HPP_
 #define AGGREGATOR_NODE_HPP_
 
-#include "aggregator_core.hpp"
+#include "aggregator/aggregator_core.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sample_msgs/msg/filtered_array.hpp"
 #include "sample_msgs/msg/unfiltered.hpp"

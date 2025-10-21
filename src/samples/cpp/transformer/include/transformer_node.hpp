@@ -19,7 +19,7 @@
 #include "sample_msgs/msg/filtered.hpp"
 #include "sample_msgs/msg/filtered_array.hpp"
 #include "sample_msgs/msg/unfiltered.hpp"
-#include "transformer_core.hpp"
+#include "transformer/transformer_core.hpp"
 
 /**
  * Implementation of a ROS2 node that converts unfiltered messages to filtered_array

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "aggregator_core.hpp"
+#include "aggregator/aggregator_core.hpp"
 
 #include <algorithm>
 

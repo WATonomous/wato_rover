@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "producer_node.hpp"
+#include "producer/producer_node.hpp"
 
 #include <chrono>
 #include <memory>

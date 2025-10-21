@@ -15,7 +15,7 @@
 #ifndef PLANNER_NODE_HPP_
 #define PLANNER_NODE_HPP_
 
-#include "planner_core.hpp"
+#include "planner/planner_core.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 class PlannerNode : public rclcpp::Node

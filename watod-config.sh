@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright (c) 2025-present WATonomous. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +29,7 @@
 ##   - robot            :   starts up robot nodes
 ##   - samples          :   starts up sample nodes for reference
 
-ACTIVE_MODULES="robot gazebo vis_tools"
+export ACTIVE_MODULES="robot gazebo vis_tools"
 
 ################################# MODE OF OPERATION #################################
 ## Possible modes of operation when running watod.
@@ -51,4 +52,4 @@ ACTIVE_MODULES="robot gazebo vis_tools"
 
 ## Platform in which to build the docker images with.
 ## Either arm64 (apple silicon, raspberry pi) or amd64 (most computers)
-PLATFORM="amd64"
+export PLATFORM="amd64"

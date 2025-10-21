@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #include "gtest/gtest.h"
-#include "producer_core.hpp"
+#include "producer/producer_core.hpp"
 
 TEST(ProducerTest, ValidSerialization)
 {
