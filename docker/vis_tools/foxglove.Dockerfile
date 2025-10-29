@@ -8,46 +8,49 @@ WORKDIR ${AMENT_WS}/src
 # Copy in source code
 COPY src/wato_msgs wato_msgs
 
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+ && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
+ && rm -rf /var/lib/apt/lists/*
+
 # Scan for rosdeps
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN apt-get update && apt-get install -y --no-install-recommends curl \
-    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
-    && apt-get -qq update && rosdep update \
-    && rosdep install --from-paths . --ignore-src -r -s \
+RUN apt-get -qq update && rosdep update && \
+    (rosdep install --from-paths . --ignore-src -r -s \
         | grep 'apt-get install' \
         | awk '{print $3}' \
-        | sort  > /tmp/colcon_install_list \
-    && rm -rf /var/lib/apt/lists/*
+        | sort  > /tmp/colcon_install_list || echo "# No additional dependencies needed" > /tmp/colcon_install_list)
 
 ################################# Dependencies ################################
 FROM ${BASE_IMAGE} AS dependencies
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get update && apt-get install -y --no-install-recommends curl \
-    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
-    && rm -rf /var/lib/apt/lists/*
+ && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
+ && rm -rf /var/lib/apt/lists/*
 
 # Install Foxglove Deps
-RUN apt-get update && apt-get install -y --no-install-recommends curl ros-humble-ros2bag ros-humble-rosbag2* ros-humble-foxglove-msgs \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends curl ros-humble-ros2bag ros-humble-rosbag2* ros-humble-foxglove-msgs && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set up apt repo
-RUN apt-get update && apt-get install -y --no-install-recommends lsb-release software-properties-common apt-transport-https \
-    && apt-add-repository universe \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends lsb-release software-properties-common apt-transport-https && \
+    apt-add-repository universe && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Dependencies
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+# Install Dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     "ros-${ROS_DISTRO}-foxglove-bridge" \
     "ros-${ROS_DISTRO}-rosbridge-server" \
     "ros-${ROS_DISTRO}-topic-tools" \
-    "ros-${ROS_DISTRO}-vision-msgs" \
-    && rm -rf /var/lib/apt/lists/*
+    "ros-${ROS_DISTRO}-vision-msgs" && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Rosdep requirements
 COPY --from=source /tmp/colcon_install_list /tmp/colcon_install_list
-RUN xargs -a /tmp/colcon_install_list apt-fast install -qq -y --no-install-recommends
+RUN if [ -s /tmp/colcon_install_list ] && ! grep -q "^#" /tmp/colcon_install_list; then \
+        xargs -a /tmp/colcon_install_list apt-fast install -qq -y --no-install-recommends < /dev/null; \
+    fi
 
 # Copy in source code from source stage
 WORKDIR ${AMENT_WS}

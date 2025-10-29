@@ -1,6 +1,7 @@
 .env
 __pycache__
 .vscode/
+.idea/
 
 watod-config.local.sh
 **/.DS_Store

@@ -29,7 +29,7 @@ run_compose run --rm --detach --name "${DEP_MOUNT_CONTAINER_NAME}" "${SERVICE_NA
 docker cp "${DEP_MOUNT_CONTAINER_NAME}:/opt/ros" "${TEMP_DEPENDENCES_DIR}"
 
 # Source ROS environment
-cd "${TEMP_DEPENDENCES_DIR}/ros/humble"
+cd "${TEMP_DEPENDENCES_DIR}/ros/humble" || exit
 . ./setup.bash
 
 # Stop the service
@@ -43,7 +43,7 @@ VSCODE_DIR="$MONO_DIR/.vscode"
 mkdir -p "$VSCODE_DIR"
 
 # Write to c_cpp_properties.json
-cat << EOF > $VSCODE_DIR/c_cpp_properties.json
+cat << EOF > "$VSCODE_DIR/c_cpp_properties.json"
 {
     "configurations": [
         {
@@ -63,7 +63,7 @@ cat << EOF > $VSCODE_DIR/c_cpp_properties.json
 EOF
 
 # Write to settings.json
-cat << EOF > $VSCODE_DIR/settings.json
+cat << EOF > "$VSCODE_DIR/settings.json"
 {
     "python.analysis.extraPaths": [
         "/tmp/deps/ros/humble/local/lib/python3.10/dist-packages"
@@ -79,8 +79,8 @@ cat << EOF > $VSCODE_DIR/settings.json
 }
 EOF
 
-# Write to settings.json
-cat << EOF > $VSCODE_DIR/extensions.json
+# Write to extensions.json
+cat << EOF > "$VSCODE_DIR/extensions.json"
 {
     "recommendations": [
         "ms-iot.vscode-ros",
