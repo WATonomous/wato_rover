@@ -24,10 +24,10 @@ RUN apt-get update && apt-get install -y curl \
     && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 RUN apt-get -qq update && rosdep update && \
-    rosdep install --from-paths . --ignore-src -r -s \
+    (rosdep install --from-paths . --ignore-src -r -s \
     | grep 'apt-get install' \
     | awk '{print $3}' \
-    | sort  > /tmp/colcon_install_list
+    | sort  > /tmp/colcon_install_list || echo "# No additional dependencies needed" > /tmp/colcon_install_list)
 
 ################################# Dependencies ################################
 FROM ${BASE_IMAGE} AS dependencies
@@ -43,7 +43,10 @@ RUN sudo apt-get clean && \
 
 # Install Rosdep requirements
 COPY --from=source /tmp/colcon_install_list /tmp/colcon_install_list
-RUN apt-get -qq update && apt-fast install -qq -y --no-install-recommends $(cat /tmp/colcon_install_list) && \
+RUN apt-get -qq update && \
+    if [ -s /tmp/colcon_install_list ] && ! grep -q "^#" /tmp/colcon_install_list; then \
+        apt-fast install -qq -y --no-install-recommends $(cat /tmp/colcon_install_list); \
+    fi && \
     # fallback that installs librealsense2 ROS packages if not in colcon_install_list
     apt-get -qq install -y --no-install-recommends ros-humble-librealsense2* || true
 
