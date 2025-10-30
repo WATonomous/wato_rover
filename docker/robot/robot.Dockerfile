@@ -6,9 +6,11 @@ FROM ${BASE_IMAGE} AS source
 WORKDIR ${AMENT_WS}/src
 
 RUN apt-get update && apt-get install -y curl \
- && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 # Copy in source code 
+COPY src/robot/yolo_inference ./yolo_inference
+COPY src/robot/object_detection object_detection
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/bringup_robot bringup_robot
 COPY src/robot/camera_fallback camera_fallback
@@ -19,7 +21,7 @@ COPY src/wato_msgs/drivetrain_msgs drivetrain_msgs
 
 # Scan for rosdeps
 RUN apt-get update && apt-get install -y curl \
- && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 RUN apt-get -qq update && rosdep update && \
     (rosdep install --from-paths . --ignore-src -r -s \
@@ -33,7 +35,7 @@ FROM ${BASE_IMAGE} AS dependencies
 # Clean up and update apt-get, then update rosdep
 
 RUN apt-get update && apt-get install -y curl \
- && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 RUN sudo apt-get clean && \
     sudo apt-get update && \
@@ -49,6 +51,7 @@ RUN apt-get -qq update && \
     apt-get -qq install -y --no-install-recommends ros-humble-librealsense2* || true
 
 # Copy in source code from source stage
+COPY src/robot/object_detection object_detection
 WORKDIR ${AMENT_WS}
 COPY --from=source ${AMENT_WS}/src src
 
@@ -64,11 +67,20 @@ FROM dependencies AS build
 # Clean up and update apt-get, then update rosdep
 
 RUN apt-get update && apt-get install -y curl \
- && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 
 RUN sudo apt-get clean && \
     sudo apt-get update && \
     sudo rosdep update
+
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    python3-dev \
+    python3-setuptools \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install onnxruntime
+RUN pip3 install "numpy<2.0"
 
 # Build ROS2 packages
 WORKDIR ${AMENT_WS}
