@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# Copyright (c) 2025-present WATonomous. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 SERVICE_NAME=$1
 
 echo "Starting dependency mount"
@@ -16,7 +29,7 @@ run_compose run --rm --detach --name "${DEP_MOUNT_CONTAINER_NAME}" "${SERVICE_NA
 docker cp "${DEP_MOUNT_CONTAINER_NAME}:/opt/ros" "${TEMP_DEPENDENCES_DIR}"
 
 # Source ROS environment
-cd "${TEMP_DEPENDENCES_DIR}/ros/humble"
+cd "${TEMP_DEPENDENCES_DIR}/ros/humble" || exit
 . ./setup.bash
 
 # Stop the service
@@ -30,7 +43,7 @@ VSCODE_DIR="$MONO_DIR/.vscode"
 mkdir -p "$VSCODE_DIR"
 
 # Write to c_cpp_properties.json
-cat << EOF > $VSCODE_DIR/c_cpp_properties.json
+cat << EOF > "$VSCODE_DIR/c_cpp_properties.json"
 {
     "configurations": [
         {
@@ -50,7 +63,7 @@ cat << EOF > $VSCODE_DIR/c_cpp_properties.json
 EOF
 
 # Write to settings.json
-cat << EOF > $VSCODE_DIR/settings.json
+cat << EOF > "$VSCODE_DIR/settings.json"
 {
     "python.analysis.extraPaths": [
         "/tmp/deps/ros/humble/local/lib/python3.10/dist-packages"
@@ -66,8 +79,8 @@ cat << EOF > $VSCODE_DIR/settings.json
 }
 EOF
 
-# Write to settings.json
-cat << EOF > $VSCODE_DIR/extensions.json
+# Write to extensions.json
+cat << EOF > "$VSCODE_DIR/extensions.json"
 {
     "recommendations": [
         "ms-iot.vscode-ros",

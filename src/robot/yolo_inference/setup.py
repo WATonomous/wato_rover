@@ -1,3 +1,16 @@
+# Copyright (c) 2025-present WATonomous. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 from setuptools import setup
 
 package_name = "yolo_inference"
@@ -7,16 +20,15 @@ setup(
     version="0.0.0",
     packages=[package_name],
     data_files=[
-        ("share/ament_index/resource_index/packages",
-         [f"resource/{package_name}"]),
+        ("share/ament_index/resource_index/packages", [f"resource/{package_name}"]),
         (f"share/{package_name}", ["package.xml"]),
         (f"share/{package_name}/models", ["models/yolov8.onnx"]),
     ],
     install_requires=[
-        "onnxruntime", 
+        "onnxruntime",
         "numpy",
         "opencv-python",
-        "torch ; extra == 'torch'",   # optional - if we want .pt support
+        "torch ; extra == 'torch'",  # optional - if we want .pt support
     ],
     entry_points={
         "console_scripts": [

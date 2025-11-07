@@ -1,5 +1,5 @@
 services:
-  robot: 
+  robot:
     build: &robot_build
       context: ..
       dockerfile: docker/robot/robot.Dockerfile
@@ -17,7 +17,7 @@ services:
     volumes:
       - /dev:/dev
     privileged: true
-  
+
   robot_dev:
     build: *robot_build
     image: "${ROBOT_IMAGE:?}:dev_${TAG}"

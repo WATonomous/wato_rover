@@ -299,11 +299,11 @@
                     <geometry>
                         <mesh>
                             <uri>mars.stl</uri>
-                            <scale>0.1 0.1 0.1</scale> 
+                            <scale>0.1 0.1 0.1</scale>
                         </mesh>
                     </geometry>
                     <material>
-                        <ambient>0.76 0.60 0.42 1</ambient> 
+                        <ambient>0.76 0.60 0.42 1</ambient>
                         <diffuse>0.76 0.60 0.42 1</diffuse>
                     </material>
                     <pose>0 0 0 0 0 3.14159</pose>
@@ -327,11 +327,11 @@
                     <geometry>
                         <mesh>
                             <uri>water_bottle.stl</uri>
-                            <scale>0.4 0.4 0.4</scale> 
+                            <scale>0.4 0.4 0.4</scale>
                         </mesh>
                     </geometry>
                     <material>
-                        <ambient>0.68 0.85 0.90 1</ambient> 
+                        <ambient>0.68 0.85 0.90 1</ambient>
                         <diffuse>0.68 0.85 0.90 1</diffuse>
                     </material>
                     <pose>0 0 0 0 0 3.14159</pose>
@@ -355,11 +355,11 @@
                     <geometry>
                         <mesh>
                             <uri>mallet.stl</uri>
-                            <scale>0.4 0.4 0.4</scale> 
+                            <scale>0.4 0.4 0.4</scale>
                         </mesh>
                     </geometry>
                     <material>
-                        <ambient>1 0.4 0.0 1</ambient> 
+                        <ambient>1 0.4 0.0 1</ambient>
                         <diffuse>1 0.4 0.0 1</diffuse>
                     </material>
                     <pose>0 0 0 0 0 3.14159</pose>

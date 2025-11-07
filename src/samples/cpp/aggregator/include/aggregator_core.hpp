@@ -1,10 +1,23 @@
+// Copyright (c) 2025-present WATonomous. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #ifndef AGGREGATOR_CORE_HPP_
 #define AGGREGATOR_CORE_HPP_
 
 #include "rclcpp/rclcpp.hpp"
-
-#include "sample_msgs/msg/unfiltered.hpp"
 #include "sample_msgs/msg/filtered_array.hpp"
+#include "sample_msgs/msg/unfiltered.hpp"
 
 namespace samples
 {
@@ -44,16 +57,14 @@ public:
    *
    * @param msg
    */
-  void add_raw_msg(
-    const sample_msgs::msg::Unfiltered::SharedPtr msg);
+  void add_raw_msg(const sample_msgs::msg::Unfiltered::SharedPtr msg);
   /**
    * Used to keep track of latest timestamp and number of messages received
    * over the "filtered" topic. Should be called before filtered_frequency().
    *
    * @param msg
    */
-  void add_filtered_msg(
-    const sample_msgs::msg::FilteredArray::SharedPtr msg);
+  void add_filtered_msg(const sample_msgs::msg::FilteredArray::SharedPtr msg);
 
 private:
   // Number of message received on "unfiltered" and "filtered" topics.

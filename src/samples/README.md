@@ -6,10 +6,10 @@ This project contains three arbitrary ROS2 nodes which communicate with each oth
 
 ![Architecture](samples_diagram.svg)
 
-Each ROS2 node is containerized([Producer](../../docker/samples/cpp/producer.Dockerfile), [Transformer](../../docker/samples/cpp/transformer.Dockerfile), [Aggregator](../../docker/samples/cpp/aggregator.Dockerfile)) and communicate with each other using ROS2 publishers and subscribers. 
+Each ROS2 node is containerized([Producer](../../docker/samples/cpp/producer.Dockerfile), [Transformer](../../docker/samples/cpp/transformer.Dockerfile), [Aggregator](../../docker/samples/cpp/aggregator.Dockerfile)) and communicate with each other using ROS2 publishers and subscribers.
 
 ### Core Logic and Node Logic
-A single ROS2 node in our stack should contain two components, we call this the `WATO Core and Node paradigm`. The Core Logic of a node represents the crucial algorithms needed to augment data. This could be a neural network, control framework, RL algorithm, etc. On the other hand, the Node represents any ROS2 interfaces and practices which enable the node to communicate with the rest of the stack. This includes subscribers, publishers, buffers, etc. 
+A single ROS2 node in our stack should contain two components, we call this the `WATO Core and Node paradigm`. The Core Logic of a node represents the crucial algorithms needed to augment data. This could be a neural network, control framework, RL algorithm, etc. On the other hand, the Node represents any ROS2 interfaces and practices which enable the node to communicate with the rest of the stack. This includes subscribers, publishers, buffers, etc.
 
 At times, the boundary between core logic and node logic may be unclear, so a good rule of thumb is that the core logic does not contain function calls from `rclpy` and `rclcpp`. It may contain message types. This rule may be broken in rare cases.
 
@@ -55,17 +55,17 @@ of tools. For developing and testing ROS2 nodes the process is as follows.
 watod up <SERVICE_NAME>
 watod -t <SERVICE_NAME>
 ```
-2. After making changes to source code rebuild the ROS2 package and source the install folder
+1. After making changes to source code rebuild the ROS2 package and source the install folder
 ```
 colcon build
 source install/setup.bash
 ```
-3. Test that no breaking changes were introduced and that ROS2 coding conventions were followed
+1. Test that no breaking changes were introduced and that ROS2 coding conventions were followed
 ```
 colcon test
 colcon test-result --verbose // Get detailed information about failures
 ```
-When developing your own node, use these samples as reference for setting up ROS2 constructs, configuration parameters, etc. 
+When developing your own node, use these samples as reference for setting up ROS2 constructs, configuration parameters, etc.
 
 ### Testing
 At this moment, the sample nodes contain unit tests, but not integration tests. As our codebase expands, we will update this section on how to do proper integration testing. See our [Testing Documentation](../../docs/dev/testing.md) for more details.

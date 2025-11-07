@@ -1,12 +1,24 @@
+// Copyright (c) 2025-present WATonomous. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #ifndef AGGREGATOR_NODE_HPP_
 #define AGGREGATOR_NODE_HPP_
 
+#include "aggregator/aggregator_core.hpp"
 #include "rclcpp/rclcpp.hpp"
-
-#include "sample_msgs/msg/unfiltered.hpp"
 #include "sample_msgs/msg/filtered_array.hpp"
-
-#include "aggregator_core.hpp"
+#include "sample_msgs/msg/unfiltered.hpp"
 
 /**
  * Implementation of a ROS2 node that listens to the "unfiltered" and "filtered"
@@ -31,8 +43,7 @@ private:
    *
    * @param msg a raw message from the "unfiltered" topic
    */
-  void unfiltered_callback(
-    const sample_msgs::msg::Unfiltered::SharedPtr msg);
+  void unfiltered_callback(const sample_msgs::msg::Unfiltered::SharedPtr msg);
 
   /**
    * A ROS2 subscription node callback used to unpack processed data from the
@@ -40,8 +51,7 @@ private:
    *
    * @param msg a processed message from the "filtered" topic
    */
-  void filtered_callback(
-    const sample_msgs::msg::FilteredArray::SharedPtr msg);
+  void filtered_callback(const sample_msgs::msg::FilteredArray::SharedPtr msg);
 
   // ROS2 subscriber listening to the unfiltered topic.
   rclcpp::Subscription<sample_msgs::msg::Unfiltered>::SharedPtr raw_sub_;

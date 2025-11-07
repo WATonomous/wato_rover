@@ -1,7 +1,21 @@
+// Copyright (c) 2025-present WATonomous. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#include "transformer/transformer_core.hpp"
+
 #include <string>
 #include <vector>
-
-#include "transformer_core.hpp"
 
 namespace samples
 {
@@ -19,8 +33,7 @@ void TransformerCore::clear_buffer()
   buffer_.clear();
 }
 
-bool TransformerCore::validate_message(
-  const sample_msgs::msg::Unfiltered::SharedPtr unfiltered)
+bool TransformerCore::validate_message(const sample_msgs::msg::Unfiltered::SharedPtr unfiltered)
 {
   return unfiltered->valid;
 }
@@ -34,16 +47,13 @@ bool TransformerCore::enqueue_message(const sample_msgs::msg::Filtered & msg)
 }
 
 bool TransformerCore::deserialize_coordinate(
-  const sample_msgs::msg::Unfiltered::SharedPtr unfiltered,
-  sample_msgs::msg::Filtered & filtered)
+  const sample_msgs::msg::Unfiltered::SharedPtr unfiltered, sample_msgs::msg::Filtered & filtered)
 {
   std::string serialized_position = unfiltered->data;
   auto start_pos = serialized_position.find("x:");
   auto end_pos = serialized_position.find(";");
   // Validate that the substrings were found
-  if (start_pos == std::string::npos || end_pos == std::string::npos ||
-    end_pos < start_pos)
-  {
+  if (start_pos == std::string::npos || end_pos == std::string::npos || end_pos < start_pos) {
     return false;
   }
   // Offset index to start of x_pos
@@ -53,9 +63,7 @@ bool TransformerCore::deserialize_coordinate(
 
   start_pos = serialized_position.find("y:", end_pos + 1);
   end_pos = serialized_position.find(";", end_pos + 1);
-  if (start_pos == std::string::npos || end_pos == std::string::npos ||
-    end_pos < start_pos)
-  {
+  if (start_pos == std::string::npos || end_pos == std::string::npos || end_pos < start_pos) {
     return false;
   }
   // Offset index to start of y_pos
@@ -64,9 +72,7 @@ bool TransformerCore::deserialize_coordinate(
 
   start_pos = serialized_position.find("z:", end_pos + 1);
   end_pos = serialized_position.find(";", end_pos + 1);
-  if (start_pos == std::string::npos || end_pos == std::string::npos ||
-    end_pos < start_pos)
-  {
+  if (start_pos == std::string::npos || end_pos == std::string::npos || end_pos < start_pos) {
     return false;
   }
   // Offset index to start of z_pos

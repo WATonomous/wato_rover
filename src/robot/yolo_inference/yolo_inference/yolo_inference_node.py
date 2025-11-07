@@ -1,4 +1,17 @@
 #!/usr/bin/env python3
+# Copyright (c) 2025-present WATonomous. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """
 Load a YOLO model (ONNX by default, optional .pt via torch)
 subscribe to /image topic and log detection results
@@ -11,11 +24,12 @@ from cv_bridge import CvBridge
 import numpy as np
 import cv2
 import os
-import onnxruntime as ort # rosdep: python3-onnxruntime
+import onnxruntime as ort  # rosdep: python3-onnxruntime
 from ament_index_python.packages import get_package_share_directory
 
 try:
-    import torch # rosdep: python3-torch (optional)
+    import torch  # rosdep: python3-torch (optional)
+
     TORCH_OK = True
 except ImportError:
     TORCH_OK = False
@@ -31,10 +45,12 @@ class YoloInference(Node):
         self.declare_parameter("model_path", default_model)
         self.declare_parameter("input_size", 640)
 
-        self.model_path: str = self.get_parameter(
-            "model_path").get_parameter_value().string_value
-        self.input_size: int = self.get_parameter(
-            "input_size").get_parameter_value().integer_value
+        self.model_path: str = (
+            self.get_parameter("model_path").get_parameter_value().string_value
+        )
+        self.input_size: int = (
+            self.get_parameter("input_size").get_parameter_value().integer_value
+        )
 
         if not self.model_path:
             self.get_logger().fatal("Parameter 'model_path' is required.")
@@ -52,21 +68,20 @@ class YoloInference(Node):
             self.run = self.run_onnx
         elif ext in (".pt", ".pth"):
             if not TORCH_OK:
-                raise RuntimeError(
-                    ".pt model requested but 'torch' not available")
+                raise RuntimeError(".pt model requested but 'torch' not available")
             self.model = torch.jit.load(self.model_path).eval()
             self.get_logger().info(f"Loaded TorchScript model: {self.model_path}")
             self.run = self.run_torch
         else:
             raise RuntimeError(f"Unsupported model extension: {ext}")
-        
+
         self.annotated_pub = self.create_publisher(Image, "/detections_image", 10)
 
         # Bridge & subscription
         self.bridge = CvBridge()
         self.create_subscription(Image, "/image", self.cb_image, 10)
 
-    ## inference 
+    ## inference
     def run_onnx(self, img: np.ndarray):
         inp = self.preprocess(img)
         preds = self.session.run(None, {self.input_name: inp})[0]
@@ -85,9 +100,18 @@ class YoloInference(Node):
 
         for x1, y1, x2, y2, conf, cls in detections:
             cv2.rectangle(frame, (x1, y1), (x2, y2), (128, 0, 128), 1)
-            cv2.putText(frame, f"{cls}: {conf:.2f}", (x1, y1 - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (128, 0, 128), 1)
-            self.get_logger().info(f"Found object {cls} at ({x1}, {y1}), ({x2}, {y2}) with {conf:.2f} confidence")
+            cv2.putText(
+                frame,
+                f"{cls}: {conf:.2f}",
+                (x1, y1 - 10),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5,
+                (128, 0, 128),
+                1,
+            )
+            self.get_logger().info(
+                f"Found object {cls} at ({x1}, {y1}), ({x2}, {y2}) with {conf:.2f} confidence"
+            )
 
         # Publish the annotated image
         annotated_msg = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
@@ -111,7 +135,10 @@ class YoloInference(Node):
         # calculate new dimensions
         shape = im.shape[:2]  # current height, width
         scale_ratio = min(new_shape[0] / shape[0], new_shape[1] / shape[1])
-        new_dims = (int(round(shape[1] * scale_ratio)), int(round(shape[0] * scale_ratio)))
+        new_dims = (
+            int(round(shape[1] * scale_ratio)),
+            int(round(shape[0] * scale_ratio)),
+        )
 
         # calculate new position
         dw, dh = (new_shape[1] - new_dims[0]) / 2, (new_shape[0] - new_dims[1]) / 2
@@ -120,7 +147,9 @@ class YoloInference(Node):
 
         # create new scaled image
         im = cv2.resize(im, new_dims, interpolation=cv2.INTER_LINEAR)
-        im = cv2.copyMakeBorder(im, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)
+        im = cv2.copyMakeBorder(
+            im, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color
+        )
 
         return im, scale_ratio, dw, dh
 
@@ -132,10 +161,11 @@ class YoloInference(Node):
         )
         img = img.astype(np.float32) / 255.0
         img = np.transpose(img, (2, 0, 1))  # HWC to CHW
-        img = np.expand_dims(img, 0)        # NCHW
+        img = np.expand_dims(img, 0)  # NCHW
         img = np.ascontiguousarray(img)
         if torch_tensor:
             import torch
+
             return torch.from_numpy(img)
         return img
 
@@ -149,7 +179,6 @@ class YoloInference(Node):
 
         predictions = raw[0]
         for det in predictions:
-
             # filter results
             conf = det[4]
             if conf < conf_threshold:
