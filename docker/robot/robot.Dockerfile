@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
  && rm -rf /var/lib/apt/lists/*
 
 # Copy in source code
+COPY src/robot/yolo_inference ./yolo_inference
+COPY src/robot/object_detection object_detection
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/bringup_robot bringup_robot
 COPY src/robot/camera_fallback camera_fallback
@@ -48,6 +50,8 @@ RUN apt-get -qq update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy in source code from source stage
+WORKDIR ${AMENT_WS}/src
+COPY src/robot/object_detection object_detection
 WORKDIR ${AMENT_WS}
 COPY --from=source ${AMENT_WS}/src src
 
@@ -68,6 +72,16 @@ RUN apt-get clean && \
     apt-get update && \
     rosdep update && \
     rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    python3-pip \
+    python3-dev \
+    python3-setuptools \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+#RUN pip install --no-cache-dir onnxruntime && pip3 install --no-cache-dir "numpy<2.0"
 
 # Build ROS2 packages
 WORKDIR ${AMENT_WS}

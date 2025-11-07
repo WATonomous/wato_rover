@@ -42,12 +42,11 @@ if ! grep -Fq "${pkg}_node = Node(" "$LAUNCH_FILE"; then
     block_file=$(mktemp)
     printf '%s' "$block" > "$block_file"
     awk -v bf="$block_file" '
-        $0 ~ /##[[:space:]]+LAUNCH[[:space:]]+NODES/ && !done {
-            print
-            while ((getline line < bf) > 0) print line
-            close(bf); done=1; next
-        }
-        { print }
+    $0 ~ /^[[:space:]]*return[[:space:]]+ld/ && !done {
+        while ((getline line < bf) > 0) print line
+        close(bf); done=1
+    }
+    { print }
     ' "$LAUNCH_FILE" > "$tmp" && mv "$tmp" "$LAUNCH_FILE"
     rm -f "$block_file"
     echo "✓ Added node block to '$LAUNCH_FILE'"

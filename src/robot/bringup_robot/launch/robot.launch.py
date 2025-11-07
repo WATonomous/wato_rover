@@ -16,12 +16,24 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
 
 import os
 
 
 def generate_launch_description():
     ld = LaunchDescription()  # Begin building a launch description
+
+    yolo_pkg_share = get_package_share_directory("yolo_inference")
+    default_model_path = os.path.join(yolo_pkg_share, "models", "yolov8.onnx")
+
+    model_path_arg = DeclareLaunchArgument(
+        "model_path",
+        default_value=default_model_path,
+        description="Absolute path to the YOLO ONNX/PT weights file",
+    )
+    ld.add_action(model_path_arg)
 
     #################### Odometry Spoof Node #####################
     odometry_spoof_node = Node(
@@ -65,4 +77,27 @@ def generate_launch_description():
     )
     ld.add_action(motor_speed_controller_node)
 
+    #################### Object_detection Node #####################
+    object_detection_node = Node(
+        package="object_detection",
+        name="object_detection_node",
+        executable="object_detection_node",
+    )
+    ld.add_action(object_detection_node)
+
+    ld.add_action(
+        Node(
+            package="yolo_inference",
+            executable="yolo_inference_node",
+            name="yolo_inference_node",
+            output="screen",
+            parameters=[
+                {
+                    "model_path": LaunchConfiguration("model_path"),
+                    "input_size": 640,  # TODO: adjust DEPENDING on model needs 416, 512, etc
+                }
+            ],
+            remappings=[("/image", "/sim/realsense1/depth/image")],
+        )
+    )
     return ld

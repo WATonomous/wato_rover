@@ -327,7 +327,7 @@
                     <geometry>
                         <mesh>
                             <uri>water_bottle.stl</uri>
-                            <scale>0.1 0.1 0.1</scale>
+                            <scale>0.4 0.4 0.4</scale>
                         </mesh>
                     </geometry>
                     <material>
@@ -340,7 +340,7 @@
                     <geometry>
                     <mesh>
                         <uri>water_bottle.stl</uri>
-                        <scale>0.1 0.1 0.1</scale>
+                        <scale>0.4 0.4 0.4</scale>
                     </mesh>
                     </geometry>
                     <pose>0 0 0 0 0 3.14159</pose>
@@ -355,7 +355,7 @@
                     <geometry>
                         <mesh>
                             <uri>mallet.stl</uri>
-                            <scale>0.1 0.1 0.1</scale>
+                            <scale>0.4 0.4 0.4</scale>
                         </mesh>
                     </geometry>
                     <material>
@@ -368,7 +368,7 @@
                     <geometry>
                     <mesh>
                         <uri>mallet.stl</uri>
-                        <scale>0.1 0.1 0.1</scale>
+                        <scale>0.4 0.4 0.4</scale>
                     </mesh>
                     </geometry>
                     <pose>0 0 0 0 0 3.14159</pose>
