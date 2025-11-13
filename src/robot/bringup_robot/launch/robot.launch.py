@@ -11,7 +11,7 @@ def generate_launch_description():
     ld = LaunchDescription()  # Begin building a launch description
 
     yolo_pkg_share = get_package_share_directory("yolo_inference")
-    default_model_path = os.path.join(yolo_pkg_share, "models", "yolov8.onnx")
+    default_model_path = os.path.join(yolo_pkg_share, "models", "best.onnx")
 
     model_path_arg = DeclareLaunchArgument(
         "model_path",

@@ -26,7 +26,7 @@ class YoloInference(Node):
         super().__init__("yolo_inference_node")
 
         pkg_share = get_package_share_directory("yolo_inference")
-        default_model = os.path.join(pkg_share, "models", "yolov8.onnx")
+        default_model = os.path.join(pkg_share, "models", "best.onnx")
 
         self.declare_parameter("model_path", default_model)
         self.declare_parameter("input_size", 640)

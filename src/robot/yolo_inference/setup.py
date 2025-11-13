@@ -10,7 +10,7 @@ setup(
         ("share/ament_index/resource_index/packages",
          [f"resource/{package_name}"]),
         (f"share/{package_name}", ["package.xml"]),
-        (f"share/{package_name}/models", ["models/yolov8.onnx"]),
+        (f"share/{package_name}/models", ["models/best.onnx", "models/yolov8.onnx"]),
     ],
     install_requires=[
         "onnxruntime", 
