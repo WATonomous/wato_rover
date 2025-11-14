@@ -25,6 +25,10 @@ public:
 
 private:
   robot::CostmapCore costmap_;
+
+  rclcpp::Subscription<sensor_msgs::PointCloud2>::SharedPtr cam1_sub_;
+  rclcpp::Subscription<sensor_msgs::PointCloud2>::SharedPtr cam2_sub_;
+
 };
 
 #endif

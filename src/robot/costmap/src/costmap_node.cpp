@@ -20,7 +20,8 @@
 CostmapNode::CostmapNode()
 : Node("costmap")
 , costmap_(robot::CostmapCore(this->get_logger()))
-{}
+{
+}
 
 int main(int argc, char ** argv)
 {
