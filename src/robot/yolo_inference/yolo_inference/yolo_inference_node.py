@@ -162,8 +162,8 @@ class YoloInference(Node):
             y2 = int((det[3] - self.dh) / self.ratio)
 
             cls = "Unknown"
-            if int(det[5]) < 2:
-                cls = ["Mallet", "Bottle"][int(det[5])]
+            if int(det[5]) < 3:
+                cls = ["Mallet", "Bottle", "Pickaxe"][int(det[5])]
 
             results.append((x1, y1, x2, y2, float(conf), cls))
 
