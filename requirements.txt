@@ -1,25 +1,2 @@
-# Core ROS 2 Python dependencies
-rclpy
-ament-index-python
-
-# Launch system dependencies
-launch
-launch-ros
-
-# Computer Vision and Machine Learning
-opencv-python
 numpy<2.0
 onnxruntime==1.16.3
-cv-bridge
-
-# Optional PyTorch support (for .pt model files)
-torch ; extra == 'torch'
-
-# Testing and Linting dependencies
-pytest
-ament-copyright
-ament-flake8
-ament-pep257
-
-# Build tools
-setuptools
