@@ -17,6 +17,7 @@
 
 #include "costmap/costmap_core.hpp"
 #include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/point_cloud2.hpp"
 
 class CostmapNode : public rclcpp::Node
 {
@@ -25,6 +26,16 @@ public:
 
 private:
   robot::CostmapCore costmap_;
+
+  // subscribers
+  rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr cam1_sub_;
+  rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr cam2_sub_;
+
+  // camera callback functions
+  void cam1_callback(sensor_msgs::msg::PointCloud2 point_cloud);
+  void cam2_callback(sensor_msgs::msg::PointCloud2 point_cloud);
+
+  // function to convert to PointXYZRGB
 };
 
 #endif

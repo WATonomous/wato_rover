@@ -37,7 +37,7 @@ export ACTIVE_MODULES="robot gazebo vis_tools"
 ##	 - deploy (default)		:	runs production-grade containers (non-editable)
 ##	 - develop   		    :	runs developer containers (editable)
 
-# MODE_OF_OPERATION=""
+MODE_OF_OPERATION="develop"
 
 ############################## ADVANCED CONFIGURATIONS ##############################
 ## Name to append to docker containers. DEFAULT = "<your_watcloud_username>"
