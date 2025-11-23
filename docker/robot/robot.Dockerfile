@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
 
 # Copy in source code
 COPY src/robot/yolo_inference ./yolo_inference
+COPY src/robot/costmap/ costmap
 COPY src/robot/object_detection object_detection
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/bringup_robot bringup_robot
