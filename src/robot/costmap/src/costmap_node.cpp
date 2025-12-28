@@ -21,25 +21,7 @@ CostmapNode::CostmapNode()
 : Node("costmap")
 , costmap_(robot::CostmapCore(this->get_logger()))
 {
-  // subscribers for each camera
-  cam1_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-    "/sim/realsense1/depth/points", 10, std::bind(
-      &CostmapNode::cam1_callback, this, std::placeholders::_1));
-  cam2_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-    "/sim/realsense2/depth/points", 10, std::bind(
-      &CostmapNode::cam2_callback, this, std::placeholders::_1));
 
-
-}
-
-void CostmapNode::cam1_callback(sensor_msgs::msg::PointCloud2 point_cloud)
-{
-  RCLCPP_INFO(this->get_logger(), "Cam 1 Recieved");
-}
-
-void CostmapNode::cam2_callback(sensor_msgs::msg::PointCloud2 point_cloud)
-{
-  RCLCPP_INFO(this->get_logger(), "Cam 1 Recieved");
 }
 
 int main(int argc, char ** argv)

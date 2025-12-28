@@ -17,7 +17,25 @@
 PCLConverterNode::PCLConverterNode()
 : Node("pcl_converter")
 , pcl_converter_(robot::PCLConverterCore(this->get_logger()))
-{}
+{
+  // subscribers for each camera
+  cam1_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
+    "/sim/realsense1/depth/points", 10, std::bind(
+      &PCLConverterNode::cam1_callback, this, std::placeholders::_1));
+  cam2_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
+    "/sim/realsense2/depth/points", 10, std::bind(
+      &PCLConverterNode::cam2_callback, this, std::placeholders::_1));
+}
+
+void PCLConverterNode::cam1_callback(sensor_msgs::msg::PointCloud2 point_cloud)
+{
+  RCLCPP_INFO(this->get_logger(), "Cam 1 Recieved");
+}
+
+void PCLConverterNode::cam2_callback(sensor_msgs::msg::PointCloud2 point_cloud)
+{
+  RCLCPP_INFO(this->get_logger(), "Cam 2 Recieved");
+}
 
 int main(int argc, char ** argv)
 {
