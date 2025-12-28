@@ -3,7 +3,7 @@
 <package format="3">
   <name>pcl_converter</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Node to convert point cloud data</description>
   <maintainer email="sdorya776@gmail.com">bolty</maintainer>
   <license>Apache-2.0</license>
 

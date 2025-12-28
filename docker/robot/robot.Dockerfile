@@ -18,6 +18,7 @@ COPY src/robot/bringup_robot bringup_robot
 COPY src/robot/camera_fallback camera_fallback
 COPY src/robot/arcade_driver arcade_driver
 COPY src/robot/motor_speed_controller motor_speed_controller
+COPY src/robot/pcl_converter pcl_converter
 COPY src/wato_msgs/drivetrain_msgs drivetrain_msgs
 
 # Scan for rosdeps
