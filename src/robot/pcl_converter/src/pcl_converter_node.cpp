@@ -14,7 +14,7 @@
 
 #include "pcl_converter/pcl_converter_node.hpp"
 
-PCLConverterCore::PCLConverterCore()
+PCLConverterNode::PCLConverterNode()
 : Node("pcl_converter")
 , pcl_converter_(robot::PCLConverterCore(this->get_logger()))
 {}
@@ -22,7 +22,7 @@ PCLConverterCore::PCLConverterCore()
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<PCLConverterCore>());
+  rclcpp::spin(std::make_shared<PCLConverterNode>());
   rclcpp::shutdown();
   return 0;
 }
