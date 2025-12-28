@@ -85,6 +85,15 @@ def generate_launch_description():
     )
     ld.add_action(object_detection_node)
 
+    #################### Pcl_converter Node #####################
+    pcl_converter_node = Node(
+        package="pcl_converter",
+        name="pcl_converter",
+        executable="pcl_converter_node",
+        output = "screen",
+    )
+    ld.add_action(pcl_converter_node)
+
     ld.add_action(
         Node(
             package="yolo_inference",
