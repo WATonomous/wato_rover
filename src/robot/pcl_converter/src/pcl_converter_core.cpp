@@ -21,4 +21,14 @@ PCLConverterCore::PCLConverterCore(const rclcpp::Logger & logger)
 : logger_(logger)
 {}
 
+
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr PCLConverterCore::convertPointCloud2(
+    const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud2_) 
+{
+    // convert to the pcl format
+
+    //pcl::fromROSMsg();
+}
+
 }  // namespace robot

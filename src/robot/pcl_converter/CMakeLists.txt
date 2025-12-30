@@ -23,7 +23,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# find dependencies
+# find ROS2 dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
@@ -33,6 +33,8 @@ find_package(geometry_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(tf2_sensor_msgs REQUIRED)
 
+# find pcl library
+find_package(PCL REQUIRED COMPONENTS common filters)
 
 # Compiles source files into a library
 # A library is not executed, instead other executables can link
@@ -43,7 +45,15 @@ add_library(pcl_converter_lib
   src/pcl_converter_core.cpp)
 # Indicate to compiler where to search for header files
 target_include_directories(pcl_converter_lib
-  PUBLIC include)
+  PUBLIC 
+  include
+  ${PCL_INCLUDE_DIRS}
+  )
+
+# link pcl_library to the pcl_converter library
+target_link_libraries(pcl_converter_lib
+  ${PCL_LIBRARIES}
+)
 # Add ROS2 dependencies required by package
 ament_target_dependencies(pcl_converter_lib 
                           rclcpp 

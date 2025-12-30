@@ -27,13 +27,16 @@ public:
 private:
   robot::PCLConverterCore pcl_converter_;
 
-   // subscribers
+  // subscribers
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr cam1_sub_;
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr cam2_sub_;
 
   // camera callback functions
-  void cam1_callback(sensor_msgs::msg::PointCloud2 point_cloud);
-  void cam2_callback(sensor_msgs::msg::PointCloud2 point_cloud);
+  void cam1_callback(const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud);
+  void cam2_callback(const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud);
+
+  // Publisher
+  // rclcpp::Publisher<pcl::PointXYZRGB>::SharedPtr point_pub_;
 };
 
 #endif

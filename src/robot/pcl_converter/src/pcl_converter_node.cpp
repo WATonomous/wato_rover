@@ -27,12 +27,12 @@ PCLConverterNode::PCLConverterNode()
       &PCLConverterNode::cam2_callback, this, std::placeholders::_1));
 }
 
-void PCLConverterNode::cam1_callback(sensor_msgs::msg::PointCloud2 point_cloud)
+void PCLConverterNode::cam1_callback(const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud)
 {
   RCLCPP_INFO(this->get_logger(), "Cam 1 Recieved");
 }
 
-void PCLConverterNode::cam2_callback(sensor_msgs::msg::PointCloud2 point_cloud)
+void PCLConverterNode::cam2_callback(const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud)
 {
   RCLCPP_INFO(this->get_logger(), "Cam 2 Recieved");
 }

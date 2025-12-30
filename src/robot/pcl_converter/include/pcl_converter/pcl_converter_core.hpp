@@ -16,6 +16,9 @@
 #define PCL_CONVERTER_CORE_HPP_
 
 #include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/point_cloud2.hpp"
+#include "pcl_conversions/pcl_conversions.h"
+#include "pcl/impl/point_types.hpp"
 
 namespace robot
 {
@@ -27,6 +30,10 @@ public:
 
 private:
   rclcpp::Logger logger_;
+  
+  // function that converts
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr convertPointCloud2(
+    const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud2_);
 };
 
 }  // namespace robot
