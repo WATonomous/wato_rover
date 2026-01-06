@@ -19,16 +19,40 @@ namespace robot
 
 PCLConverterCore::PCLConverterCore(const rclcpp::Logger & logger)
 : logger_(logger)
-{}
-
-
-
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr PCLConverterCore::convertPointCloud2(
-    const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud2_) 
 {
-    // convert to the pcl format
-
-    //pcl::fromROSMsg();
+    // make sure they are not null ptr
+    pcl_point_cloud_1_ = std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>();
+    pcl_point_cloud_2_ = std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>();
+    pcl_point_cloud_merged_ = std::make_shared<pcl::PointCloud<pcl::PointXYZRGB>>();
+    merged_msg = std::make_shared<sensor_msgs::msg::PointCloud2>();
 }
+
+
+// processes pointclouds and stores them to be used for the merge
+void PCLConverterCore::processPointCloudMsg(
+    const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud2_msg_, int cam_num) 
+{
+    // convert based on the camera it comes from
+    if(cam_num == 1)
+    {
+        pcl::fromROSMsg(*point_cloud2_msg_, *pcl_point_cloud_1_);
+        
+    } else if(cam_num == 2)
+    {
+        pcl::fromROSMsg(*point_cloud2_msg_, *pcl_point_cloud_2_);          
+    }
+}
+
+// merges point cloud msgs and converts them to ros msgs
+sensor_msgs::msg::PointCloud2::SharedPtr PCLConverterCore::mergePointCloudMsgs()
+{
+    // ** NEEDS WORK **
+    *pcl_point_cloud_merged_ = *pcl_point_cloud_1_ + *pcl_point_cloud_2_;
+
+    sensor_msgs::msg::PointCloud2 output_msg;
+    pcl::toROSMsg(*pcl_point_cloud_merged_, output_msg);
+
+
+    return std::make_shared<sensor_msgs::msg::PointCloud2>(output_msg);}
 
 }  // namespace robot

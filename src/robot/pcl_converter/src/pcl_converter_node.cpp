@@ -21,21 +21,72 @@ PCLConverterNode::PCLConverterNode()
   // subscribers for each camera
   cam1_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
     "/sim/realsense1/depth/points", 10, std::bind(
-      &PCLConverterNode::cam1_callback, this, std::placeholders::_1));
+      &PCLConverterNode::cam1Callback, this, std::placeholders::_1));
   cam2_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
     "/sim/realsense2/depth/points", 10, std::bind(
-      &PCLConverterNode::cam2_callback, this, std::placeholders::_1));
+      &PCLConverterNode::cam2Callback, this, std::placeholders::_1));
+
+  // publisher for merged pointcloud
+  point_cloud_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(
+  "pcl_converter/mergedpointcloud", 10);
+
+  // set flags to false
+  has_cam1 = false;
+  has_cam2 = false;
+
+  // initialize the msg
+  point_cloud_msg = 
 }
 
-void PCLConverterNode::cam1_callback(const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud)
+// callback for camera 1 and processes what is recieved 
+// and store in pcl_converter_core for merge
+void PCLConverterNode::cam1Callback(const 
+  sensor_msgs::msg::PointCloud2::SharedPtr point_cloud)
 {
-  RCLCPP_INFO(this->get_logger(), "Cam 1 Recieved");
+  pcl_converter_.processPointCloudMsg(point_cloud, 1);
+  has_cam1 = true;
+
+  // only publishes if both recieved
+  publishPointCloud();
 }
 
-void PCLConverterNode::cam2_callback(const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud)
+// callback for camera 2 and processes what is recieved
+// and store in pcl_converter_core for merge
+void PCLConverterNode::cam2Callback(const 
+  sensor_msgs::msg::PointCloud2::SharedPtr point_cloud)
 {
-  RCLCPP_INFO(this->get_logger(), "Cam 2 Recieved");
+  pcl_converter_.processPointCloudMsg(point_cloud, 2);
+  has_cam2 = true;
+
+  // only publishes if both recieved
+  publishPointCloud();
 }
+
+// publishes the pointcloud
+void PCLConverterNode::publishPointCloud()
+{
+  // dont publish if no point cloud
+  if(!has_cam1 || !has_cam2)
+  {
+    return;
+  }
+  
+  // merge the point clouds
+  point_cloud_msg = pcl_converter_.mergePointCloudMsgs();
+
+  // set flags back to false
+  has_cam1 = false;
+  has_cam2 = false;
+
+  // set the header
+  point_cloud_msg->header.frame_id = "base_link";
+  point_cloud_msg->header.stamp = this->now();
+
+  // publish and log
+  point_cloud_pub_->publish(*point_cloud_msg);
+  RCLCPP_INFO(this->get_logger(), "Point Cloud published");
+}
+
 
 int main(int argc, char ** argv)
 {

@@ -28,12 +28,21 @@ class PCLConverterCore
 public:
   explicit PCLConverterCore(const rclcpp::Logger & logger);
 
+  // processes the point cloud
+  void processPointCloudMsg(
+    const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud2_msg_, int cam_num);
+
+  // function that merges the point clouds
+  sensor_msgs::msg::PointCloud2::SharedPtr mergePointCloudMsgs();
+
 private:
   rclcpp::Logger logger_;
   
-  // function that converts
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr convertPointCloud2(
-    const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud2_);
+  // pcl pointcloud pointers
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcl_point_cloud_1_;
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcl_point_cloud_2_;
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr pcl_point_cloud_merged_;
+  sensor_msgs::msg::PointCloud2::SharedPtr merged_msg;
 };
 
 }  // namespace robot
