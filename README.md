@@ -10,7 +10,8 @@ These steps are to setup the repo to work on your own PC. We utilize docker to e
 3. You're all set! You can visit the [WATO Wiki](https://wiki.watonomous.ca/autonomous_software_general/monorepo_infrastructure) for more documentation on the WATO infrastructure.
 
 ## Demo
-[Demo Video](assets/demos/demo_nov30.mp4)
+https://github.com/user-attachments/assets/d4e821cd-8db7-4176-9e2e-1d9c62aab23d
+
 ![Demo Screenshot](assets/demos/demo_nov30.png)
 
 ## Simulation Environment
