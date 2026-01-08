@@ -17,28 +17,26 @@
 namespace robot
 {
 
-PlannerCore::PlannerCore(const rclcpp::Logger& logger) : path_(std::make_shared<nav_msgs::msg::Path>()), map_(std::make_shared<nav_msgs::msg::OccupancyGrid>()), logger_(logger) {}
+PlannerCore::PlannerCore(const rclcpp::Logger & logger)
+: path_(std::make_shared<nav_msgs::msg::Path>())
+, map_(std::make_shared<nav_msgs::msg::OccupancyGrid>())
+, logger_(logger)
+{}
 
-void PlannerCore::initPlanner(double smoothing_factor, int iterations) {
+void PlannerCore::initPlanner(double smoothing_factor, int iterations)
+{
   smoothing_factor_ = smoothing_factor;
   iterations_ = iterations;
 }
 
 bool PlannerCore::planPath(
-  double start_world_x,
-  double start_world_y,
-  double goal_x, 
-  double goal_y,
-  nav_msgs::msg::OccupancyGrid::SharedPtr map
-) {
+  double start_world_x, double start_world_y, double goal_x, double goal_y, nav_msgs::msg::OccupancyGrid::SharedPtr map)
+{
   map_ = map;
 
   // Convert current goal to map indices
   CellIndex goal_idx;
-  if (!poseToMap(goal_x,
-                 goal_y,
-                 goal_idx))
-  {
+  if (!poseToMap(goal_x, goal_y, goal_idx)) {
     RCLCPP_WARN(logger_, "Goal is out of costmap bounds. Aborting.");
     return false;
   }
@@ -49,12 +47,16 @@ bool PlannerCore::planPath(
     return false;
   }
 
-  RCLCPP_INFO(logger_,
-              "Planning from odom start (%0.2f, %0.2f) => cell (%d, %d) to goal (%d, %d).",
-              start_world_x, start_world_y,
-              start_idx.x, start_idx.y,
-              goal_idx.x, goal_idx.y);
-  
+  RCLCPP_INFO(
+    logger_,
+    "Planning from odom start (%0.2f, %0.2f) => cell (%d, %d) to goal (%d, %d).",
+    start_world_x,
+    start_world_y,
+    start_idx.x,
+    start_idx.y,
+    goal_idx.x,
+    goal_idx.y);
+
   // Run A*
   std::vector<CellIndex> path_cells;
   bool success = doAStar(start_idx, goal_idx, path_cells);
@@ -69,7 +71,7 @@ bool PlannerCore::planPath(
     path_->poses.clear();
   }
 
-  for (auto &cell : path_cells) {
+  for (auto & cell : path_cells) {
     geometry_msgs::msg::PoseStamped pose_stamped;
     pose_stamped.header = map_->header;
 
@@ -78,7 +80,7 @@ bool PlannerCore::planPath(
 
     pose_stamped.pose.position.x = wx;
     pose_stamped.pose.position.y = wy;
-    pose_stamped.pose.orientation.w = 1.0; // simple orientation
+    pose_stamped.pose.orientation.w = 1.0;  // simple orientation
 
     path_->poses.push_back(pose_stamped);
   }
@@ -86,12 +88,9 @@ bool PlannerCore::planPath(
   return true;
 }
 
-bool PlannerCore::doAStar(
-  const CellIndex &start_idx,
-  const CellIndex &goal_idx,
-  std::vector<CellIndex> &out_path
-) {
-  const int width  = map_->info.width;
+bool PlannerCore::doAStar(const CellIndex & start_idx, const CellIndex & goal_idx, std::vector<CellIndex> & out_path)
+{
+  const int width = map_->info.width;
   const int height = map_->info.height;
 
   // Data structures for A*
@@ -99,10 +98,8 @@ bool PlannerCore::doAStar(
   std::unordered_map<CellIndex, CellIndex, CellIndexHash> cameFrom;
   std::unordered_map<CellIndex, double, CellIndexHash> fScore;
 
-  auto setScore = [&](auto &storage, const CellIndex &idx, double val){
-    storage[idx] = val;
-  };
-  auto getScore = [&](auto &storage, const CellIndex &idx){
+  auto setScore = [&](auto & storage, const CellIndex & idx, double val) { storage[idx] = val; };
+  auto getScore = [&](auto & storage, const CellIndex & idx) {
     auto it = storage.find(idx);
     if (it == storage.end()) {
       return std::numeric_limits<double>::infinity();
@@ -111,9 +108,9 @@ bool PlannerCore::doAStar(
   };
 
   // Helper to retrieve cell cost from costmap
-  auto cellCost = [&](const CellIndex &idx) {
+  auto cellCost = [&](const CellIndex & idx) {
     if (idx.x < 0 || idx.x >= width || idx.y < 0 || idx.y >= height) {
-      return 127; // out of bounds => treat as high cost
+      return 127;  // out of bounds => treat as high cost
     }
     int map_index = idx.y * width + idx.x;
     int8_t val = map_->data[map_index];
@@ -148,7 +145,7 @@ bool PlannerCore::doAStar(
 
     // Check neighbors (8-way)
     auto neighbors = getNeighbors8(cidx);
-    for (auto &nb : neighbors) {
+    for (auto & nb : neighbors) {
       // Skip out of bounds quickly
       if (nb.x < 0 || nb.x >= width || nb.y < 0 || nb.y >= height) {
         continue;
@@ -180,13 +177,13 @@ bool PlannerCore::doAStar(
     }
   }
 
-  return false; // No path found
+  return false;  // No path found
 }
 
 void PlannerCore::reconstructPath(
-  const std::unordered_map<CellIndex, CellIndex, CellIndexHash> &cameFrom,
-  const CellIndex &current,
-  std::vector<CellIndex> &out_path)
+  const std::unordered_map<CellIndex, CellIndex, CellIndexHash> & cameFrom,
+  const CellIndex & current,
+  std::vector<CellIndex> & out_path)
 {
   out_path.clear();
   CellIndex c = current;
@@ -201,7 +198,7 @@ void PlannerCore::reconstructPath(
   std::reverse(out_path.begin(), out_path.end());
 }
 
-std::vector<CellIndex> PlannerCore::getNeighbors8(const CellIndex &c)
+std::vector<CellIndex> PlannerCore::getNeighbors8(const CellIndex & c)
 {
   std::vector<CellIndex> result;
   result.reserve(8);
@@ -216,14 +213,14 @@ std::vector<CellIndex> PlannerCore::getNeighbors8(const CellIndex &c)
   return result;
 }
 
-double PlannerCore::euclideanHeuristic(const CellIndex &a, const CellIndex &b)
+double PlannerCore::euclideanHeuristic(const CellIndex & a, const CellIndex & b)
 {
   double dx = static_cast<double>(a.x - b.x);
   double dy = static_cast<double>(a.y - b.y);
   return std::sqrt(dx * dx + dy * dy);
 }
 
-double PlannerCore::stepDistance(const CellIndex &a, const CellIndex &b)
+double PlannerCore::stepDistance(const CellIndex & a, const CellIndex & b)
 {
   int dx = std::abs(a.x - b.x);
   int dy = std::abs(a.y - b.y);
@@ -236,11 +233,11 @@ double PlannerCore::stepDistance(const CellIndex &a, const CellIndex &b)
   }
 }
 
-bool PlannerCore::poseToMap(double wx, double wy, CellIndex &out_idx)
+bool PlannerCore::poseToMap(double wx, double wy, CellIndex & out_idx)
 {
   double origin_x = map_->info.origin.position.x;
   double origin_y = map_->info.origin.position.y;
-  double res      = map_->info.resolution;
+  double res = map_->info.resolution;
 
   double mx = (wx - origin_x) / res;
   double my = (wy - origin_y) / res;
@@ -248,9 +245,7 @@ bool PlannerCore::poseToMap(double wx, double wy, CellIndex &out_idx)
   int ix = static_cast<int>(std::floor(mx));
   int iy = static_cast<int>(std::floor(my));
 
-  if (ix < 0 || ix >= static_cast<int>(map_->info.width) ||
-      iy < 0 || iy >= static_cast<int>(map_->info.height))
-  {
+  if (ix < 0 || ix >= static_cast<int>(map_->info.width) || iy < 0 || iy >= static_cast<int>(map_->info.height)) {
     return false;
   }
 
@@ -259,18 +254,19 @@ bool PlannerCore::poseToMap(double wx, double wy, CellIndex &out_idx)
   return true;
 }
 
-void PlannerCore::mapToPose(const CellIndex &idx, double &wx, double &wy)
+void PlannerCore::mapToPose(const CellIndex & idx, double & wx, double & wy)
 {
   double origin_x = map_->info.origin.position.x;
   double origin_y = map_->info.origin.position.y;
-  double res      = map_->info.resolution;
+  double res = map_->info.resolution;
 
   wx = origin_x + (idx.x + 0.5) * res;
   wy = origin_y + (idx.y + 0.5) * res;
 }
 
-nav_msgs::msg::Path::SharedPtr PlannerCore::getPath() const {
+nav_msgs::msg::Path::SharedPtr PlannerCore::getPath() const
+{
   return path_;
 }
 
-} 
+}  // namespace robot

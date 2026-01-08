@@ -12,51 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "tf2/LinearMath/Quaternion.h"
-#include "tf2/LinearMath/Matrix3x3.h"
-
 #include "map_memory_node.hpp"
 
-MapMemoryNode::MapMemoryNode() : Node("map_memory"), map_memory_(robot::MapMemoryCore(this->get_logger())) {
+#include "tf2/LinearMath/Matrix3x3.h"
+#include "tf2/LinearMath/Quaternion.h"
+
+MapMemoryNode::MapMemoryNode()
+: Node("map_memory")
+, map_memory_(robot::MapMemoryCore(this->get_logger()))
+{
   // load ROS2 yaml parameters
   processParameters();
 
   // Subscribe to local costmap
   local_costmap_sub_ = this->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    local_costmap_topic_,
-    10,
-    std::bind(&MapMemoryNode::localCostmapCallback, this, std::placeholders::_1)
-  );
+    local_costmap_topic_, 10, std::bind(&MapMemoryNode::localCostmapCallback, this, std::placeholders::_1));
 
   // Subscribe to odometry
   odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
-    odom_topic_,
-    10,
-    std::bind(&MapMemoryNode::odomCallback, this, std::placeholders::_1)
-  );
+    odom_topic_, 10, std::bind(&MapMemoryNode::odomCallback, this, std::placeholders::_1));
 
   // Publish a global costmap for downstream path planning
-  global_costmap_pub_ = this->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    map_topic_,
-    10
-  );
+  global_costmap_pub_ = this->create_publisher<nav_msgs::msg::OccupancyGrid>(map_topic_, 10);
 
-  timer_ = this->create_wall_timer(
-    std::chrono::milliseconds(map_pub_rate_),
-    std::bind(&MapMemoryNode::timerCallback, this)
-  );
+  timer_ =
+    this->create_wall_timer(std::chrono::milliseconds(map_pub_rate_), std::bind(&MapMemoryNode::timerCallback, this));
 
-  map_memory_.initMapMemory(
-    resolution_, 
-    width_, 
-    height_, 
-    origin_
-  );
+  map_memory_.initMapMemory(resolution_, width_, height_, origin_);
 
   RCLCPP_INFO(this->get_logger(), "Initialized Map Memory Core");
 }
 
-void MapMemoryNode::processParameters() {
+void MapMemoryNode::processParameters()
+{
   // Declare all ROS2 Parameters
   this->declare_parameter<std::string>("local_costmap_topic", "/costmap");
   this->declare_parameter<std::string>("odom_topic", "/odom/filtered");
@@ -86,22 +74,18 @@ void MapMemoryNode::processParameters() {
   origin_.orientation.w = this->get_parameter("global_map.origin.orientation.w").as_double();
 }
 
-void MapMemoryNode::localCostmapCallback(
-  const nav_msgs::msg::OccupancyGrid::SharedPtr msg) {
-
-  bool all_zero = std::all_of(msg->data.begin(), msg->data.end(),
-                            [](int8_t val) { return val == 0; });
+void MapMemoryNode::localCostmapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr msg)
+{
+  bool all_zero = std::all_of(msg->data.begin(), msg->data.end(), [](int8_t val) { return val == 0; });
   if (all_zero) {
     RCLCPP_INFO(this->get_logger(), "All elements in the array are zero.");
     return;
   }
 
   // Check how far the robot has moved since last update
-  if (!std::isnan(last_robot_x_))
-  {
+  if (!std::isnan(last_robot_x_)) {
     double dist = std::hypot(robot_x_ - last_robot_x_, robot_y_ - last_robot_y_);
-    if (dist < update_distance_)
-    {
+    if (dist < update_distance_) {
       // Robot hasn’t moved enough, skip updating the global map
       return;
     }
@@ -115,7 +99,8 @@ void MapMemoryNode::localCostmapCallback(
   map_memory_.updateMap(msg, robot_x_, robot_y_, robot_theta_);
 }
 
-void MapMemoryNode::odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg) {
+void MapMemoryNode::odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg)
+{
   // Extract the robot’s position and orientation from the Odometry message.
   // Assume this odometry is in the "sim_world" frame or a frame equivalent to it.
   robot_x_ = msg->pose.pose.position.x;
@@ -129,7 +114,8 @@ void MapMemoryNode::odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg) {
   robot_theta_ = quaternionToYaw(qx, qy, qz, qw);
 }
 
-void MapMemoryNode::timerCallback() {
+void MapMemoryNode::timerCallback()
+{
   // Publish the map every map_pub_rate [ms]
   nav_msgs::msg::OccupancyGrid map_msg = *map_memory_.getMapData();
   map_msg.header.stamp = this->now();

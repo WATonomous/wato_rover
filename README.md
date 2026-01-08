@@ -9,7 +9,6 @@ These steps are to setup the repo to work on your own PC. We utilize docker to e
 2. Once inside Linux, [Download Docker Engine using the `apt` repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)
 3. You're all set! You can visit the [WATO Wiki](https://wiki.watonomous.ca/autonomous_software_general/monorepo_infrastructure) for more documentation on the WATO infrastructure.
 
-
 ## Demo
 [Demo Video](assets/demos/demo_nov30.mp4)
 ![Demo Screenshot](assets/demos/demo_nov30.png)
@@ -59,7 +58,7 @@ The `ros_gz_bridge` translates Ignition messages to ROS2 topics, bridging `/cmd_
 - **control**: Pure pursuit controller that tracks the planned path. Uses a PID loop (configurable Kp, Ki, Kd gains) to compute steering corrections based on cross-track error. Outputs angular velocity to steer toward the target waypoint while maintaining constant forward velocity, publishing [Twist](https://docs.ros.org/en/jade/api/geometry_msgs/html/msg/Twist.html) commands to `/cmd_vel`.
 
 ### Data Flow
-The pipeline runs as follows: 
+The pipeline runs as follows:
 - Sensor sims generate noisy data
 - Localization fuses it into an estimate of the robot's position (odometry)
 - Costmap builds local obstacles

@@ -17,28 +17,26 @@
 namespace robot
 {
 
-MapMemoryCore::MapMemoryCore(const rclcpp::Logger& logger) 
-  : global_map_(std::make_shared<nav_msgs::msg::OccupancyGrid>()), logger_(logger) {}
+MapMemoryCore::MapMemoryCore(const rclcpp::Logger & logger)
+: global_map_(std::make_shared<nav_msgs::msg::OccupancyGrid>())
+, logger_(logger)
+{}
 
-void MapMemoryCore::initMapMemory(
-  double resolution, 
-  int width, 
-  int height, 
-  geometry_msgs::msg::Pose origin
-) {
+void MapMemoryCore::initMapMemory(double resolution, int width, int height, geometry_msgs::msg::Pose origin)
+{
   global_map_->info.resolution = resolution;
   global_map_->info.width = width;
   global_map_->info.height = height;
   global_map_->info.origin = origin;
   global_map_->data.assign(width * height, 0);
 
-  RCLCPP_INFO(logger_, "Global Map initialized with resolution: %.2f, width: %d, height: %d", resolution, width, height);
+  RCLCPP_INFO(
+    logger_, "Global Map initialized with resolution: %.2f, width: %d, height: %d", resolution, width, height);
 }
 
 void MapMemoryCore::updateMap(
-  nav_msgs::msg::OccupancyGrid::SharedPtr local_costmap,
-  double robot_x, double robot_y, double robot_theta
-) {
+  nav_msgs::msg::OccupancyGrid::SharedPtr local_costmap, double robot_x, double robot_y, double robot_theta)
+{
   // Get local costmap specs
   double local_res = local_costmap->info.resolution;
   double local_origin_x = local_costmap->info.origin.position.x;
@@ -48,17 +46,15 @@ void MapMemoryCore::updateMap(
   const auto & local_data = local_costmap->data;
 
   // For each cell in local costmap, transform to sim_world
-  for (unsigned int j = 0; j < local_h; ++j)
-  {
-    for (unsigned int i = 0; i < local_w; ++i)
-    {
+  for (unsigned int j = 0; j < local_h; ++j) {
+    for (unsigned int i = 0; i < local_w; ++i) {
       int8_t occ_val = local_data[j * local_w + i];
       if (occ_val < 0) {
         // Unknown => skip or handle differently
         continue;
       }
       // Convert (i,j) to local metric coords relative to "robot" frame
-      double lx = local_origin_x + (i + 0.5) * local_res; // center of cell
+      double lx = local_origin_x + (i + 0.5) * local_res;  // center of cell
       double ly = local_origin_y + (j + 0.5) * local_res;
 
       // Now transform (lx, ly) from "robot" frame to "sim_world" frame
@@ -79,10 +75,10 @@ void MapMemoryCore::updateMap(
       }
 
       // --- Take the max cost instead of direct overwrite ---
-      int8_t &global_val = global_map_->data[gy * global_map_->info.width + gx];
-      
+      int8_t & global_val = global_map_->data[gy * global_map_->info.width + gx];
+
       // If the global cell is unknown (-1), treat that as 0 when taking max.
-      int current_global_cost = (global_val < 0) ? 0 : global_val; 
+      int current_global_cost = (global_val < 0) ? 0 : global_val;
       int local_cost = static_cast<int>(occ_val);
 
       // Merge by taking the maximum:
@@ -95,7 +91,8 @@ void MapMemoryCore::updateMap(
   }
 }
 
-bool MapMemoryCore::robotToMap(double rx, double ry, int& mx, int& my) {
+bool MapMemoryCore::robotToMap(double rx, double ry, int & mx, int & my)
+{
   double origin_x = global_map_->info.origin.position.x;
   double origin_y = global_map_->info.origin.position.y;
   double resolution = global_map_->info.resolution;
@@ -108,8 +105,9 @@ bool MapMemoryCore::robotToMap(double rx, double ry, int& mx, int& my) {
   my = static_cast<int>((ry - origin_y) / resolution);
   mx = static_cast<int>((rx - origin_x) / resolution);
 
-  if (mx < 0 || mx >= static_cast<int>(global_map_->info.width) ||
-      my < 0 || my >= static_cast<int>(global_map_->info.height))
+  if (
+    mx < 0 || mx >= static_cast<int>(global_map_->info.width) || my < 0 ||
+    my >= static_cast<int>(global_map_->info.height))
   {
     return false;
   }
@@ -117,8 +115,9 @@ bool MapMemoryCore::robotToMap(double rx, double ry, int& mx, int& my) {
 }
 
 // Retrieves map data
-nav_msgs::msg::OccupancyGrid::SharedPtr MapMemoryCore::getMapData() const {
+nav_msgs::msg::OccupancyGrid::SharedPtr MapMemoryCore::getMapData() const
+{
   return global_map_;
 }
 
-} 
+}  // namespace robot

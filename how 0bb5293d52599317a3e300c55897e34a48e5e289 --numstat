@@ -1,0 +1,65 @@
+[33mcommit 0bb5293d52599317a3e300c55897e34a48e5e289[m
+Author: Barry Zhang <45883553+bluebarryz@users.noreply.github.com>
+Date:   Wed Jan 7 19:46:46 2026 -0500
+
+    refactor perception and integrate costmap, planner, and control modules
+
+ .gitignore                                         |   3 [32m+[m
+ docker/gazebo/gazeboserver.Dockerfile              |  10 [32m+[m[31m-[m
+ docker/robot/robot.Dockerfile                      |  29 [32m+[m[31m-[m
+ docker/vis_tools/foxglove.Dockerfile               |  11 [32m+[m[31m-[m
+ modules/docker-compose.robot.yaml                  |  13 [32m+[m[31m-[m
+ src/gazebo/launch/env.urdf                         | 357 [32m++++++[m[31m-----[m
+ src/gazebo/launch/mr24/robot.urdf                  | 365 [32m+++++++++++[m
+ src/gazebo/launch/robot_env.sdf                    | 668 [32m+++++++++[m[31m------------[m
+ src/gazebo/launch/sim.launch.py                    |  60 [32m+[m[31m-[m
+ src/robot/bringup_robot/launch/robot.launch.py     | 206 [32m+++++[m[31m--[m
+ src/robot/bringup_robot/package.xml                |  14 [32m+[m[31m-[m
+ src/robot/control/CMakeLists.txt                   |   7 [32m+[m[31m-[m
+ src/robot/control/config/params.yaml               |  14 [32m+[m[31m-[m
+ src/robot/control/include/control_core.hpp         |  47 [32m++[m
+ src/robot/control/include/control_node.hpp         |  63 [32m++[m
+ src/robot/control/package.xml                      |   3 [32m+[m
+ src/robot/control/src/control_core.cpp             | 146 [32m++++[m[31m-[m
+ src/robot/control/src/control_node.cpp             | 101 [32m+++[m[31m-[m
+ src/robot/costmap/CMakeLists.txt                   |   5 [32m+[m[31m-[m
+ src/robot/costmap/config/params.yaml               |  20 [32m+[m[31m-[m
+ src/robot/costmap/include/costmap_core.hpp         |  50 [32m++[m
+ src/robot/costmap/include/costmap_node.hpp         |  46 [32m++[m
+ src/robot/costmap/package.xml                      |   3 [32m+[m
+ src/robot/costmap/src/costmap_core.cpp             | 170 [32m+++++[m[31m-[m
+ src/robot/costmap/src/costmap_node.cpp             |  88 [32m++[m[31m-[m
+ src/robot/gps_sim/CMakeLists.txt                   |  47 [32m++[m
+ src/robot/gps_sim/config/params.yaml               |  13 [32m+[m
+ src/robot/gps_sim/include/gps_sim_node.hpp         |  46 [32m++[m
+ src/robot/gps_sim/package.xml                      |  28 [32m+[m
+ src/robot/gps_sim/src/gps_sim_node.cpp             | 134 [32m+++++[m
+ src/robot/imu_sim/CMakeLists.txt                   |  41 [32m++[m
+ src/robot/imu_sim/config/params.yaml               |  18 [32m+[m
+ src/robot/imu_sim/include/imu_sim_node.hpp         |  53 [32m++[m
+ src/robot/imu_sim/package.xml                      |  25 [32m+[m
+ src/robot/imu_sim/src/imu_sim_node.cpp             | 171 [32m++++++[m
+ src/robot/localization/CMakeLists.txt              |  56 [32m++[m
+ src/robot/localization/config/params.yaml          |  25 [32m+[m
+ .../localization/include/localization_core.hpp     | 106 [32m++++[m
+ .../localization/include/localization_node.hpp     |  73 [32m+++[m
+ src/robot/localization/package.xml                 |  29 [32m+[m
+ src/robot/localization/src/localization_core.cpp   | 501 [32m++++++++++++++++[m
+ src/robot/localization/src/localization_node.cpp   | 225 [32m+++++++[m
+ src/robot/map_memory/CMakeLists.txt                |   8 [32m+[m[31m-[m
+ src/robot/map_memory/config/params.yaml            |  26 [32m+[m[31m-[m
+ src/robot/map_memory/include/map_memory_core.hpp   |  38 [32m++[m
+ src/robot/map_memory/include/map_memory_node.hpp   |  63 [32m++[m
+ src/robot/map_memory/package.xml                   |   3 [32m+[m
+ src/robot/map_memory/src/map_memory_core.cpp       | 110 [32m+++[m[31m-[m
+ src/robot/map_memory/src/map_memory_node.cpp       | 141 [32m++++[m[31m-[m
+ .../odometry_spoof/include/odometry_spoof.hpp      |  40 [32m++[m
+ src/robot/odometry_spoof/src/odometry_spoof.cpp    |  92 [32m+[m[31m--[m
+ src/robot/planner/CMakeLists.txt                   |   4 [32m+[m[31m-[m
+ src/robot/planner/config/params.yaml               |  16 [32m+[m[31m-[m
+ src/robot/planner/include/planner_core.hpp         | 125 [32m+++[m[31m-[m
+ src/robot/planner/include/planner_node.hpp         |  70 [32m++[m[31m-[m
+ src/robot/planner/package.xml                      |   2 [32m+[m
+ src/robot/planner/src/planner_core.cpp             | 262 [32m+++++++[m[31m-[m
+ src/robot/planner/src/planner_node.cpp             | 186 [32m+++++[m[31m-[m
+ 58 files changed, 4503 insertions(+), 773 deletions(-)

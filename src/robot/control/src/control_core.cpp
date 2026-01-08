@@ -13,23 +13,23 @@
 // limitations under the License.
 
 #include "control_core.hpp"
-#include <cmath>
+
 #include <algorithm>
+#include <cmath>
 #include <limits>
 
 namespace robot
 {
 
-ControlCore::ControlCore(const rclcpp::Logger& logger) 
-  : path_(nav_msgs::msg::Path()), logger_(logger), prev_error_(0.0), integral_error_(0.0) {}
+ControlCore::ControlCore(const rclcpp::Logger & logger)
+: path_(nav_msgs::msg::Path())
+, logger_(logger)
+, prev_error_(0.0)
+, integral_error_(0.0)
+{}
 
-void ControlCore::initControlCore(
-  double kp,
-  double ki,
-  double kd,
-  double max_steering_angle,
-  double linear_velocity
-) {
+void ControlCore::initControlCore(double kp, double ki, double kd, double max_steering_angle, double linear_velocity)
+{
   kp_ = kp;
   ki_ = ki;
   kd_ = kd;
@@ -37,7 +37,8 @@ void ControlCore::initControlCore(
   linear_velocity_ = linear_velocity;
 }
 
-void ControlCore::updatePath(nav_msgs::msg::Path path) {
+void ControlCore::updatePath(nav_msgs::msg::Path path)
+{
   RCLCPP_INFO(logger_, "Path Updated");
   path_ = path;
   // Reset PID state when path changes
@@ -45,11 +46,14 @@ void ControlCore::updatePath(nav_msgs::msg::Path path) {
   integral_error_ = 0.0;
 }
 
-bool ControlCore::isPathEmpty() {
+bool ControlCore::isPathEmpty()
+{
   return path_.poses.empty();
 }
 
-geometry_msgs::msg::Twist ControlCore::calculateControlCommand(double robot_x, double robot_y, double robot_theta, double dt) {
+geometry_msgs::msg::Twist ControlCore::calculateControlCommand(
+  double robot_x, double robot_y, double robot_theta, double dt)
+{
   geometry_msgs::msg::Twist twist;
 
   if (path_.poses.empty()) {
@@ -88,9 +92,9 @@ geometry_msgs::msg::Twist ControlCore::calculateControlCommand(double robot_x, d
   // Vector V from p1 to p2
   double vx = p2_x - p1_x;
   double vy = p2_y - p1_y;
-  
+
   // Normalize V
-  double v_len = std::sqrt(vx*vx + vy*vy);
+  double v_len = std::sqrt(vx * vx + vy * vy);
   if (v_len > 0) {
     vx /= v_len;
     vy /= v_len;
@@ -103,13 +107,13 @@ geometry_msgs::msg::Twist ControlCore::calculateControlCommand(double robot_x, d
   // Signed distance (cross product of normalized V and R) in 2D (z component)
   // if V is along X, R is along Y, cross is positive (Left).
   double cross_product = vx * ry - vy * rx;
-  
-  double error = cross_product; // Positive if robot is to the left of the path
+
+  double error = cross_product;  // Positive if robot is to the left of the path
 
   // PID Calculation
   // Integral
   integral_error_ += error * dt;
-  
+
   // Derivative
   double derivative = 0.0;
   if (dt > 0) {
@@ -132,7 +136,7 @@ geometry_msgs::msg::Twist ControlCore::calculateControlCommand(double robot_x, d
   // For now, constant velocity unless very sharp turn required?
   // Let's stick to the previous logic: if turning hard, slow down?
   // Or just constant linear velocity as per prompt "make sure the robot follows the path"
-  
+
   // Just use the configured linear velocity
   twist.linear.x = linear_velocity_;
   twist.angular.z = output;
@@ -140,7 +144,8 @@ geometry_msgs::msg::Twist ControlCore::calculateControlCommand(double robot_x, d
   return twist;
 }
 
-unsigned int ControlCore::findClosestPoint(double robot_x, double robot_y) {
+unsigned int ControlCore::findClosestPoint(double robot_x, double robot_y)
+{
   double min_distance = std::numeric_limits<double>::max();
   unsigned int closest_index = 0;
 
@@ -148,7 +153,7 @@ unsigned int ControlCore::findClosestPoint(double robot_x, double robot_y) {
     double dx = path_.poses[i].pose.position.x - robot_x;
     double dy = path_.poses[i].pose.position.y - robot_y;
     double distance = std::sqrt(dx * dx + dy * dy);
-    
+
     if (distance < min_distance) {
       min_distance = distance;
       closest_index = i;
@@ -157,4 +162,4 @@ unsigned int ControlCore::findClosestPoint(double robot_x, double robot_y) {
   return closest_index;
 }
 
-}  
+}  // namespace robot

@@ -14,5 +14,5 @@ costmap_node:
           y: -24.0 # given by -1 * height * resolution / 2
         orientation:
           w: 1.0
-      
+
       inflation_radius: 1.5

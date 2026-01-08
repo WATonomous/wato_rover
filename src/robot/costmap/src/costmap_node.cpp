@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include "costmap_node.hpp"
+
 #include <chrono>
 #include <memory>
 
-#include "costmap_node.hpp"
-
-CostmapNode::CostmapNode() : Node("costmap"), costmap_(robot::CostmapCore(this->get_logger())) {
+CostmapNode::CostmapNode()
+: Node("costmap")
+, costmap_(robot::CostmapCore(this->get_logger()))
+{
   // load ROS2 yaml parameters
   processParameters();
 
   // Subscribe to point cloud from RGBD camera
   point_cloud_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-    pointcloud_topic_, 10,
-    std::bind(
-      &CostmapNode::pointCloudCallback, this,
-      std::placeholders::_1));
+    pointcloud_topic_, 10, std::bind(&CostmapNode::pointCloudCallback, this, std::placeholders::_1));
 
   // Keep laser scan subscription for backwards compatibility (optional)
   // laser_scan_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
@@ -35,24 +35,18 @@ CostmapNode::CostmapNode() : Node("costmap"), costmap_(robot::CostmapCore(this->
   //     &CostmapNode::laserScanCallback, this,
   //     std::placeholders::_1));
 
-  costmap_pub_ = this->create_publisher<nav_msgs::msg::OccupancyGrid>(
-    costmap_topic_, 10);
+  costmap_pub_ = this->create_publisher<nav_msgs::msg::OccupancyGrid>(costmap_topic_, 10);
 
   RCLCPP_INFO(this->get_logger(), "Initialized ROS Constructs");
   RCLCPP_INFO(this->get_logger(), "Subscribed to point cloud topic: %s", pointcloud_topic_.c_str());
 
-  costmap_.initCostmap(
-    resolution_,
-    width_,
-    height_,
-    origin_,
-    inflation_radius_
-  );
+  costmap_.initCostmap(resolution_, width_, height_, origin_, inflation_radius_);
 
   RCLCPP_INFO(this->get_logger(), "Initialized Costmap Core");
 }
 
-void CostmapNode::processParameters() {
+void CostmapNode::processParameters()
+{
   // Declare all ROS2 Parameters
   this->declare_parameter<std::string>("laserscan_topic", "/lidar");
   this->declare_parameter<std::string>("pointcloud_topic", "/camera/points");
@@ -78,7 +72,8 @@ void CostmapNode::processParameters() {
   inflation_radius_ = this->get_parameter("costmap.inflation_radius").as_double();
 }
 
-void CostmapNode::laserScanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg) const {
+void CostmapNode::laserScanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg) const
+{
   // Update the costmap according to the laser scan
   costmap_.updateCostmap(msg);
   // publish the costmap
@@ -87,7 +82,8 @@ void CostmapNode::laserScanCallback(const sensor_msgs::msg::LaserScan::SharedPtr
   costmap_pub_->publish(costmap_msg);
 }
 
-void CostmapNode::pointCloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr msg) const {
+void CostmapNode::pointCloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr msg) const
+{
   // Update the costmap according to the point cloud
   costmap_.updateCostmapFromPointCloud(msg);
   // publish the costmap

@@ -12,20 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <algorithm>
-#include <queue>
-#include <cmath>
-
 #include "costmap_core.hpp"
+
+#include <algorithm>
+#include <cmath>
+#include <queue>
+
 #include "sensor_msgs/point_cloud2_iterator.hpp"
 
 namespace robot
 {
 
-CostmapCore::CostmapCore(const rclcpp::Logger& logger) : costmap_data_(std::make_shared<nav_msgs::msg::OccupancyGrid>()), logger_(logger) {}
+CostmapCore::CostmapCore(const rclcpp::Logger & logger)
+: costmap_data_(std::make_shared<nav_msgs::msg::OccupancyGrid>())
+, logger_(logger)
+{}
 
-void CostmapCore::initCostmap(double resolution, int width, int height, 
-    geometry_msgs::msg::Pose origin, double inflation_radius) {
+void CostmapCore::initCostmap(
+  double resolution, int width, int height, geometry_msgs::msg::Pose origin, double inflation_radius)
+{
   costmap_data_->info.resolution = resolution;
   costmap_data_->info.width = width;
   costmap_data_->info.height = height;
@@ -38,7 +43,8 @@ void CostmapCore::initCostmap(double resolution, int width, int height,
   RCLCPP_INFO(logger_, "Costmap initialized with resolution: %.2f, width: %d, height: %d", resolution, width, height);
 }
 
-void CostmapCore::updateCostmap(const sensor_msgs::msg::LaserScan::SharedPtr laserscan) const {
+void CostmapCore::updateCostmap(const sensor_msgs::msg::LaserScan::SharedPtr laserscan) const
+{
   // Reset the costmap to free space
   std::fill(costmap_data_->data.begin(), costmap_data_->data.end(), 0);
 
@@ -56,8 +62,10 @@ void CostmapCore::updateCostmap(const sensor_msgs::msg::LaserScan::SharedPtr las
       int grid_x = static_cast<int>((x - costmap_data_->info.origin.position.x) / costmap_data_->info.resolution);
       int grid_y = static_cast<int>((y - costmap_data_->info.origin.position.y) / costmap_data_->info.resolution);
 
-      if (grid_x >= 0 && grid_x < static_cast<int>(costmap_data_->info.width) &&
-        grid_y >= 0 && grid_y < static_cast<int>(costmap_data_->info.height)) {
+      if (
+        grid_x >= 0 && grid_x < static_cast<int>(costmap_data_->info.width) && grid_y >= 0 &&
+        grid_y < static_cast<int>(costmap_data_->info.height))
+      {
         // Mark the cell as occupied
         int index = grid_y * costmap_data_->info.width + grid_x;
         costmap_data_->data[index] = 100;  // 100 indicates an occupied cell
@@ -69,7 +77,8 @@ void CostmapCore::updateCostmap(const sensor_msgs::msg::LaserScan::SharedPtr las
   }
 }
 
-void CostmapCore::updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud2::SharedPtr cloud) const {
+void CostmapCore::updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud2::SharedPtr cloud) const
+{
   // Reset the costmap to free space
   std::fill(costmap_data_->data.begin(), costmap_data_->data.end(), 0);
 
@@ -117,13 +126,16 @@ void CostmapCore::updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud
     double obstacle_y = y;
 
     // Convert to grid coordinates (same logic as laser scan)
-    int grid_x = static_cast<int>((obstacle_x - costmap_data_->info.origin.position.x) / costmap_data_->info.resolution);
-    int grid_y = static_cast<int>((obstacle_y - costmap_data_->info.origin.position.y) / costmap_data_->info.resolution);
+    int grid_x =
+      static_cast<int>((obstacle_x - costmap_data_->info.origin.position.x) / costmap_data_->info.resolution);
+    int grid_y =
+      static_cast<int>((obstacle_y - costmap_data_->info.origin.position.y) / costmap_data_->info.resolution);
 
     // Check if within costmap bounds
-    if (grid_x >= 0 && grid_x < static_cast<int>(costmap_data_->info.width) &&
-        grid_y >= 0 && grid_y < static_cast<int>(costmap_data_->info.height)) {
-
+    if (
+      grid_x >= 0 && grid_x < static_cast<int>(costmap_data_->info.width) && grid_y >= 0 &&
+      grid_y < static_cast<int>(costmap_data_->info.height))
+    {
       // Mark the cell as occupied
       int index = grid_y * costmap_data_->info.width + grid_x;
       costmap_data_->data[index] = 100;  // 100 indicates an occupied cell
@@ -134,12 +146,14 @@ void CostmapCore::updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud
   }
 }
 
-void CostmapCore::inflateObstacle(int origin_x, int origin_y) const {
+void CostmapCore::inflateObstacle(int origin_x, int origin_y) const
+{
   // Use a simple breadth-first search (BFS) to mark cells within the inflation radius
   std::queue<std::pair<int, int>> queue;
   queue.emplace(origin_x, origin_y);
 
-  std::vector<std::vector<bool>> visited(costmap_data_->info.width, std::vector<bool>(costmap_data_->info.height, false));
+  std::vector<std::vector<bool>> visited(
+    costmap_data_->info.width, std::vector<bool>(costmap_data_->info.height, false));
   visited[origin_x][origin_y] = true;
 
   while (!queue.empty()) {
@@ -155,19 +169,20 @@ void CostmapCore::inflateObstacle(int origin_x, int origin_y) const {
         int ny = y + dy;
 
         // Ensure the neighbor cell is within bounds
-        if (nx >= 0 && nx < static_cast<int>(costmap_data_->info.width) &&
-          ny >= 0 && ny < static_cast<int>(costmap_data_->info.height) &&
-          !visited[nx][ny]) {
+        if (
+          nx >= 0 && nx < static_cast<int>(costmap_data_->info.width) && ny >= 0 &&
+          ny < static_cast<int>(costmap_data_->info.height) && !visited[nx][ny])
+        {
           // Calculate the distance to the original obstacle cell
           double distance = std::hypot(nx - origin_x, ny - origin_y) * costmap_data_->info.resolution;
 
           // If within inflation radius, mark as inflated and add to queue
           if (distance <= inflation_radius_) {
-              int index = ny * costmap_data_->info.width + nx;
-              if (costmap_data_->data[index] < (1 - (distance / inflation_radius_)) * 100) {
-                costmap_data_->data[index] = (1 - (distance / inflation_radius_)) * 100;
-              }
-              queue.emplace(nx, ny);
+            int index = ny * costmap_data_->info.width + nx;
+            if (costmap_data_->data[index] < (1 - (distance / inflation_radius_)) * 100) {
+              costmap_data_->data[index] = (1 - (distance / inflation_radius_)) * 100;
+            }
+            queue.emplace(nx, ny);
           }
 
           visited[nx][ny] = true;
@@ -177,8 +192,9 @@ void CostmapCore::inflateObstacle(int origin_x, int origin_y) const {
   }
 }
 
-nav_msgs::msg::OccupancyGrid::SharedPtr CostmapCore::getCostmapData() const {
+nav_msgs::msg::OccupancyGrid::SharedPtr CostmapCore::getCostmapData() const
+{
   return costmap_data_;
 }
 
-} 
+}  // namespace robot

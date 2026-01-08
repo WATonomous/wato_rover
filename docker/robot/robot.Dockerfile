@@ -9,7 +9,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
  && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
  && rm -rf /var/lib/apt/lists/*
 
-# Copy in source code 
+# Copy in source code
+# COPY src/robot/yolo_inference ./yolo_inference
+# COPY src/robot/object_detection object_detection
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/gps_sim gps_sim
 COPY src/robot/imu_sim imu_sim
@@ -90,7 +92,7 @@ RUN . "/opt/ros/${ROS_DISTRO}/setup.sh" && \
     colcon build \
     --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base "${WATONOMOUS_INSTALL}"
 
-# Source and Build Artifact Cleanup 
+# Source and Build Artifact Cleanup
 RUN rm -rf src/* build/* devel/* install/* log/*
 
 # Entrypoint will run before any CMD on launch. Sources ~/opt/<ROS_DISTRO>/setup.bash and ~/ament_ws/install/setup.bash

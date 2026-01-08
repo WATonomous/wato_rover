@@ -14,43 +14,35 @@
 
 #include "planner_node.hpp"
 
-PlannerNode::PlannerNode() : Node("planner"), planner_(robot::PlannerCore(this->get_logger())) {
+PlannerNode::PlannerNode()
+: Node("planner")
+, planner_(robot::PlannerCore(this->get_logger()))
+{
   // load ROS2 yaml parameters
   processParameters();
 
   // Subscribers
   map_sub_ = this->create_subscription<nav_msgs::msg::OccupancyGrid>(
-    map_topic_,
-    10,
-    std::bind(&PlannerNode::mapCallback, this, std::placeholders::_1)
-  );
+    map_topic_, 10, std::bind(&PlannerNode::mapCallback, this, std::placeholders::_1));
 
   goal_sub_ = this->create_subscription<geometry_msgs::msg::PointStamped>(
-    goal_topic_,
-    10,
-    std::bind(&PlannerNode::goalCallback, this, std::placeholders::_1)
-  );
+    goal_topic_, 10, std::bind(&PlannerNode::goalCallback, this, std::placeholders::_1));
 
   // Subscribe to odometry from /odom/filtered
   odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
-    odom_topic_,
-    10,
-    std::bind(&PlannerNode::odomCallback, this, std::placeholders::_1)
-  );
+    odom_topic_, 10, std::bind(&PlannerNode::odomCallback, this, std::placeholders::_1));
 
   // Publisher
   path_pub_ = this->create_publisher<nav_msgs::msg::Path>(path_topic_, 10);
 
   // Timer to check goal/timeout status periodically (500 ms)
-  timer_ = this->create_wall_timer(
-    std::chrono::milliseconds(500),
-    std::bind(&PlannerNode::timerCallback, this)
-  );
+  timer_ = this->create_wall_timer(std::chrono::milliseconds(500), std::bind(&PlannerNode::timerCallback, this));
 
   planner_.initPlanner(smoothing_factor_, iterations_);
 }
 
-void PlannerNode::processParameters() {
+void PlannerNode::processParameters()
+{
   // Declare and get parameters
   this->declare_parameter<std::string>("map_topic", "/map");
   this->declare_parameter<std::string>("goal_topic", "/goal_pose");
@@ -82,9 +74,7 @@ void PlannerNode::mapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr msg)
   if (active_goal_) {
     double elapsed = (now() - plan_start_time_).seconds();
     if (elapsed <= plan_timeout_) {
-      RCLCPP_INFO(this->get_logger(), 
-                  "Map updated => Replanning for current goal (time elapsed: %.2f).",
-                  elapsed);
+      RCLCPP_INFO(this->get_logger(), "Map updated => Replanning for current goal (time elapsed: %.2f).", elapsed);
       publishPath();
     }
   }
@@ -106,8 +96,7 @@ void PlannerNode::goalCallback(const geometry_msgs::msg::PointStamped::SharedPtr
   active_goal_ = true;
   plan_start_time_ = now();
 
-  RCLCPP_INFO(this->get_logger(), "Received new goal: (%.2f, %.2f)",
-              goal_msg->point.x, goal_msg->point.y);
+  RCLCPP_INFO(this->get_logger(), "Received new goal: (%.2f, %.2f)", goal_msg->point.x, goal_msg->point.y);
 
   publishPath();
 }
@@ -136,7 +125,7 @@ void PlannerNode::timerCallback()
   // }
 
   // Check if we reached the goal
-  double distance = sqrt(pow(odom_x_ - current_goal_.point.x, 2) +  pow(odom_y_ - current_goal_.point.y, 2));
+  double distance = sqrt(pow(odom_x_ - current_goal_.point.x, 2) + pow(odom_y_ - current_goal_.point.y, 2));
   if (distance < goal_tolerance_) {
     RCLCPP_WARN(this->get_logger(), "Plan succeeded! Elapsed Time: %.2f", elapsed);
     resetGoal();
@@ -144,7 +133,8 @@ void PlannerNode::timerCallback()
   }
 }
 
-void PlannerNode::publishPath() {
+void PlannerNode::publishPath()
+{
   if (!have_odom_) {
     RCLCPP_WARN(this->get_logger(), "No odometry received yet. Cannot plan.");
     resetGoal();
@@ -157,7 +147,7 @@ void PlannerNode::publishPath() {
 
   {
     std::lock_guard<std::mutex> lock(map_mutex_);
-    if(!planner_.planPath(start_world_x, start_world_y, current_goal_.point.x, current_goal_.point.y, map_)) {
+    if (!planner_.planPath(start_world_x, start_world_y, current_goal_.point.x, current_goal_.point.y, map_)) {
       RCLCPP_ERROR(this->get_logger(), "Plan Failed.");
       resetGoal();
       return;
@@ -167,11 +157,12 @@ void PlannerNode::publishPath() {
   nav_msgs::msg::Path path_msg = *planner_.getPath();
   path_msg.header.stamp = this->now();
   path_msg.header.frame_id = map_->header.frame_id;
-  
+
   path_pub_->publish(path_msg);
 }
 
-void PlannerNode::resetGoal() {
+void PlannerNode::resetGoal()
+{
   active_goal_ = false;
   RCLCPP_INFO(this->get_logger(), "Resetting active goal.");
 
@@ -188,7 +179,7 @@ void PlannerNode::resetGoal() {
       empty_path.header.frame_id = "sim_world";
     }
   }
-  
+
   // Publish the empty path
   path_pub_->publish(empty_path);
 
