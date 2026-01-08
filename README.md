@@ -12,6 +12,7 @@ These steps are to setup the repo to work on your own PC. We utilize docker to e
 
 ## Demo
 [Demo Video](assets/demos/demo_nov30.mp4)
+![Demo Screenshot](assets/demos/demo_nov30.png)
 
 ## Simulation Environment
 
