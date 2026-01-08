@@ -11,10 +11,7 @@ These steps are to setup the repo to work on your own PC. We utilize docker to e
 
 
 ## Demo
-<video width="720" controls>
-  <source src="assets/demos/demo_nov30.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+[Demo Video](assets/demos/demo_nov30.mp4)
 
 ## Simulation Environment
 
