@@ -5,7 +5,7 @@ FROM ${BASE_IMAGE} AS source
 
 WORKDIR ${AMENT_WS}/src
 
-# Copy in source code
+# Copy in source code 
 COPY src/gazebo gazebo
 
 RUN apt-get update && apt-get install -y --no-install-recommends curl \
@@ -15,10 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
 # Scan for rosdeps
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get -qq update && rosdep update && \
-    (rosdep install --from-paths . --ignore-src -r -s \
-        | grep 'apt-get install' \
+    (rosdep install --from-paths . --ignore-src -r -s || true) \
+        | (grep 'apt-get install' || true) \
         | awk '{print $3}' \
-        | sort  > /tmp/colcon_install_list || echo "# No additional dependencies needed" > /tmp/colcon_install_list)
+        | sort  > /tmp/colcon_install_list
 
 ################################# Dependencies ################################
 FROM ${BASE_IMAGE} AS dependencies
@@ -63,7 +63,7 @@ RUN . "/opt/ros/${ROS_DISTRO}/setup.sh" && \
     colcon build \
         --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base "${WATONOMOUS_INSTALL}"
 
-# Source and Build Artifact Cleanup
+# Source and Build Artifact Cleanup 
 RUN rm -rf src/* build/* devel/* install/* log/*
 
 # Entrypoint will run before any CMD on launch. Sources ~/opt/<ROS_DISTRO>/setup.bash and ~/ament_ws/install/setup.bash

@@ -9,23 +9,24 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
  && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
  && rm -rf /var/lib/apt/lists/*
 
-# Copy in source code
-COPY src/robot/yolo_inference ./yolo_inference
-COPY src/robot/object_detection object_detection
+# Copy in source code 
 COPY src/robot/odometry_spoof odometry_spoof
+COPY src/robot/gps_sim gps_sim
+COPY src/robot/imu_sim imu_sim
+COPY src/robot/localization localization
+COPY src/robot/costmap costmap
+COPY src/robot/map_memory map_memory
+COPY src/robot/planner planner
+COPY src/robot/control control
 COPY src/robot/bringup_robot bringup_robot
-COPY src/robot/camera_fallback camera_fallback
-COPY src/robot/arcade_driver arcade_driver
-COPY src/robot/motor_speed_controller motor_speed_controller
-COPY src/wato_msgs/drivetrain_msgs drivetrain_msgs
 
 # Scan for rosdeps
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get -qq update && rosdep update && \
-    (rosdep install --from-paths . --ignore-src -r -s \
-    | grep 'apt-get install' \
-    | awk '{print $3}' \
-    | sort  > /tmp/colcon_install_list || echo "# No additional dependencies needed" > /tmp/colcon_install_list)
+    (rosdep install --from-paths . --ignore-src -r -s || true) \
+    | (grep 'apt-get install' || true) \
+        | awk '{print $3}' \
+    | sort  > /tmp/colcon_install_list || echo "# No additional dependencies needed" > /tmp/colcon_install_list
 
 ################################# Dependencies ################################
 FROM ${BASE_IMAGE} AS dependencies
@@ -50,8 +51,8 @@ RUN apt-get -qq update && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy in source code from source stage
-WORKDIR ${AMENT_WS}/src
-COPY src/robot/object_detection object_detection
+# WORKDIR ${AMENT_WS}/src
+# COPY src/robot/object_detection object_detection
 WORKDIR ${AMENT_WS}
 COPY --from=source ${AMENT_WS}/src src
 
@@ -89,7 +90,7 @@ RUN . "/opt/ros/${ROS_DISTRO}/setup.sh" && \
     colcon build \
     --cmake-args -DCMAKE_BUILD_TYPE=Release --install-base "${WATONOMOUS_INSTALL}"
 
-# Source and Build Artifact Cleanup
+# Source and Build Artifact Cleanup 
 RUN rm -rf src/* build/* devel/* install/* log/*
 
 # Entrypoint will run before any CMD on launch. Sources ~/opt/<ROS_DISTRO>/setup.bash and ~/ament_ws/install/setup.bash

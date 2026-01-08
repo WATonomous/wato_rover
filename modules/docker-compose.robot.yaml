@@ -1,5 +1,5 @@
 services:
-  robot:
+  robot: 
     build: &robot_build
       context: ..
       dockerfile: docker/robot/robot.Dockerfile
@@ -12,12 +12,7 @@ services:
     profiles:
       - deploy
     command: /bin/bash -c "ros2 launch bringup_robot robot.launch.py"
-    devices:
-      - /dev/bus/usb:/dev/bus/usb
-    volumes:
-      - /dev:/dev
-    privileged: true
-
+  
   robot_dev:
     build: *robot_build
     image: "${ROBOT_IMAGE:?}:dev_${TAG}"
@@ -26,7 +21,3 @@ services:
       - develop
     volumes:
       - ${MONO_DIR}/src/robot:/root/ament_ws/src
-      - /dev:/dev
-    devices:
-      - /dev/bus/usb:/dev/bus/usb
-    privileged: true

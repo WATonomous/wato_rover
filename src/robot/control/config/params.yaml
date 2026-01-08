@@ -1,2 +1,12 @@
-# control_node:
-#   ros__parameters:
+control_node:
+  ros__parameters:
+    path_topic: "/path"
+    # odom_topic: "/odom/filtered"
+    cmd_vel_topic: "/cmd_vel"
+
+    kp: 1.0
+    ki: 0.01
+    kd: 0.1
+
+    max_steering_angle: 1.0 # rad
+    linear_velocity: 1.0 # m/s

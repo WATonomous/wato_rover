@@ -6,3 +6,6 @@ __pycache__
 watod-config.local.sh
 **/.DS_Store
 draft_*
+*copy*
+camera-info.txt
+src/gazebo/launch/MR24-DT-A00.00 - URDF/
