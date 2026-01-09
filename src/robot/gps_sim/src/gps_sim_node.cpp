@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "gps_sim_node.hpp"
+#include "gps_sim/gps_sim_node.hpp"
 
 #include <chrono>
 #include <cmath>
 #include <memory>
+#include <string>
 
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 

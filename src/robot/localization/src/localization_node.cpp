@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "localization_node.hpp"
+#include "localization/localization_node.hpp"
 
 #include <chrono>
 #include <cmath>
 #include <memory>
+#include <string>
 
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "tf2/LinearMath/Quaternion.h"

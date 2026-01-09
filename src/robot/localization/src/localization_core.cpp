@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "localization_core.hpp"
+#include "localization/localization_core.hpp"
 
 #include <algorithm>
 #include <limits>
+#include <string>
+#include <utility>
 
 #include "tf2/LinearMath/Matrix3x3.h"
 #include "tf2/LinearMath/Quaternion.h"

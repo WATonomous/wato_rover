@@ -17,6 +17,7 @@
 
 #include <array>
 #include <cmath>
+#include <string>
 
 #include "nav_msgs/msg/odometry.hpp"
 #include "rclcpp/rclcpp.hpp"
@@ -31,7 +32,7 @@ class Matrix6x6
 {
 public:
   Matrix6x6();
-  Matrix6x6(double value);
+  explicit Matrix6x6(double value);
   Matrix6x6(const Matrix6x6 & other);
 
   double & operator()(int i, int j)
@@ -116,7 +117,7 @@ private:
 class ExtendedKalmanFilter
 {
 public:
-  ExtendedKalmanFilter(const rclcpp::Logger & logger);
+  explicit ExtendedKalmanFilter(const rclcpp::Logger & logger);
 
   // Initialize EKF with initial pose
   void initialize(double x, double y, double theta);

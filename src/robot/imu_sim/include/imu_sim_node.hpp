@@ -16,6 +16,7 @@
 #define IMU_SIM_NODE_HPP_
 
 #include <random>
+#include <string>
 
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/imu.hpp"

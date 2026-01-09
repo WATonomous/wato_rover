@@ -15,8 +15,11 @@
 #ifndef LOCALIZATION_NODE_HPP_
 #define LOCALIZATION_NODE_HPP_
 
+#include <memory>
+#include <string>
+
 #include "geometry_msgs/msg/twist.hpp"
-#include "localization_core.hpp"
+#include "localization/localization_core.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/imu.hpp"

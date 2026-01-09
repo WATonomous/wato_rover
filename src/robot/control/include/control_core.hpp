@@ -25,7 +25,7 @@ namespace robot
 class ControlCore
 {
 public:
-  ControlCore(const rclcpp::Logger & logger);
+  explicit ControlCore(const rclcpp::Logger & logger);
 
   void initControlCore(double kp, double ki, double kd, double max_steering_angle, double linear_velocity);
 

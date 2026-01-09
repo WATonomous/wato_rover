@@ -15,7 +15,9 @@
 #ifndef CONTROL_NODE_HPP_
 #define CONTROL_NODE_HPP_
 
-#include "control_core.hpp"
+#include <string>
+
+#include "control/control_core.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "nav_msgs/msg/path.hpp"

@@ -12,7 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "planner_core.hpp"
+#include "planner/planner_core.hpp"
+
+#include <limits>
+#include <queue>
+#include <unordered_map>
+#include <vector>
 
 namespace robot
 {

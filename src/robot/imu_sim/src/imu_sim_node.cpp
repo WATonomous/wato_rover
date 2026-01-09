@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "imu_sim_node.hpp"
+#include "imu_sim/imu_sim_node.hpp"
 
 #include <chrono>
 #include <cmath>
 #include <memory>
+#include <string>
 
 ImuSimNode::ImuSimNode()
 : Node("imu_sim_node")

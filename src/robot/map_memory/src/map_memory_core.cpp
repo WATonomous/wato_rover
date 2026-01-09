@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "map_memory_core.hpp"
+#include "map_memory/map_memory_core.hpp"
+
+#include <algorithm>
 
 namespace robot
 {

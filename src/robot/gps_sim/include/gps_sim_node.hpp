@@ -15,7 +15,9 @@
 #ifndef GPS_SIM_NODE_HPP_
 #define GPS_SIM_NODE_HPP_
 
+#include <memory>
 #include <random>
+#include <string>
 
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "rclcpp/rclcpp.hpp"

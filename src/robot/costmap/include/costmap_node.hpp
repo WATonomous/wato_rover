@@ -15,7 +15,9 @@
 #ifndef COSTMAP_NODE_HPP_
 #define COSTMAP_NODE_HPP_
 
-#include "costmap_core.hpp"
+#include <string>
+
+#include "costmap/costmap_core.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"

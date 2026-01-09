@@ -15,6 +15,8 @@
 #ifndef ODOMETRY_SPOOF_NODE_HPP_
 #define ODOMETRY_SPOOF_NODE_HPP_
 
+#include <memory>
+
 #include "geometry_msgs/msg/transform_stamped.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "rclcpp/rclcpp.hpp"
