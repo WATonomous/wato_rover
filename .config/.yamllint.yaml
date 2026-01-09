@@ -5,8 +5,13 @@ rules:
   line-length:
     max: 256
   commas: false
+  document-start: disable
+  comments:
+    min-spaces-from-content: 1
+  new-lines: disable
 
   truthy:
     ignore: |
       .github/workflows/build_base_images.yml
       .github/workflows/build_and_unitest.yml
+      .github/workflows/pre-commit.yml
