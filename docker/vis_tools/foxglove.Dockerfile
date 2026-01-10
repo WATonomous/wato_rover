@@ -15,10 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
 # Scan for rosdeps
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN apt-get -qq update && rosdep update && \
-    (rosdep install --from-paths . --ignore-src -r -s \
-        | grep 'apt-get install' \
+    (rosdep install --from-paths . --ignore-src -r -s || true) \
+        | (grep 'apt-get install' || true) \
         | awk '{print $3}' \
-        | sort  > /tmp/colcon_install_list || echo "# No additional dependencies needed" > /tmp/colcon_install_list)
+        | sort  > /tmp/colcon_install_list
 
 ################################# Dependencies ################################
 FROM ${BASE_IMAGE} AS dependencies
@@ -36,7 +36,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends lsb-release sof
     apt-add-repository universe && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Dependencies
 # Install Dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \

@@ -10,17 +10,13 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>odometry_spoof</depend>
-  <depend>arcade_driver</depend>
-  <depend>motor_speed_controller</depend>
-  <depend>realsense2_camera</depend>
-  <depend>realsense2_camera_msgs</depend>
-  <depend>realsense2_description</depend>
-  <depend>camera_fallback</depend>
-  <!-- <depend>rviz2</depend> -->
-  <!-- <depend>costmap</depend>
+  <depend>gps_sim</depend>
+  <depend>imu_sim</depend>
+  <depend>localization</depend>
+  <depend>costmap</depend>
   <depend>map_memory</depend>
   <depend>planner</depend>
-  <depend>control</depend> -->
+  <depend>control</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

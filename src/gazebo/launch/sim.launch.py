@@ -39,16 +39,13 @@ def generate_launch_description():
             "/model/robot/pose@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V",
             "/model/robot/pose_static@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V",
             "/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist",
-            "/cmd_vel_stamped@geometry_msgs/msg/TwistStamped@ignition.msgs.Twist",
             "/imu@sensor_msgs/msg/Imu@ignition.msgs.IMU",
+            #    '/lidar@sensor_msgs/msg/LaserScan@ignition.msgs.LaserScan',
+            "/camera/image@sensor_msgs/msg/Image@ignition.msgs.Image",
+            "/camera/depth_image@sensor_msgs/msg/Image@ignition.msgs.Image",
+            "/camera/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked",
+            "/camera/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo",
             "/model/robot/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry",
-            "/sim/realsense1/depth/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked",
-            "/sim/realsense1/depth/image@sensor_msgs/msg/Image@ignition.msgs.Image",
-            "/sim/realsense1/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo",
-            "/sim/realsense2/depth/points@sensor_msgs/msg/PointCloud2@ignition.msgs.PointCloudPacked",
-            "/sim/realsense2/depth/image@sensor_msgs/msg/Image@ignition.msgs.Image",
-            "/sim/realsense2/depth/camera_info@sensor_msgs/msg/CameraInfo@ignition.msgs.CameraInfo",
-            "/tf@tf2_msgs/msg/TFMessage@ignition.msgs.Pose_V",
         ],
         parameters=[
             {"qos_overrides./model/vehicle_blue.subscriber.reliability": "reliable"}
@@ -57,6 +54,7 @@ def generate_launch_description():
         remappings=[
             ("/model/robot/pose", "/tf"),
             ("/model/robot/pose_static", "/tf"),
+            ("/camera/camera_info", "/camera_info"),
         ],
     )
 
