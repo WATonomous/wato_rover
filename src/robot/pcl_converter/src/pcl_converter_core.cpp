@@ -53,6 +53,14 @@ sensor_msgs::msg::PointCloud2::SharedPtr PCLConverterCore::mergePointCloudMsgs()
     pcl::toROSMsg(*pcl_point_cloud_merged_, output_msg);
 
 
-    return std::make_shared<sensor_msgs::msg::PointCloud2>(output_msg);}
+    return std::make_shared<sensor_msgs::msg::PointCloud2>(output_msg);
+}
+
+/*
+robot-1 | [pcl_converter_node-7] [INFO] [1768496986.737299149] [pcl_converter]: Frame_ID of cam1: robot/chassis/sim_realsense_d435_1_color
+robot-1 | [pcl_converter_node-7] [INFO] [1768496986.804964767] [pcl_converter]: Frame_ID of cam2: robot/chassis/sim_realsense_d435_2_color
+*/
+
+
 
 }  // namespace robot

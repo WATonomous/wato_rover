@@ -35,7 +35,8 @@ PCLConverterNode::PCLConverterNode()
   has_cam2 = false;
 
   // initialize the msg
-  point_cloud_msg = 
+  point_cloud_msg = std::make_shared<sensor_msgs::msg::PointCloud2>();
+
 }
 
 // callback for camera 1 and processes what is recieved 
@@ -45,6 +46,8 @@ void PCLConverterNode::cam1Callback(const
 {
   pcl_converter_.processPointCloudMsg(point_cloud, 1);
   has_cam1 = true;
+
+  RCLCPP_INFO(this->get_logger(), "Frame_ID of cam1: %s", point_cloud->header.frame_id.c_str());
 
   // only publishes if both recieved
   publishPointCloud();
@@ -57,6 +60,8 @@ void PCLConverterNode::cam2Callback(const
 {
   pcl_converter_.processPointCloudMsg(point_cloud, 2);
   has_cam2 = true;
+
+  RCLCPP_INFO(this->get_logger(), "Frame_ID of cam2: %s", point_cloud->header.frame_id.c_str());
 
   // only publishes if both recieved
   publishPointCloud();
@@ -79,12 +84,12 @@ void PCLConverterNode::publishPointCloud()
   has_cam2 = false;
 
   // set the header
-  point_cloud_msg->header.frame_id = "base_link";
+  point_cloud_msg->header.frame_id = "robot/chassis";
   point_cloud_msg->header.stamp = this->now();
 
   // publish and log
   point_cloud_pub_->publish(*point_cloud_msg);
-  RCLCPP_INFO(this->get_logger(), "Point Cloud published");
+  // RCLCPP_INFO(this->get_logger(), "Point Cloud published");
 }
 
 
