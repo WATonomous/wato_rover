@@ -79,6 +79,15 @@ Matrix6x6 Matrix6x6::operator*(const Matrix6x6 & other) const
   return result;
 }
 
+Matrix6x6 Matrix6x6::operator*(double scalar) const
+{
+  Matrix6x6 result;
+  for (size_t i = 0; i < 36; i++) {
+    result.data_[i] = data_[i] * scalar;
+  }
+  return result;
+}
+
 Matrix6x6 Matrix6x6::transpose() const
 {
   Matrix6x6 result;
