@@ -79,6 +79,23 @@ Matrix6x6 Matrix6x6::operator*(const Matrix6x6 & other) const
   return result;
 }
 
+Matrix6x6 Matrix6x6::operator*(double scalar) const
+{
+  Matrix6x6 result;
+  for (size_t i = 0; i < 36; i++) {
+    result.data_[i] = data_[i] * scalar;
+  }
+  return result;
+}
+
+Matrix6x6 & Matrix6x6::operator=(const Matrix6x6 & other)
+{
+  if (this != &other) {
+    data_ = other.data_;
+  }
+  return *this;
+}
+
 Matrix6x6 Matrix6x6::transpose() const
 {
   Matrix6x6 result;
@@ -93,8 +110,6 @@ Matrix6x6 Matrix6x6::transpose() const
 Matrix6x6 Matrix6x6::inverse() const
 {
   // Simple Gaussian elimination for 6x6 matrix
-  Matrix6x6 augmented = *this;
-  Matrix6x6 identity = Matrix6x6::identity();
 
   // Create augmented matrix [A|I]
   std::array<double, 72> aug_data;
@@ -226,8 +241,8 @@ double Vector6::norm() const
 // ============================================================================
 
 ExtendedKalmanFilter::ExtendedKalmanFilter(const rclcpp::Logger & logger)
-: logger_(logger)
-, initialized_(false)
+: initialized_(false)
+, logger_(logger)
 {
   state_ = Vector6();
   P_ = Matrix6x6::identity() * 0.1;  // Initial uncertainty
@@ -518,6 +533,7 @@ void ExtendedKalmanFilter::getOdometry(
 
 Matrix6x6 ExtendedKalmanFilter::computeProcessJacobian(double vx, double vy, double omega, double dt)
 {
+  (void)omega;
   Matrix6x6 F = Matrix6x6::identity();
   double theta = state_.theta();
   double cos_theta = std::cos(theta);
