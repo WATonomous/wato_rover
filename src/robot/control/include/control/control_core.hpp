@@ -15,6 +15,8 @@
 #ifndef CONTROL_CORE_HPP_
 #define CONTROL_CORE_HPP_
 
+#include "geometry_msgs/msg/twist.hpp"
+#include "nav_msgs/msg/path.hpp"
 #include "rclcpp/rclcpp.hpp"
 
 namespace robot
@@ -23,11 +25,37 @@ namespace robot
 class ControlCore
 {
 public:
-  // Constructor, we pass in the node's RCLCPP logger to enable logging to terminal
   explicit ControlCore(const rclcpp::Logger & logger);
 
+  void initControlCore(
+    double kp,
+    double ki,
+    double kd,
+    double max_steering_angle,
+    double linear_velocity);
+
+  void updatePath(nav_msgs::msg::Path path);
+  bool isPathEmpty();
+
+  geometry_msgs::msg::Twist calculateControlCommand(
+    double robot_x,
+    double robot_y,
+    double robot_theta,
+    double dt);
+
 private:
+  unsigned int findClosestPoint(double robot_x, double robot_y);
+
+  nav_msgs::msg::Path path_;
   rclcpp::Logger logger_;
+  double prev_error_;
+  double integral_error_;
+
+  double kp_;
+  double ki_;
+  double kd_;
+  double max_steering_angle_;
+  double linear_velocity_;
 };
 
 }  // namespace robot

@@ -79,6 +79,15 @@ Matrix6x6 Matrix6x6::operator*(const Matrix6x6 & other) const
   return result;
 }
 
+Matrix6x6 Matrix6x6::operator*(double scalar) const
+{
+  Matrix6x6 result;
+  for (size_t i = 0; i < 36; i++) {
+    result.data_[i] = data_[i] * scalar;
+  }
+  return result;
+}
+
 Matrix6x6 Matrix6x6::transpose() const
 {
   Matrix6x6 result;
@@ -226,8 +235,8 @@ double Vector6::norm() const
 // ============================================================================
 
 ExtendedKalmanFilter::ExtendedKalmanFilter(const rclcpp::Logger & logger)
-: logger_(logger)
-, initialized_(false)
+: initialized_(false)
+, logger_(logger)
 {
   state_ = Vector6();
   P_ = Matrix6x6::identity() * 0.1;  // Initial uncertainty
