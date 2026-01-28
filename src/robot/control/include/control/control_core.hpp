@@ -27,21 +27,12 @@ class ControlCore
 public:
   explicit ControlCore(const rclcpp::Logger & logger);
 
-  void initControlCore(
-    double kp,
-    double ki,
-    double kd,
-    double max_steering_angle,
-    double linear_velocity);
+  void initControlCore(double kp, double ki, double kd, double max_steering_angle, double linear_velocity);
 
   void updatePath(nav_msgs::msg::Path path);
   bool isPathEmpty();
 
-  geometry_msgs::msg::Twist calculateControlCommand(
-    double robot_x,
-    double robot_y,
-    double robot_theta,
-    double dt);
+  geometry_msgs::msg::Twist calculateControlCommand(double robot_x, double robot_y, double robot_theta, double dt);
 
 private:
   unsigned int findClosestPoint(double robot_x, double robot_y);

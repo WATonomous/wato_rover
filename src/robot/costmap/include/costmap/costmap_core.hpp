@@ -29,12 +29,7 @@ class CostmapCore
 public:
   explicit CostmapCore(const rclcpp::Logger & logger);
 
-  void initCostmap(
-    double resolution,
-    int width,
-    int height,
-    geometry_msgs::msg::Pose origin,
-    double inflation_radius);
+  void initCostmap(double resolution, int width, int height, geometry_msgs::msg::Pose origin, double inflation_radius);
 
   void updateCostmap(const sensor_msgs::msg::LaserScan::SharedPtr laserscan) const;
   void updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud2::SharedPtr cloud) const;
