@@ -48,8 +48,11 @@ public:
   Matrix6x6 operator+(const Matrix6x6 & other) const;
   Matrix6x6 operator-(const Matrix6x6 & other) const;
   Matrix6x6 operator*(const Matrix6x6 & other) const;
+  Matrix6x6 operator*(double scalar) const;
   Matrix6x6 transpose() const;
   Matrix6x6 inverse() const;
+
+  Matrix6x6 & operator=(const Matrix6x6 & other);
 
   static Matrix6x6 identity();
 
