@@ -93,7 +93,7 @@ void ControlNode::followPath()
     return;
   }
 
-  // Stops the robot
+  // Calculate control commands
   double dt = control_period_ms_ / 1000.0;
   geometry_msgs::msg::Twist cmd_vel = control_.calculateControlCommand(robot_x_, robot_y_, robot_theta_, dt);
   cmd_vel_publisher_->publish(cmd_vel);
