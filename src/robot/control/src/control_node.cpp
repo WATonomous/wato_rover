@@ -48,8 +48,8 @@ void ControlNode::processParameters()
   this->declare_parameter<std::string>("cmd_vel_topic", "/cmd_vel");
   this->declare_parameter<int>("control_period_ms", 100);
   this->declare_parameter<double>("kp", 1.0);
-  this->declare_parameter<double>("ki", 1.0);
-  this->declare_parameter<double>("kd", 0.6);
+  this->declare_parameter<double>("ki", 0.6);
+  this->declare_parameter<double>("kd", 0.4);
   this->declare_parameter<double>("max_steering_angle", 1.5);
   this->declare_parameter<double>("linear_velocity", 1.5);
 
