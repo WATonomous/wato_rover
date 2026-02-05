@@ -118,6 +118,8 @@ void MapMemoryNode::odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg)
 
 void MapMemoryNode::timerCallback()
 {
+  // decay map before publishing
+  map_memory_.decayMap();
   // Publish the map every map_pub_rate [ms]
   nav_msgs::msg::OccupancyGrid map_msg = *map_memory_.getMapData();
   map_msg.header.stamp = this->now();

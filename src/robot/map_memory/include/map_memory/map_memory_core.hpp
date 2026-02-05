@@ -36,6 +36,9 @@ public:
   // Retrieves map data
   nav_msgs::msg::OccupancyGrid::SharedPtr getMapData() const;
 
+  // decays cost
+  void decayMap(double decay_constant = 0.92);
+
 private:
   nav_msgs::msg::OccupancyGrid::SharedPtr global_map_;
   rclcpp::Logger logger_;

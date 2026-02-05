@@ -122,4 +122,17 @@ nav_msgs::msg::OccupancyGrid::SharedPtr MapMemoryCore::getMapData() const
   return global_map_;
 }
 
+// Decays cost with exponential decay
+void MapMemoryCore::decayMap(double decay_factor)
+{
+  for (unsigned int y = 0; y < global_map_->info.height; y++) {
+    for (unsigned int x = 0; x < global_map_->info.width; x++) {
+      int idx = y * global_map_->info.width + x;
+      int cost = static_cast<int>(global_map_->data[idx]);
+      if (cost == -1) return;
+      global_map_->data[idx] *= decay_factor;
+    }
+  }
+}
+
 }  // namespace robot
