@@ -31,6 +31,11 @@
 
 export ACTIVE_MODULES="robot gazebo vis_tools"
 
+################################# MULTI-MACHINE ROS2 CONFIG #################################
+## ROS_DOMAIN_ID must match on all machines that need to communicate.
+## Valid range: 0-101. Set the same value on the remote machine.
+export ROS_DOMAIN_ID=42
+
 ################################# MODE OF OPERATION #################################
 ## Possible modes of operation when running watod.
 ## Possible values:

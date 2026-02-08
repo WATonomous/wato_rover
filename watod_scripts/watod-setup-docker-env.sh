@@ -64,6 +64,10 @@ GAZEBO_SERVER_IMAGE=${GAZEBO_SERVER_IMAGE:-"$REGISTRY_URL/gazebo_server"}
 INFRASTRUCTURE_FOXGLOVE_IMAGE=${INFRASTRUCTURE_FOXGLOVE_IMAGE:-"$REGISTRY_URL/infrastructure_foxglove"}
 ROBOT_IMAGE=${ROBOT_IMAGE:-"$REGISTRY_URL/robot"}
 
+## -------------------- Multi-Machine ROS2 Config -------------------
+
+ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-0}
+
 ## --------------------------- Ports ------------------------------
 
 BASE_PORT=${BASE_PORT:-$(($(id -u)*20))}
@@ -82,6 +86,7 @@ echo "$MODULES_DIR"
     echo "COMPOSE_DOCKER_CLI_BUILD=1"
     echo "COMPOSE_PROJECT_NAME=$COMPOSE_PROJECT_NAME"
     echo "TAG=$TAG"
+    echo "ROS_DOMAIN_ID=$ROS_DOMAIN_ID"
     echo "BASE_PORT=$BASE_PORT"
     echo "FOXGLOVE_BRIDGE_PORT=$FOXGLOVE_BRIDGE_PORT"
     echo "GAZEBO_PORT=$GAZEBO_PORT"

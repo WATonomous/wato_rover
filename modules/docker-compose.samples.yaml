@@ -7,6 +7,9 @@ services:
   #       - "${SAMPLES_AGGREGATOR_IMAGE:?}:${TAG}"
   #       - "${SAMPLES_AGGREGATOR_IMAGE:?}:main"
   #   image: "${SAMPLES_AGGREGATOR_IMAGE:?}:${TAG}"
+  #   network_mode: host
+  #   environment:
+  #     - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:?}
   #   profiles: [deploy]
   #   command: /bin/bash -c "ros2 launch aggregator aggregator.launch.py"
   #   volumes:
@@ -22,6 +25,9 @@ services:
       args:
         BASE_IMAGE: ${BASE_IMAGE_OVERRIDE-}
     image: "${SAMPLES_AGGREGATOR_IMAGE:?}:${TAG}"
+    network_mode: host
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:?}
     profiles: [deploy]
     command: /bin/bash -c "ros2 launch aggregator aggregator.launch.py"
     volumes:
@@ -37,6 +43,9 @@ services:
       args:
         BASE_IMAGE: ${BASE_IMAGE_OVERRIDE-}
     image: "${SAMPLES_PRODUCER_IMAGE:?}:${TAG}"
+    network_mode: host
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:?}
     profiles: [deploy]
     command: /bin/bash -c "ros2 launch producer producer.launch.py"
     volumes:
@@ -50,6 +59,9 @@ services:
   #       - "${SAMPLES_PRODUCER_IMAGE:?}:${TAG}"
   #       - "${SAMPLES_PRODUCER_IMAGE:?}:main"
   #   image: "${SAMPLES_PRODUCER_IMAGE:?}:${TAG}"
+  #   network_mode: host
+  #   environment:
+  #     - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:?}
   #   profiles: [deploy]
   #   command: /bin/bash -c "ros2 launch producer producer.launch.py"
   #   volumes:
@@ -65,6 +77,9 @@ services:
       args:
         BASE_IMAGE: ${BASE_IMAGE_OVERRIDE-}
     image: "${SAMPLES_TRANSFORMER_IMAGE:?}:${TAG}"
+    network_mode: host
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:?}
     profiles: [deploy]
     command: /bin/bash -c "ros2 launch transformer transformer.launch.py"
     volumes:
@@ -78,6 +93,9 @@ services:
   #       - "${SAMPLES_TRANSFORMER_IMAGE:?}:${TAG}"
   #       - "${SAMPLES_TRANSFORMER_IMAGE:?}:main"
   #   image: "${SAMPLES_TRANSFORMER_IMAGE:?}:${TAG}"
+  #   network_mode: host
+  #   environment:
+  #     - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:?}
   #   profiles: [deploy]
   #   command: /bin/bash -c "ros2 launch transformer transformer.launch.py"
   #   volumes:
@@ -86,6 +104,9 @@ services:
   aggregator_dev:
     build: *aggregator_build
     image: "${SAMPLES_AGGREGATOR_IMAGE}:dev_${TAG}"
+    network_mode: host
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:?}
     command: tail -F anything
     profiles: [develop]
     volumes:
@@ -95,6 +116,9 @@ services:
   producer_dev:
     build: *producer_build
     image: "${SAMPLES_PRODUCER_IMAGE}:dev_${TAG}"
+    network_mode: host
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:?}
     command: tail -F anything
     profiles: [develop]
     volumes:
@@ -104,6 +128,9 @@ services:
   transformer_dev:
     build: *transformer_build
     image: "${SAMPLES_TRANSFORMER_IMAGE}:dev_${TAG}"
+    network_mode: host
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:?}
     command: tail -F anything
     profiles: [develop]
     volumes:

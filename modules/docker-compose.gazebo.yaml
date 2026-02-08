@@ -9,10 +9,11 @@ services:
       args:
         BASE_IMAGE: ${BASE_IMAGE_OVERRIDE-}
     image: "${GAZEBO_SERVER_IMAGE:?}:${TAG}"
+    network_mode: host
     ipc: host
     tty: true
-    ports:
-      - "${GAZEBO_PORT:?}:9002"
+    environment:
+      - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:?}
     profiles: [deploy, develop]
     command: /bin/bash -c "ros2 launch gazebo sim.launch.py"
     volumes:
