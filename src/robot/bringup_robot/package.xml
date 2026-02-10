@@ -17,6 +17,8 @@
   <depend>map_memory</depend>
   <depend>planner</depend>
   <depend>control</depend>
+  <!-- <depend>camera_from_url</depend>
+  <depend>yolo_inference</depend> -->
 
   <export>
     <build_type>ament_cmake</build_type>
