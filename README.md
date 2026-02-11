@@ -72,6 +72,8 @@ The pipeline runs as follows:
 
 You can run YOLO object detection on your MacBook’s built-in camera and view the feed and detections in Foxglove.
 
+**Phone camera:** See [Phone camera object detection](docs/PHONE_CAMERA_OBJECT_DETECTION.md) for step-by-step setup.
+
 ### 1. Stream your Mac camera (on the host)
 
 Install OpenCV and run the stream script (no ROS2 required on the host):
@@ -83,29 +85,4 @@ python3 scripts/mac_camera_stream.py
 
 Leave this running. It serves JPEG frames at `http://localhost:9999/frame`. From inside Docker, the URL is `http://host.docker.internal:9999/frame`.
 
-### 2. Start Docker (robot + Foxglove)
-
-Ensure `watod-config.sh` has `ACTIVE_MODULES="robot vis_tools"` (default is `robot gazebo vis_tools`; you can leave gazebo in or omit it for this test). Then:
-
-```bash
-./watod_scripts/watod-setup-docker-env.sh   # once per setup
-watod up
-```
-
-In a **second terminal**, open a shell in the robot container and run the Mac camera + YOLO launch:
-
-```bash
-watod -t robot
-# inside the container:
-ros2 launch bringup_robot mac_camera_object_detection.launch.py
-```
-
-Leave this running. You should see `/image` and `/detections_image` being published.
-
-### 3. Connect Foxglove and add the image panels
-
-1. Open [Foxglove Studio](https://foxglove.dev/studio) (desktop or browser).
-2. Connect to the Foxglove Bridge: **Open connection** → **Foxglove WebSocket** → URL `ws://localhost:<FOXGLOVE_BRIDGE_PORT>`. The port is in `modules/.env` as `FOXGLOVE_BRIDGE_PORT` (from `watod-setup-docker-env.sh`).
-3. Add panels: **Image** for `/image` (raw camera) and **Image** for `/detections_image` (YOLO annotations).
-
-If you use a saved layout (e.g. `config/wato_asd_training_foxglove_config .json`), add or point the Image panels to `/image` and `/detections_image` as above.
+**2. and 3.** Same as Option A: run `./watod up`, then `./watod -t robot` and inside the container `ros2 launch bringup_robot mac_camera_object_detection.launch.py`, then connect Foxglove and add the Image panels for `/image` and `/detections_image`.

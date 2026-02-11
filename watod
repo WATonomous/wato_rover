@@ -124,9 +124,9 @@ else
     cd "$MONO_DIR" && . ./watod_scripts/watod-setup-docker-env.sh &> /dev/null
 fi
 
-# override to use arm64 images
-if [ "$PLATFORM" = "arm64" ]; then
-    echo "BASE_IMAGE_OVERRIDE=ghcr.io/watonomous/rover/base:humble-arm64" >> "$MODULES_DIR/.env"
+# Base image: default to robot_base (works without rover package access). Set BASE_IMAGE_OVERRIDE to e.g. ghcr.io/watonomous/rover/base:humble-arm64 for native arm64.
+if [ -n "$BASE_IMAGE_OVERRIDE" ]; then
+    echo "BASE_IMAGE_OVERRIDE=$BASE_IMAGE_OVERRIDE" >> "$MODULES_DIR/.env"
 else
     echo "BASE_IMAGE_OVERRIDE=ghcr.io/watonomous/robot_base/base:humble-ubuntu22.04" >> "$MODULES_DIR/.env"
 fi
