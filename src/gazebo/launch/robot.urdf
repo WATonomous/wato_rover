@@ -1,39 +1,36 @@
 <robot name='robot'>
     <link name='robot/chassis'>
         <visual>
+            <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
             <geometry>
-                <box size="2.0 1.0 0.5"/>
+                <mesh filename="package://gazebo/launch/rover_base_link.stl"/>
             </geometry>
-            <material>
-                <ambient>0.0 0.0 1.0 1</ambient>
-                <diffuse>0.0 0.0 1.0 1</diffuse>
-                <specular>0.0 0.0 1.0 1</specular>
+            <material name="rover_grey">
+                <color rgba="0.75 0.75 0.75 1"/>
             </material>
         </visual>
     </link>
 
     <link name='robot/left_wheel'>
         <visual name='visual'>
+            <origin xyz="0 0 0" rpy="1.5708 0 0"/>
             <geometry>
-                <cylinder radius="0.4" length="0.2"/>
+                <mesh filename="package://gazebo/launch/rover_center_left_wheel.stl"/>
             </geometry>
-            <material>
-                <ambient>1.0 0.0 0.0 1</ambient>
-                <diffuse>1.0 0.0 0.0 1</diffuse>
-                <specular>1.0 0.0 0.0 1</specular>
+            <material name="rover_grey">
+                <color rgba="0.75 0.75 0.75 1"/>
             </material>
         </visual>
     </link>
 
     <link name='robot/right_wheel'>
         <visual name='visual'>
+            <origin xyz="0 0 0" rpy="1.5708 0 0"/>
             <geometry>
-                <cylinder radius="0.4" length="0.2" />
+                <mesh filename="package://gazebo/launch/rover_center_right_wheel.stl"/>
             </geometry>
-            <material>
-                <ambient>1.0 0.0 0.0 1</ambient>
-                <diffuse>1.0 0.0 0.0 1</diffuse>
-                <specular>1.0 0.0 0.0 1</specular>
+            <material name="rover_grey">
+                <color rgba="0.75 0.75 0.75 1"/>
             </material>
         </visual>
     </link>
@@ -41,13 +38,83 @@
     <link name='robot/caster'>
         <visual name='visual'>
             <geometry>
-                <sphere radius="0.2" />
+                <sphere radius="0.01"/>
             </geometry>
-            <material>
-                <ambient>0.0 1 0.0 1</ambient>
-                <diffuse>0.0 1 0.0 1</diffuse>
-                <specular>0.0 1 0.0 1</specular>
+            <material name="invisible">
+                <color rgba="0 0 0 0"/>
             </material>
         </visual>
     </link>
+
+    <!-- Front-left visual wheel (fixed, no physics) -->
+    <link name='robot/front_left_wheel_visual'>
+        <visual name='visual'>
+            <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+            <geometry>
+                <mesh filename="package://gazebo/launch/rover_front_left_wheel.stl"/>
+            </geometry>
+            <material name="rover_grey">
+                <color rgba="0.75 0.75 0.75 1"/>
+            </material>
+        </visual>
+    </link>
+    <joint name="front_left_wheel_visual_joint" type="fixed">
+        <parent link="robot/chassis"/>
+        <child link="robot/front_left_wheel_visual"/>
+        <origin xyz="0.404 0.6 0" rpy="-1.5707 0 0"/>
+    </joint>
+
+    <!-- Front-right visual wheel -->
+    <link name='robot/front_right_wheel_visual'>
+        <visual name='visual'>
+            <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+            <geometry>
+                <mesh filename="package://gazebo/launch/rover_front_right_wheel.stl"/>
+            </geometry>
+            <material name="rover_grey">
+                <color rgba="0.75 0.75 0.75 1"/>
+            </material>
+        </visual>
+    </link>
+    <joint name="front_right_wheel_visual_joint" type="fixed">
+        <parent link="robot/chassis"/>
+        <child link="robot/front_right_wheel_visual"/>
+        <origin xyz="0.404 -0.6 0" rpy="-1.5707 0 0"/>
+    </joint>
+
+    <!-- Rear-left visual wheel -->
+    <link name='robot/rear_left_wheel_visual'>
+        <visual name='visual'>
+            <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+            <geometry>
+                <mesh filename="package://gazebo/launch/rover_rear_left_wheel.stl"/>
+            </geometry>
+            <material name="rover_grey">
+                <color rgba="0.75 0.75 0.75 1"/>
+            </material>
+        </visual>
+    </link>
+    <joint name="rear_left_wheel_visual_joint" type="fixed">
+        <parent link="robot/chassis"/>
+        <child link="robot/rear_left_wheel_visual"/>
+        <origin xyz="-0.398 0.6 0" rpy="-1.5707 0 0"/>
+    </joint>
+
+    <!-- Rear-right visual wheel -->
+    <link name='robot/rear_right_wheel_visual'>
+        <visual name='visual'>
+            <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+            <geometry>
+                <mesh filename="package://gazebo/launch/rover_rear_right_wheel.stl"/>
+            </geometry>
+            <material name="rover_grey">
+                <color rgba="0.75 0.75 0.75 1"/>
+            </material>
+        </visual>
+    </link>
+    <joint name="rear_right_wheel_visual_joint" type="fixed">
+        <parent link="robot/chassis"/>
+        <child link="robot/rear_right_wheel_visual"/>
+        <origin xyz="-0.398 -0.6 0" rpy="-1.5707 0 0"/>
+    </joint>
 </robot>

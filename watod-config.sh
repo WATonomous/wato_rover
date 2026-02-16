@@ -52,4 +52,6 @@ export ACTIVE_MODULES="robot gazebo vis_tools"
 
 ## Platform in which to build the docker images with.
 ## Either arm64 (apple silicon, raspberry pi) or amd64 (most computers)
-export PLATFORM="arm64"
+export PLATFORM="amd64"
+
+# hopefully i don't accidentally commit this lol
