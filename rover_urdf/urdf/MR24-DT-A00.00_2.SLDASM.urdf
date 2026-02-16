@@ -50,7 +50,7 @@
     <child link="Front_Left Wheel" />
     <axis xyz="0 -1 0" />
   </joint>
-  <link name="Front_right Wheel">
+  <link name="Front_Right Wheel">
     <inertial>
       <origin xyz="-1.03548080176985E-06 0.00282335706325032 5.97855546069503E-07" rpy="0 0 0" />
       <mass value="1.45375895562017" />
@@ -59,7 +59,7 @@
     <visual>
       <origin xyz="0.000000 0.000000 0.498464" rpy="1.5708 0 0" />
       <geometry>
-        <mesh filename="../meshes/Front_right Wheel.STL" />
+        <mesh filename="../meshes/Front_Right Wheel.STL" />
       </geometry>
       <material name="">
         <color rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
@@ -68,14 +68,14 @@
     <collision>
       <origin xyz="0.000000 0.000000 0.498464" rpy="1.5708 0 0" />
       <geometry>
-        <mesh filename="../meshes/Front_right Wheel.STL" />
+        <mesh filename="../meshes/Front_Right Wheel.STL" />
       </geometry>
     </collision>
   </link>
   <joint name="Front_Right Wheel Joint" type="continuous">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <parent link="base_link" />
-    <child link="Front_right Wheel" />
+    <child link="Front_Right Wheel" />
     <axis xyz="0 -1 0" />
   </joint>
   <link name="Center_Left Wheel">
