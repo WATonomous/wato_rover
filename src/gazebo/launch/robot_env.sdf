@@ -483,7 +483,7 @@
 
             <!--let's build the left wheel-->
             <link name='left_wheel'>
-                <pose relative_to="chassis">-0.5 0.6 0 -1.5707 0 0</pose> <!--angles are in radian-->
+                <pose relative_to="chassis">0 0.48455 0 -1.5707 0 0</pose> <!--angles are in radian-->
                 <inertial>
                     <mass>2</mass>
                     <inertia>
@@ -520,7 +520,7 @@
 
             <!--copy and paste for right wheel but change position-->
             <link name='right_wheel'>
-                <pose relative_to="chassis">-0.5 -0.6 0 -1.5707 0 0</pose> <!--angles are in radian-->
+                <pose relative_to="chassis">0 -0.48455 0 -1.5707 0 0</pose> <!--angles are in radian-->
                 <inertial>
                     <mass>1</mass>
                     <inertia>
@@ -628,7 +628,7 @@
 
             <!-- Front-left visual wheel (no collision, fixed to chassis) -->
             <link name='front_left_wheel_visual'>
-                <pose relative_to="chassis">0.404 0.6 0 -1.5707 0 0</pose>
+                <pose relative_to="chassis">0.40398 0.43855 0.0080468 -1.5707 0 0</pose>
                 <inertial>
                     <mass>0.001</mass>
                     <inertia>
@@ -654,7 +654,7 @@
 
             <!-- Front-right visual wheel -->
             <link name='front_right_wheel_visual'>
-                <pose relative_to="chassis">0.404 -0.6 0 -1.5707 0 0</pose>
+                <pose relative_to="chassis">0.40398 -0.43855 0.0080468 -1.5707 0 0</pose>
                 <inertial>
                     <mass>0.001</mass>
                     <inertia>
@@ -680,7 +680,7 @@
 
             <!-- Rear-left visual wheel -->
             <link name='rear_left_wheel_visual'>
-                <pose relative_to="chassis">-0.398 0.6 0 -1.5707 0 0</pose>
+                <pose relative_to="chassis">-0.39807 0.48455 0.016315 -1.5707 0 0</pose>
                 <inertial>
                     <mass>0.001</mass>
                     <inertia>
@@ -706,7 +706,7 @@
 
             <!-- Rear-right visual wheel -->
             <link name='rear_right_wheel_visual'>
-                <pose relative_to="chassis">-0.398 -0.6 0 -1.5707 0 0</pose>
+                <pose relative_to="chassis">-0.39807 -0.48455 0.016315 -1.5707 0 0</pose>
                 <inertial>
                     <mass>0.001</mass>
                     <inertia>

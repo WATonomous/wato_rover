@@ -25,7 +25,7 @@
     <joint name="left_wheel_joint" type="fixed">
         <parent link="robot/chassis"/>
         <child link="robot/left_wheel"/>
-        <origin xyz="-0.5 0.6 0" rpy="-1.5707 0 0"/>
+        <origin xyz="0 0.48455 0" rpy="-1.5707 0 0"/>
     </joint>
 
     <link name='robot/right_wheel'>
@@ -42,7 +42,7 @@
     <joint name="right_wheel_joint" type="fixed">
         <parent link="robot/chassis"/>
         <child link="robot/right_wheel"/>
-        <origin xyz="-0.5 -0.6 0" rpy="-1.5707 0 0"/>
+        <origin xyz="0 -0.48455 0" rpy="-1.5707 0 0"/>
     </joint>
 
     <link name='robot/caster'>
@@ -71,7 +71,7 @@
     <joint name="front_left_wheel_visual_joint" type="fixed">
         <parent link="robot/chassis"/>
         <child link="robot/front_left_wheel_visual"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0.40398 0.43855 0.0080468" rpy="0 0 0"/>
     </joint>
 
     <!-- Front-right visual wheel -->
@@ -89,7 +89,7 @@
     <joint name="front_right_wheel_visual_joint" type="fixed">
         <parent link="robot/chassis"/>
         <child link="robot/front_right_wheel_visual"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0.40398 -0.43855 0.0080468" rpy="0 0 0"/>
     </joint>
 
     <!-- Rear-left visual wheel -->
@@ -107,7 +107,7 @@
     <joint name="rear_left_wheel_visual_joint" type="fixed">
         <parent link="robot/chassis"/>
         <child link="robot/rear_left_wheel_visual"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="-0.39807 0.48455 0.016315" rpy="0 0 0"/>
     </joint>
 
     <!-- Rear-right visual wheel -->
@@ -125,6 +125,6 @@
     <joint name="rear_right_wheel_visual_joint" type="fixed">
         <parent link="robot/chassis"/>
         <child link="robot/rear_right_wheel_visual"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="-0.39807 -0.48455 0.016315" rpy="0 0 0"/>
     </joint>
 </robot>
