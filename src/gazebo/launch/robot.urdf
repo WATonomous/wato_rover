@@ -15,7 +15,7 @@
         <visual name='visual'>
             <origin xyz="0 0 0" rpy="1.5708 3.1416 0"/>
             <geometry>
-                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/rover_urdf/meshes/Center_Left%20Wheel.STL"/>
+                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/src/gazebo/launch/rover_center_left_wheel.stl"/>
             </geometry>
             <material name="rover_grey">
                 <color rgba="0.75 0.75 0.75 1"/>
@@ -32,7 +32,7 @@
         <visual name='visual'>
             <origin xyz="0 0 0" rpy="1.5708 3.1416 0"/>
             <geometry>
-                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/rover_urdf/meshes/Center_Right%20Wheel.STL"/>
+                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/src/gazebo/launch/rover_center_right_wheel.stl"/>
             </geometry>
             <material name="rover_grey">
                 <color rgba="0.75 0.75 0.75 1"/>
@@ -45,23 +45,12 @@
         <origin xyz="0 -0.48455 0" rpy="-1.5707 0 0"/>
     </joint>
 
-    <link name='robot/caster'>
-        <visual name='visual'>
-            <geometry>
-                <sphere radius="0.01"/>
-            </geometry>
-            <material name="invisible">
-                <color rgba="0 0 0 0"/>
-            </material>
-        </visual>
-    </link>
-
     <!-- Front-left visual wheel (fixed, no physics) -->
     <link name='robot/front_left_wheel_visual'>
         <visual name='visual'>
             <origin xyz="0 0 0" rpy="1.5708 3.1416 0"/>
             <geometry>
-                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/rover_urdf/meshes/Front_Left%20Wheel.STL"/>
+                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/src/gazebo/launch/rover_front_left_wheel.stl"/>
             </geometry>
             <material name="rover_grey">
                 <color rgba="0.75 0.75 0.75 1"/>
@@ -79,7 +68,7 @@
         <visual name='visual'>
             <origin xyz="0 0 0" rpy="1.5708 3.1416 0"/>
             <geometry>
-                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/rover_urdf/meshes/Front_Right%20Wheel.STL"/>
+                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/src/gazebo/launch/rover_front_right_wheel.stl"/>
             </geometry>
             <material name="rover_grey">
                 <color rgba="0.75 0.75 0.75 1"/>
@@ -97,7 +86,7 @@
         <visual name='visual'>
             <origin xyz="0 0 0" rpy="1.5708 3.1416 0"/>
             <geometry>
-                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/rover_urdf/meshes/Rear_Left%20Wheel.STL"/>
+                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/src/gazebo/launch/rover_rear_left_wheel.stl"/>
             </geometry>
             <material name="rover_grey">
                 <color rgba="0.75 0.75 0.75 1"/>
@@ -115,7 +104,7 @@
         <visual name='visual'>
             <origin xyz="0 0 0" rpy="1.5708 3.1416 0"/>
             <geometry>
-                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/rover_urdf/meshes/Rear_Right%20Wheel.STL"/>
+                <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/src/gazebo/launch/rover_rear_right_wheel.stl"/>
             </geometry>
             <material name="rover_grey">
                 <color rgba="0.75 0.75 0.75 1"/>
