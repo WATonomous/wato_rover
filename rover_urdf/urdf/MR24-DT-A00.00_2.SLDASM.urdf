@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="MR24-DT-A00.00_2.SLDASM">
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.000885923205321869 -0.028119179443882 0.0975795573636295" rpy="0 0 0" />
+      <mass value="9.38345533967687" />
+      <inertia ixx="0.0130902222960498" ixy="1.8427558457332E-06" ixz="-1.01248654001176E-09" iyy="0.0207681971565289" iyz="0.00110801941555495" izz="0.0292659491028059" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/base_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="../meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="Front_Left Wheel">
+    <inertial>
+      <origin xyz="-1.03548082763805E-06 0.00282335706328918 5.97855537354253E-07" rpy="0 0 0" />
+      <mass value="1.45375895562109" />
+      <inertia ixx="0.00515687387483678" ixy="-4.54997044063511E-09" ixz="-5.28518624676698E-09" iyy="0.00750126301372881" iyz="2.62479822634305E-09" izz="0.00515686780911825" />
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.498351" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Front_Left Wheel.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.498351" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Front_Left Wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Front_Left Wheel Joint" type="continuous">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="Front_Left Wheel" />
+    <axis xyz="0 -1 0" />
+  </joint>
+  <link name="Front_right Wheel">
+    <inertial>
+      <origin xyz="-1.03548080176985E-06 0.00282335706325032 5.97855546069503E-07" rpy="0 0 0" />
+      <mass value="1.45375895562017" />
+      <inertia ixx="0.00515687387483691" ixy="-4.54997059706509E-09" ixz="-5.28518657433156E-09" iyy="0.00750126301372899" iyz="2.62479818211546E-09" izz="0.0051568678091181" />
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.498464" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Front_right Wheel.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.498464" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Front_right Wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Front_Right Wheel Joint" type="continuous">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="Front_right Wheel" />
+    <axis xyz="0 -1 0" />
+  </joint>
+  <link name="Center_Left Wheel">
+    <inertial>
+      <origin xyz="-1.03548080172822E-06 0.0028233570632506 5.97855545736437E-07" rpy="0 0 0" />
+      <mass value="1.45375895562016" />
+      <inertia ixx="0.00515687387483907" ixy="-4.54997063834433E-09" ixz="-5.28518586577834E-09" iyy="0.00750126301373391" iyz="2.62479826947741E-09" izz="0.00515686780912049" />
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.005589 0.506384" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Center_Left Wheel.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.005589 0.506384" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Center_Left Wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Center_Left Wheel Joint" type="continuous">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="Center_Left Wheel" />
+    <axis xyz="0 -1 0" />
+  </joint>
+  <link name="Center_Right Wheel">
+    <inertial>
+      <origin xyz="-1.03548080190863E-06 0.0028233570632511 5.97855545958481E-07" rpy="0 0 0" />
+      <mass value="1.45375895562016" />
+      <inertia ixx="0.00515687387483913" ixy="-4.54997069864924E-09" ixz="-5.28518622969079E-09" iyy="0.00750126301373414" iyz="2.62479807474661E-09" izz="0.00515686780912046" />
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.005563 0.506384" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Center_Right Wheel.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.005563 0.506384" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Center_Right Wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Center_Right Wheel Joint" type="continuous">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="Center_Right Wheel" />
+    <axis xyz="0 -1 0" />
+  </joint>
+  <link name="Rear_Left Wheel">
+    <inertial>
+      <origin xyz="-1.03548080149229E-06 0.00282335706325076 5.97855546569104E-07" rpy="0 0 0" />
+      <mass value="1.45375895562016" />
+      <inertia ixx="0.00515687387483777" ixy="-4.54997062894092E-09" ixz="-5.28518575611129E-09" iyy="0.00750126301373237" iyz="2.62479850527491E-09" izz="0.00515686780911965" />
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.490124" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Rear_Left Wheel.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.490124" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Rear_Left Wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Rear_Left Wheel Joint" type="continuous">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="Rear_Left Wheel" />
+    <axis xyz="0 -1 0" />
+  </joint>
+  <link name="Rear_Right Wheel">
+    <inertial>
+      <origin xyz="-1.03548080071514E-06 0.00282335706325076 5.9785554540337E-07" rpy="0 0 0" />
+      <mass value="1.45375895562016" />
+      <inertia ixx="0.00515687387483825" ixy="-4.54997027073155E-09" ixz="-5.2851861444725E-09" iyy="0.00750126301373297" iyz="2.62479818011765E-09" izz="0.00515686780911977" />
+    </inertial>
+    <visual>
+      <origin xyz="0.000000 0.000000 0.489950" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Rear_Right Wheel.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000000 0.000000 0.489950" rpy="1.5708 0 0" />
+      <geometry>
+        <mesh filename="../meshes/Rear_Right Wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Rear_Right Wheel Joint" type="continuous">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="Rear_Right Wheel" />
+    <axis xyz="0 -1 0" />
+  </joint>
+</robot>
