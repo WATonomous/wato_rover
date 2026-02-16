@@ -1,7 +1,7 @@
 <robot name='robot'>
     <link name='robot/chassis'>
         <visual>
-            <origin xyz="0 0 0" rpy="0 -1.5708 -1.5708"/>
+            <origin xyz="0 0 0" rpy="0 1.5708 -1.5708"/>
             <geometry>
                 <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/src/gazebo/launch/rover_base_link.stl"/>
             </geometry>
