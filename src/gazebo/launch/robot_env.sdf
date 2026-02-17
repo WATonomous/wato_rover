@@ -419,10 +419,11 @@
                         <specular>0.3 0.3 0.3 1</specular>
                     </material>
                 </visual>
-                <collision name='collision'> <!--todo: describe why we need the collision-->
+                <collision name='collision'>
+                    <pose>0 0 0.05 0 0 0</pose>
                     <geometry>
                         <box>
-                            <size>2.0 1.0 0.5</size>
+                            <size>1.0 0.6 0.2</size>
                         </box>
                     </geometry>
                 </collision>
@@ -511,7 +512,7 @@
                 <collision name='collision'>
                     <geometry>
                         <cylinder>
-                            <radius>0.4</radius>
+                            <radius>0.10</radius>
                             <length>0.2</length>
                         </cylinder>
                     </geometry>
@@ -548,7 +549,7 @@
                 <collision name='collision'>
                     <geometry>
                         <cylinder>
-                            <radius>0.4</radius>
+                            <radius>0.10</radius>
                             <length>0.2</length>
                         </cylinder>
                     </geometry>
@@ -556,7 +557,7 @@
             </link>
 
             <frame name="caster_frame" attached_to='chassis'>
-                <pose>0.8 0 -0.2 0 0 0</pose>
+                <pose>0.8 0 -0.05 0 0 0</pose>
             </frame>
 
             <!--caster wheel-->
@@ -587,7 +588,7 @@
                 <collision name='collision'>
                     <geometry>
                         <sphere>
-                            <radius>0.2</radius>
+                            <radius>0.05</radius>
                         </sphere>
                     </geometry>
                 </collision>
@@ -737,7 +738,7 @@
                 <left_joint>left_wheel_joint</left_joint>
                 <right_joint>right_wheel_joint</right_joint>
                 <wheel_separation>1.2</wheel_separation>
-                <wheel_radius>0.4</wheel_radius>
+                <wheel_radius>0.10</wheel_radius>
                 <odom_publish_frequency>1</odom_publish_frequency>
                 <topic>cmd_vel</topic>
             </plugin>

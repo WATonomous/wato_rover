@@ -48,7 +48,7 @@
     <!-- Front-left visual wheel (fixed, no physics) -->
     <link name='robot/front_left_wheel_visual'>
         <visual name='visual'>
-            <origin xyz="0 0 0" rpy="0 -1.5708 1.5708"/>
+            <origin xyz="0 0 0.07" rpy="0 -1.5708 1.5708"/>
             <geometry>
                 <mesh filename="rover_front_left_wheel.stl"/>
             </geometry>
@@ -66,7 +66,7 @@
     <!-- Front-right visual wheel -->
     <link name='robot/front_right_wheel_visual'>
         <visual name='visual'>
-            <origin xyz="0 0 0" rpy="0 -1.5708 1.5708"/>
+            <origin xyz="0.40398 -0.5 -0.5" rpy="0 -1.5708 1.5708"/>
             <geometry>
                 <mesh filename="rover_front_right_wheel.stl"/>
             </geometry>
