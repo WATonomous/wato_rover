@@ -64,7 +64,10 @@ class YoloInference(Node):
                 providers=["CPUExecutionProvider"],
             )
             self.input_name = self.session.get_inputs()[0].name
+            output_shape = self.session.get_outputs()[0].shape
+            num_classes = output_shape[1] - 4 if len(output_shape) == 3 else "unknown"
             self.get_logger().info(f"Loaded ONNX model: {self.model_path}")
+            self.get_logger().info(f"Output shape: {output_shape} -> {num_classes} classes")
             self.run = self.run_onnx
         elif ext in (".pt", ".pth"):
             if not TORCH_OK:
@@ -171,30 +174,65 @@ class YoloInference(Node):
 
     def postprocess(self, raw: np.ndarray):
         """
-        YOLOv8 output should be already postprocessed now ...
-        Format: [x, y, w, h, conf, class_id]
+        Ultralytics YOLO11 ONNX output format:
+          raw shape = [1, 4 + num_classes, num_predictions]
+          First 4 rows: x_center, y_center, w, h (in letterboxed pixel space)
+          Remaining rows: class scores (raw, not sigmoided)
         """
         conf_threshold = 0.25
+        iou_threshold = 0.45
+
+        # [1, 4+C, N] -> [N, 4+C]
+        preds = raw[0].T
+
+        boxes_xywh = preds[:, :4]
+        class_scores = preds[:, 4:]
+        num_classes = class_scores.shape[1]
+
+        class_ids = np.argmax(class_scores, axis=1)
+        confidences = class_scores[np.arange(len(class_ids)), class_ids]
+
+        mask = confidences > conf_threshold
+        boxes_xywh = boxes_xywh[mask]
+        confidences = confidences[mask]
+        class_ids = class_ids[mask]
+
+        if len(boxes_xywh) == 0:
+            return []
+
+        # xywh center -> xyxy
+        boxes_xyxy = np.empty_like(boxes_xywh)
+        boxes_xyxy[:, 0] = boxes_xywh[:, 0] - boxes_xywh[:, 2] / 2
+        boxes_xyxy[:, 1] = boxes_xywh[:, 1] - boxes_xywh[:, 3] / 2
+        boxes_xyxy[:, 2] = boxes_xywh[:, 0] + boxes_xywh[:, 2] / 2
+        boxes_xyxy[:, 3] = boxes_xywh[:, 1] + boxes_xywh[:, 3] / 2
+
+        # NMS via OpenCV (expects xywh with top-left origin)
+        bboxes_for_nms = np.empty_like(boxes_xywh)
+        bboxes_for_nms[:, 0] = boxes_xyxy[:, 0]
+        bboxes_for_nms[:, 1] = boxes_xyxy[:, 1]
+        bboxes_for_nms[:, 2] = boxes_xywh[:, 2]
+        bboxes_for_nms[:, 3] = boxes_xywh[:, 3]
+        indices = cv2.dnn.NMSBoxes(
+            bboxes_for_nms.tolist(),
+            confidences.tolist(),
+            conf_threshold,
+            iou_threshold,
+        )
+        if len(indices) == 0:
+            return []
+
+        class_names = ["Mallet", "Bottle", "Hammer"]
+
         results = []
-
-        predictions = raw[0]
-        for det in predictions:
-            # filter results
-            conf = det[4]
-            if conf < conf_threshold:
-                continue
-
-            # scale model results from letterbox to original
-            x1 = int((det[0] - self.dw) / self.ratio)
-            y1 = int((det[1] - self.dh) / self.ratio)
-            x2 = int((det[2] - self.dw) / self.ratio)
-            y2 = int((det[3] - self.dh) / self.ratio)
-
-            cls = "Unknown"
-            if int(det[5]) < 2:
-                cls = ["Mallet", "Bottle"][int(det[5])]
-
-            results.append((x1, y1, x2, y2, float(conf), cls))
+        for i in indices.flatten():
+            x1 = int((boxes_xyxy[i, 0] - self.dw) / self.ratio)
+            y1 = int((boxes_xyxy[i, 1] - self.dh) / self.ratio)
+            x2 = int((boxes_xyxy[i, 2] - self.dw) / self.ratio)
+            y2 = int((boxes_xyxy[i, 3] - self.dh) / self.ratio)
+            cid = int(class_ids[i])
+            name = class_names[cid] if cid < len(class_names) else f"class_{cid}"
+            results.append((x1, y1, x2, y2, float(confidences[i]), name))
 
         return results
 

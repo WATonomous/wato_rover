@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
  && rm -rf /var/lib/apt/lists/*
 
 # Copy in source code
-# COPY src/robot/yolo_inference ./yolo_inference
-# COPY src/robot/object_detection object_detection
+COPY src/robot/yolo_inference ./yolo_inference
+COPY src/robot/object_detection object_detection
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/gps_sim gps_sim
 COPY src/robot/imu_sim imu_sim
