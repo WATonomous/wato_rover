@@ -40,7 +40,8 @@
         "enableStats": false,
         "ignoreColladaUpAxis": false,
         "transforms": {
-          "editable": true
+          "editable": true,
+          "labelSize": 0.075
         }
       },
       "transforms": {
