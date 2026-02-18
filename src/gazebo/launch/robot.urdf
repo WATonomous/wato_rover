@@ -66,7 +66,7 @@
     <!-- Front-right visual wheel -->
     <link name='robot/fr_whl'>
         <visual name='visual'>
-            <origin xyz="0.40398 -0.5 -0.5" rpy="0 -1.5708 1.5708"/>
+            <origin xyz="0 0 0" rpy="0 -1.5708 1.5708"/>
             <geometry>
                 <mesh filename="https://raw.githubusercontent.com/WATonomous/wato_rover/add-rover-urdf/src/gazebo/launch/rover_front_right_wheel.stl"/>
             </geometry>
