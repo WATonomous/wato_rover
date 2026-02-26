@@ -1,0 +1,45 @@
+#ifndef GOAL_FINDER_NODE_HPP
+#define GOAL_FINDER_NODE_HPP
+
+#include <rclcpp/rclcpp.hpp>
+#include <nav_msgs/msg/occupancy_grid.hpp>
+#include <nav_msgs/msg/odometry.hpp>
+#include <vision_msgs/msg/detection2_d_array.hpp>
+#include <geometry_msgs/msg/point_stamped.hpp>
+#include <geometry_msgs/msg/twist.hpp>
+
+class GoalFinderNode : public rclcpp::Node
+{
+public:
+    GoalFinderNode();
+
+private:
+    enum class State { WAITING_FOR_OBJECT, SEARCHING_FOR_OBJECT, MOVING_TO_OBJECT };
+    State state_ = State::SEARCHING_FOR_OBJECT;
+
+    bool objectDetected_ = false;
+    double max_angle_ = 45.0; // assuming 90 degree FOV
+    double search_angle_ = 0.0;
+    int image_width_ = 640;
+    int desired_class_ = 0; // class of the object we want to detect
+
+    rclcpp::Subscription<nav_msgs::msg::OccupancyGrid>::SharedPtr map_sub_;
+    rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
+    rclcpp::Subscription<vision_msgs::msg::Detection2DArray>::SharedPtr object_sub_;
+    rclcpp::Publisher<geometry_msgs::msg::PointStamped>::SharedPtr goal_pub_;
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr rotate_pub_;
+
+    nav_msgs::msg::OccupancyGrid map_;
+    nav_msgs::msg::Odometry robot_pose_;
+    vision_msgs::msg::Detection2DArray object_message_;
+    geometry_msgs::msg::PointStamped goal_point_;
+
+    void mapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr msg);
+    void odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg);
+    void objectCallback(const vision_msgs::msg::Detection2DArray::SharedPtr msg);
+    void timerCallback();
+    double cameraToAngle(const vision_msgs::msg::BoundingBox2D &bbox);
+    bool findGoalPoint(double angle); // returns true if an occupied cell was found and fills goal_point_
+};
+
+#endif // GOAL_FINDER_NODE_HPP
