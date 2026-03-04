@@ -13,14 +13,6 @@
     <!-- Runtime ROS deps -->
     <exec_depend>rclpy</exec_depend>
     <exec_depend>sensor_msgs</exec_depend>
-    <exec_depend>cv_bridge</exec_depend>
-
-    <!-- Runtime non-ROS deps resolved by rosdep -->
-    <exec_depend>onnxruntime</exec_depend>
-    <exec_depend>python3-opencv</exec_depend>
-    <exec_depend>python3-numpy</exec_depend>
-    <!-- (optional) leave out if we only use ONNX -->
-    <exec_depend>python3-torch</exec_depend>
 
     <export>
         <build_type>ament_python</build_type>
