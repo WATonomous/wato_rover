@@ -67,7 +67,9 @@ class YoloInference(Node):
             output_shape = self.session.get_outputs()[0].shape
             num_classes = output_shape[1] - 4 if len(output_shape) == 3 else "unknown"
             self.get_logger().info(f"Loaded ONNX model: {self.model_path}")
-            self.get_logger().info(f"Output shape: {output_shape} -> {num_classes} classes")
+            self.get_logger().info(
+                f"Output shape: {output_shape} -> {num_classes} classes"
+            )
             self.run = self.run_onnx
         elif ext in (".pt", ".pth"):
             if not TORCH_OK:
@@ -187,7 +189,6 @@ class YoloInference(Node):
 
         boxes_xywh = preds[:, :4]
         class_scores = preds[:, 4:]
-        num_classes = class_scores.shape[1]
 
         class_ids = np.argmax(class_scores, axis=1)
         confidences = class_scores[np.arange(len(class_ids)), class_ids]

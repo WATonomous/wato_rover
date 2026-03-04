@@ -40,7 +40,8 @@ RUN apt-get update && \
 # Install remaining rosdep requirements
 COPY --from=source /tmp/colcon_install_list /tmp/colcon_install_list
 RUN apt-get update && \
-    apt-fast install -qq -y --no-install-recommends "$(cat /tmp/colcon_install_list)"
+    apt-fast install -qq -y --no-install-recommends "$(cat /tmp/colcon_install_list)" && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies via pip
 COPY requirements.txt /tmp/requirements.txt
