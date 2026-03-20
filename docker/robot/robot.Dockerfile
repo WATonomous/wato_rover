@@ -6,8 +6,8 @@ FROM ${BASE_IMAGE} AS source
 WORKDIR ${AMENT_WS}/src
 
 # Copy in source code
-# COPY src/robot/yolo_inference ./yolo_inference
-# COPY src/robot/object_detection object_detection
+COPY src/robot/yolo_inference ./yolo_inference
+COPY src/robot/object_detection object_detection
 COPY src/robot/odometry_spoof odometry_spoof
 COPY src/robot/gps_sim gps_sim
 COPY src/robot/imu_sim imu_sim
@@ -30,11 +30,24 @@ RUN apt-get -qq update && rosdep update && \
 ################################# Dependencies ################################
 FROM ${BASE_IMAGE} AS dependencies
 
-# ADD MORE DEPENDENCIES HERE
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Install Rosdep requirements
+# Install cv_bridge directly (not reliably resolved via rosdep on arm64)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ros-"$ROS_DISTRO"-cv-bridge && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install remaining rosdep requirements
 COPY --from=source /tmp/colcon_install_list /tmp/colcon_install_list
-RUN apt-fast install -qq -y --no-install-recommends "$(cat /tmp/colcon_install_list)"
+RUN apt-get update && \
+    apt-fast install -qq -y --no-install-recommends "$(cat /tmp/colcon_install_list)" && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies via pip
+COPY requirements.txt /tmp/requirements.txt
+RUN apt-get update && apt-get install -y --no-install-recommends python3-pip && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir -r /tmp/requirements.txt
 
 # Copy in source code from source stage
 WORKDIR ${AMENT_WS}

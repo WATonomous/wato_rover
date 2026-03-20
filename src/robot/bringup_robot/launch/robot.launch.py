@@ -176,4 +176,13 @@ def generate_launch_description():
     ld.add_action(localization_param)
     ld.add_action(localization_node)
 
+    #################### YOLO Inference Node #####################
+    yolo_inference_node = Node(
+        package="yolo_inference",
+        name="yolo_inference_node",
+        executable="yolo_inference_node",
+        remappings=[("/image", "/camera/image")],
+    )
+    ld.add_action(yolo_inference_node)
+
     return ld
