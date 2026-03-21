@@ -1,21 +1,9 @@
-// Copyright (c) 2025-present WATonomous. All rights reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
 #include "costmap/costmap_core.hpp"
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <queue>
 #include <vector>
 
@@ -30,165 +18,151 @@ CostmapCore::CostmapCore(const rclcpp::Logger & logger)
 {}
 
 void CostmapCore::initCostmap(
-  double resolution, int width, int height, geometry_msgs::msg::Pose origin, double inflation_radius)
+  double resolution, int width, int height,
+  double inflation_radius, double step_threshold, double max_range)
 {
   costmap_data_->info.resolution = resolution;
   costmap_data_->info.width = width;
   costmap_data_->info.height = height;
-  costmap_data_->info.origin = origin;
-  costmap_data_->data.assign(width * height, -1);
+
+  costmap_data_->info.origin.position.x = -(width * resolution) / 2.0;
+  costmap_data_->info.origin.position.y = -(height * resolution) / 2.0;
+  costmap_data_->info.origin.orientation.w = 1.0;
+
+  costmap_data_->data.assign(width * height, 0);
 
   inflation_radius_ = inflation_radius;
-  inflation_cells_ = static_cast<int>(inflation_radius / resolution);
+  inflation_cells_ = static_cast<int>(std::ceil(inflation_radius / resolution));
+  step_threshold_ = step_threshold;
+  max_range_ = max_range;
 
-  RCLCPP_INFO(logger_, "Costmap initialized with resolution: %.2f, width: %d, height: %d", resolution, width, height);
-}
-
-void CostmapCore::updateCostmap(const sensor_msgs::msg::LaserScan::SharedPtr laserscan) const
-{
-  // Reset the costmap to free space
-  std::fill(costmap_data_->data.begin(), costmap_data_->data.end(), 0);
-
-  double angle = laserscan->angle_min;
-  for (size_t i = 0; i < laserscan->ranges.size(); ++i, angle += laserscan->angle_increment) {
-    double range = laserscan->ranges[i];
-
-    // Check if the range is within the valid range
-    if (range >= laserscan->range_min && range <= laserscan->range_max) {
-      // Calculate obstacle position in the map frame
-      double x = range * std::cos(angle);
-      double y = range * std::sin(angle);
-
-      // Convert to grid coordinates
-      int grid_x = static_cast<int>((x - costmap_data_->info.origin.position.x) / costmap_data_->info.resolution);
-      int grid_y = static_cast<int>((y - costmap_data_->info.origin.position.y) / costmap_data_->info.resolution);
-
-      if (
-        grid_x >= 0 && grid_x < static_cast<int>(costmap_data_->info.width) && grid_y >= 0 &&
-        grid_y < static_cast<int>(costmap_data_->info.height))
-      {
-        // Mark the cell as occupied
-        int index = grid_y * costmap_data_->info.width + grid_x;
-        costmap_data_->data[index] = 100;  // 100 indicates an occupied cell
-
-        // Inflate around the obstacle
-        inflateObstacle(grid_x, grid_y);
-      }
-    }
-  }
+  RCLCPP_INFO(
+    logger_, "Costmap initialized: %dx%d @ %.2fm/cell, inflation=%.2fm, step=%.2fm, range=%.1fm",
+    width, height, resolution, inflation_radius, step_threshold, max_range);
 }
 
 void CostmapCore::updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud2::SharedPtr cloud) const
 {
-  // Reset the costmap to free space
-  std::fill(costmap_data_->data.begin(), costmap_data_->data.end(), 0);
+  const int w = costmap_data_->info.width;
+  const int h = costmap_data_->info.height;
+  const int n = w * h;
+  const double res = costmap_data_->info.resolution;
+  const double ox = costmap_data_->info.origin.position.x;
+  const double oy = costmap_data_->info.origin.position.y;
 
-  // Create iterators for x, y, z fields in the point cloud
+  // Per-cell height tracking
+  const float NEG_INF = -std::numeric_limits<float>::infinity();
+  const float POS_INF = std::numeric_limits<float>::infinity();
+  std::vector<float> min_z(n, POS_INF);
+  std::vector<float> max_z(n, NEG_INF);
+
   sensor_msgs::PointCloud2ConstIterator<float> iter_x(*cloud, "x");
   sensor_msgs::PointCloud2ConstIterator<float> iter_y(*cloud, "y");
   sensor_msgs::PointCloud2ConstIterator<float> iter_z(*cloud, "z");
 
-  // Take a thin horizontal slice at a specific height (like a 2D laser scan)
-  // Filter by z-height to get points at obstacle level (ignore ground)
-  const double min_height = 0.05;  // Minimum height - ignore ground points below this
-  const double max_height = 0.15;  // Maximum height - only 10cm band
-
-  // Downsample: only process every Nth point to reduce computation
-  // A 640x480 cloud has 307k points, we only need ~256-500 for a laser-scan-like result
-  const int point_skip = 20;  // Process every 20th point (307k/20 ≈ 15k points checked)
-
-  int point_count = 0;
-
-  // Iterate through points in the cloud with downsampling
+  // Pass 1: accumulate min/max z per grid cell
   for (; iter_x != iter_x.end(); ++iter_x, ++iter_y, ++iter_z) {
-    // Downsample: skip most points
-    if (++point_count % point_skip != 0) {
-      continue;
-    }
+    float px = *iter_x;
+    float py = *iter_y;
+    float pz = *iter_z;
 
-    float x = *iter_x;
-    float y = *iter_y;
-    float z = *iter_z;
+    if (!std::isfinite(px) || !std::isfinite(py) || !std::isfinite(pz)) continue;
 
-    // Skip invalid points (NaN or Inf)
-    if (!std::isfinite(x) || !std::isfinite(y) || !std::isfinite(z)) {
-      continue;
-    }
+    if (std::hypot(px, py) > max_range_) continue;
 
-    // Only consider points in a thin horizontal slice at a specific height
-    // This creates a 2D laser-scan-like view, ignoring ground points
-    if (z < min_height || z > max_height) {
-      continue;
-    }
+    int gx = static_cast<int>((px - ox) / res);
+    int gy = static_cast<int>((py - oy) / res);
+    if (gx < 0 || gx >= w || gy < 0 || gy >= h) continue;
 
-    // Use x and y directly from the point cloud (in the sensor's frame)
-    // This is exactly like the laser scan approach
-    double obstacle_x = x;
-    double obstacle_y = y;
+    int idx = gy * w + gx;
+    min_z[idx] = std::min(min_z[idx], pz);
+    max_z[idx] = std::max(max_z[idx], pz);
+  }
 
-    // Convert to grid coordinates (same logic as laser scan)
-    int grid_x =
-      static_cast<int>((obstacle_x - costmap_data_->info.origin.position.x) / costmap_data_->info.resolution);
-    int grid_y =
-      static_cast<int>((obstacle_y - costmap_data_->info.origin.position.y) / costmap_data_->info.resolution);
+  // Pass 2: mark obstacle cells where height gradient exceeds threshold
+  // A cell is an obstacle if:
+  //   (a) it has a large internal height span (e.g. boulder face), OR
+  //   (b) its max_z is much higher than a neighbor's max_z (step/cliff edge)
+  std::fill(costmap_data_->data.begin(), costmap_data_->data.end(), 0);
 
-    // Check if within costmap bounds
-    if (
-      grid_x >= 0 && grid_x < static_cast<int>(costmap_data_->info.width) && grid_y >= 0 &&
-      grid_y < static_cast<int>(costmap_data_->info.height))
-    {
-      // Mark the cell as occupied
-      int index = grid_y * costmap_data_->info.width + grid_x;
-      costmap_data_->data[index] = 100;  // 100 indicates an occupied cell
+  for (int y = 0; y < h; ++y) {
+    for (int x = 0; x < w; ++x) {
+      int idx = y * w + x;
+      if (max_z[idx] == NEG_INF) continue;  // no points in this cell
 
-      // Inflate around the obstacle
-      inflateObstacle(grid_x, grid_y);
+      // Check internal height span
+      float span = max_z[idx] - min_z[idx];
+      if (span > step_threshold_) {
+        costmap_data_->data[idx] = 100;
+        continue;
+      }
+
+      // Check height difference to neighbors
+      for (int dx = -1; dx <= 1; ++dx) {
+        for (int dy = -1; dy <= 1; ++dy) {
+          if (dx == 0 && dy == 0) continue;
+          int nx = x + dx, ny = y + dy;
+          if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+          int ni = ny * w + nx;
+          if (max_z[ni] == NEG_INF) continue;
+
+          float diff = std::abs(max_z[idx] - max_z[ni]);
+          if (diff > step_threshold_) {
+            costmap_data_->data[idx] = 100;
+            goto next_cell;
+          }
+        }
+      }
+      next_cell:;
     }
   }
+
+  inflate(costmap_data_->data, w, h);
 }
 
-void CostmapCore::inflateObstacle(int origin_x, int origin_y) const
+void CostmapCore::inflate(std::vector<int8_t> & grid, int width, int height) const
 {
-  // Use a simple breadth-first search (BFS) to mark cells within the inflation radius
-  std::queue<std::pair<int, int>> queue;
-  queue.emplace(origin_x, origin_y);
+  if (inflation_cells_ <= 0) return;
 
-  std::vector<std::vector<bool>> visited(
-    costmap_data_->info.width, std::vector<bool>(costmap_data_->info.height, false));
-  visited[origin_x][origin_y] = true;
+  std::queue<std::pair<int, int>> queue;
+  std::vector<int> dist(width * height, -1);
+
+  for (int y = 0; y < height; ++y) {
+    for (int x = 0; x < width; ++x) {
+      if (grid[y * width + x] == 100) {
+        queue.emplace(x, y);
+        dist[y * width + x] = 0;
+      }
+    }
+  }
+
+  const double res = costmap_data_->info.resolution;
+  const int dirs[][2] = {{1,0},{-1,0},{0,1},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1}};
 
   while (!queue.empty()) {
     auto [x, y] = queue.front();
     queue.pop();
 
-    // Iterate over neighboring cells
-    for (int dx = -1; dx <= 1; ++dx) {
-      for (int dy = -1; dy <= 1; ++dy) {
-        if (dx == 0 && dy == 0) continue;  // Skip the center cell
+    for (auto & d : dirs) {
+      int nx = x + d[0];
+      int ny = y + d[1];
+      if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
 
-        int nx = x + dx;
-        int ny = y + dy;
+      int ni = ny * width + nx;
+      if (dist[ni] >= 0) continue;
 
-        // Ensure the neighbor cell is within bounds
-        if (
-          nx >= 0 && nx < static_cast<int>(costmap_data_->info.width) && ny >= 0 &&
-          ny < static_cast<int>(costmap_data_->info.height) && !visited[nx][ny])
-        {
-          // Calculate the distance to the original obstacle cell
-          double distance = std::hypot(nx - origin_x, ny - origin_y) * costmap_data_->info.resolution;
+      int new_dist = dist[y * width + x] + 1;
+      double real_dist = new_dist * res;
+      if (real_dist > inflation_radius_) continue;
 
-          // If within inflation radius, mark as inflated and add to queue
-          if (distance <= inflation_radius_) {
-            int index = ny * costmap_data_->info.width + nx;
-            if (costmap_data_->data[index] < (1 - (distance / inflation_radius_)) * 100) {
-              costmap_data_->data[index] = (1 - (distance / inflation_radius_)) * 100;
-            }
-            queue.emplace(nx, ny);
-          }
+      dist[ni] = new_dist;
 
-          visited[nx][ny] = true;
-        }
+      int8_t cost = static_cast<int8_t>((1.0 - real_dist / inflation_radius_) * 99);
+      if (cost > grid[ni]) {
+        grid[ni] = cost;
       }
+
+      queue.emplace(nx, ny);
     }
   }
 }

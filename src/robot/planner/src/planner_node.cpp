@@ -84,11 +84,6 @@ void PlannerNode::mapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr msg)
 
 void PlannerNode::goalCallback(const geometry_msgs::msg::PointStamped::SharedPtr goal_msg)
 {
-  if (active_goal_) {
-    RCLCPP_WARN(this->get_logger(), "Ignoring new goal; a goal is already active.");
-    return;
-  }
-
   if (!map_) {
     RCLCPP_WARN(this->get_logger(), "No costmap available yet. Cannot set goal.");
     return;
