@@ -162,6 +162,15 @@ bool PlannerCore::doAStar(const CellIndex & start_idx, const CellIndex & goal_id
         continue;
       }
 
+      // Prevent diagonal corner-cutting through obstacles
+      int dx = nb.x - cidx.x;
+      int dy = nb.y - cidx.y;
+      if (dx != 0 && dy != 0) {
+        if (cellCost({cidx.x + dx, cidx.y}) > 90 || cellCost({cidx.x, cidx.y + dy}) > 90) {
+          continue;
+        }
+      }
+
       // Step cost: 1.0 orth, sqrt(2) diag
       double step_cost = stepDistance(cidx, nb);
       // Add a penalty from costmap cell value (simple scale)
