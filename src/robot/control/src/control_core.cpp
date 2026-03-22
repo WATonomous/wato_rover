@@ -84,7 +84,7 @@ geometry_msgs::msg::Twist ControlCore::calculateControlCommand(double robot_x, d
 
 unsigned int ControlCore::findLookaheadPoint(double robot_x, double robot_y, double robot_theta) {
   double min_distance = std::numeric_limits<double>::max();
-  int lookahead_index = 0;
+  int lookahead_index = path_.poses.size();  // default to past-end so caller stops
   bool found_forward = false;
 
   // Loop through all path points to find the closest lookahead point
