@@ -1,23 +1,23 @@
 {
   "configById": {
-    "RawMessages!r2z55s": {
-      "diffEnabled": false,
-      "diffMethod": "custom",
-      "diffTopicPath": "",
-      "showFullMessageForDiff": false,
-      "topicPath": "/camera/depth/points",
-      "fontSize": 12
+    "RawMessages!4j4g8j9": {
+      "topicPath": "/cmd_vel"
+    },
+    "Publish!b3qov4": {
+      "topicName": "/control_node/enable",
+      "datatype": "std_msgs/msg/Bool",
+      "value": "{\n  \"data\": true\n}"
     },
     "3D!185ho2t": {
       "cameraState": {
         "perspective": true,
-        "distance": 28.639455620673164,
-        "phi": 18.830087786132676,
-        "thetaOffset": 143.10881232903213,
+        "distance": 21.05263157891807,
+        "phi": 37.1127842505283,
+        "thetaOffset": 55.67218618729289,
         "targetOffset": [
-          -3.406009427188918,
-          1.3537424176444015,
-          0.9171607980147727
+          -2.331024943795097,
+          2.2200999230434864,
+          -3.838663527620745e-16
         ],
         "target": [
           0,
@@ -147,7 +147,7 @@
           "alpha": 0.5016
         },
         "/costmap": {
-          "visible": true,
+          "visible": false,
           "colorMode": "costmap",
           "alpha": 1
         },
@@ -206,6 +206,12 @@
         },
         "/sim/realsense2/depth/camera_info": {
           "visible": false
+        },
+        "/camera/points": {
+          "visible": false,
+          "colorField": "rgb",
+          "colorMode": "rgb",
+          "colorMap": "turbo"
         }
       },
       "layers": {
@@ -226,7 +232,7 @@
           "order": 1
         },
         "6387c3f4-066a-4fb9-a043-d9bbb06d4697": {
-          "visible": true,
+          "visible": false,
           "frameLocked": true,
           "label": "Grid",
           "instanceId": "6387c3f4-066a-4fb9-a043-d9bbb06d4697",
@@ -272,130 +278,6 @@
         "type": "point",
         "poseTopic": "/goal_pose",
         "pointTopic": "/goal_point",
-        "poseEstimateTopic": "/initialpose",
-        "poseEstimateXDeviation": 0.5,
-        "poseEstimateYDeviation": 0.5,
-        "poseEstimateThetaDeviation": 0.26179939
-      },
-      "imageMode": {}
-    },
-    "3D!xzfbk4": {
-      "cameraState": {
-        "perspective": true,
-        "distance": 11.376001845500813,
-        "phi": 43.38824250791778,
-        "thetaOffset": -108.39546367026087,
-        "targetOffset": [
-          -3.8330732359231585,
-          3.848382127936893,
-          6.958865714122545e-16
-        ],
-        "target": [
-          0,
-          0,
-          0
-        ],
-        "targetOrientation": [
-          0,
-          0,
-          0,
-          1
-        ],
-        "fovy": 45,
-        "near": 0.5,
-        "far": 5000
-      },
-      "followMode": "follow-pose",
-      "scene": {
-        "transforms": {
-          "editable": true,
-          "enablePreloading": true,
-          "visible": true,
-          "showLabel": true
-        }
-      },
-      "transforms": {
-        "frame:robot/caster": {
-          "visible": true
-        },
-        "frame:sim_world": {
-          "visible": true
-        },
-        "frame:robot": {
-          "visible": true
-        },
-        "frame:robot/chassis": {
-          "visible": true
-        },
-        "frame:robot/chassis/imu_sensor": {
-          "visible": true
-        },
-        "frame:robot/chassis/sim_realsense_d435_color": {
-          "visible": true
-        },
-        "frame:robot/clw": {
-          "visible": true
-        },
-        "frame:robot/crw": {
-          "visible": true
-        },
-        "frame:robot/chassis/sim_realsense_d435_1_color": {
-          "visible": true
-        },
-        "frame:robot/chassis/sim_realsense_d435_2_color": {
-          "visible": true
-        }
-      },
-      "topics": {
-        "/camera/camera/depth/color/points": {
-          "visible": false
-        },
-        "/camera/depth/points": {
-          "visible": true,
-          "colorField": "rgb",
-          "colorMode": "rgb",
-          "colorMap": "turbo"
-        },
-        "/sim/realsense/depth/points": {
-          "visible": true,
-          "colorField": "rgb",
-          "colorMode": "rgb",
-          "colorMap": "turbo"
-        },
-        "/sim/realsense2/depth/points": {
-          "visible": true,
-          "colorField": "rgb",
-          "colorMode": "rgb",
-          "colorMap": "turbo"
-        }
-      },
-      "layers": {
-        "grid": {
-          "visible": true,
-          "frameLocked": true,
-          "label": "Grid",
-          "instanceId": "955c5c51-01ee-4270-ac7b-df2de3e0cfba",
-          "layerId": "foxglove.Grid",
-          "size": 30,
-          "divisions": 30,
-          "lineWidth": 1,
-          "color": "#248eff",
-          "position": [
-            0,
-            0,
-            0
-          ],
-          "rotation": [
-            0,
-            0,
-            0
-          ]
-        }
-      },
-      "publish": {
-        "type": "point",
-        "poseTopic": "/move_base_simple/goal",
-        "pointTopic": "/clicked_point",
         "poseEstimateTopic": "/initialpose",
         "poseEstimateXDeviation": 0.5,
         "poseEstimateYDeviation": 0.5,
@@ -475,14 +357,14 @@
     "speed": 1
   },
   "layout": {
-    "first": "RawMessages!r2z55s",
+    "direction": "row",
+    "first": {
+      "first": "Publish!b3qov4",
+      "second": "RawMessages!4j4g8j9",
+      "direction": "column"
+    },
     "second": {
-      "first": {
-        "first": "3D!185ho2t",
-        "second": "3D!xzfbk4",
-        "direction": "column",
-        "splitPercentage": 55.543595263724434
-      },
+      "first": "3D!185ho2t",
       "second": {
         "first": "Teleop!1rfn0xj",
         "second": "Image!2c95gcu",
@@ -491,7 +373,6 @@
       "direction": "row",
       "splitPercentage": 63.34763948497854
     },
-    "direction": "row",
-    "splitPercentage": 25.272610647851184
+    "splitPercentage": 34.30749682337992
   }
 }
