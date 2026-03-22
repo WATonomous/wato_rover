@@ -22,6 +22,13 @@ ControlNode::ControlNode(): Node("control"), control_(robot::ControlCore(this->g
   );
 
   control_.initControlCore(lookahead_distance_, max_steering_angle_, steering_gain_, linear_velocity_);
+
+  enable_sub_ = this->create_subscription<std_msgs::msg::Bool>(
+    "~/enable", 10,
+    [this](const std_msgs::msg::Bool::SharedPtr msg) {
+      enabled_ = msg->data;
+      RCLCPP_INFO(this->get_logger(), "Controller %s", enabled_ ? "enabled" : "disabled");
+    });
 }
 
 void ControlNode::processParameters() {
@@ -67,6 +74,8 @@ void ControlNode::odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg)
 
 void ControlNode::followPath()
 {
+  if (!enabled_) return;
+
   if (control_.isPathEmpty())
   {
     RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 3000, "Path is empty. Waiting for new path.");

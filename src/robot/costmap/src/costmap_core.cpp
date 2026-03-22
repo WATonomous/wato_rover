@@ -41,7 +41,7 @@ void CostmapCore::initCostmap(
     width, height, resolution, inflation_radius, step_threshold, max_range);
 }
 
-void CostmapCore::updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud2::SharedPtr cloud) const
+void CostmapCore::updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud2::SharedPtr cloud, double pitch) const
 {
   const int w = costmap_data_->info.width;
   const int h = costmap_data_->info.height;
@@ -60,6 +60,10 @@ void CostmapCore::updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud
   sensor_msgs::PointCloud2ConstIterator<float> iter_y(*cloud, "y");
   sensor_msgs::PointCloud2ConstIterator<float> iter_z(*cloud, "z");
 
+  // Precompute pitch correction (rotate points around Y axis by -pitch to level the frame)
+  const float cos_p = std::cos(-pitch);
+  const float sin_p = std::sin(-pitch);
+
   // Pass 1: accumulate min/max z per grid cell
   for (; iter_x != iter_x.end(); ++iter_x, ++iter_y, ++iter_z) {
     float px = *iter_x;
@@ -67,6 +71,12 @@ void CostmapCore::updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud
     float pz = *iter_z;
 
     if (!std::isfinite(px) || !std::isfinite(py) || !std::isfinite(pz)) continue;
+
+    // Compensate for robot pitch: rotate (px, pz) to level frame
+    float corrected_x = px * cos_p + pz * sin_p;
+    float corrected_z = -px * sin_p + pz * cos_p;
+    px = corrected_x;
+    pz = corrected_z;
 
     if (std::hypot(px, py) > max_range_) continue;
 

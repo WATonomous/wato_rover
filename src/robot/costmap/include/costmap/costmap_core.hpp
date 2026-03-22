@@ -18,7 +18,7 @@ public:
     double resolution, int width, int height,
     double inflation_radius, double step_threshold, double max_range);
 
-  void updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud2::SharedPtr cloud) const;
+  void updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud2::SharedPtr cloud, double pitch = 0.0) const;
 
   nav_msgs::msg::OccupancyGrid::SharedPtr getCostmapData() const;
 

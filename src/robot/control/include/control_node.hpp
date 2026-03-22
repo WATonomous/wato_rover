@@ -5,6 +5,7 @@
 #include "nav_msgs/msg/path.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "geometry_msgs/msg/twist.hpp"
+#include "std_msgs/msg/bool.hpp"
 
 #include "control_core.hpp"
 
@@ -40,6 +41,10 @@ class ControlNode : public rclcpp::Node {
 
     // Timer
     rclcpp::TimerBase::SharedPtr timer_;
+
+    // Toggle subscriber — publish false to stop controller from publishing cmd_vel
+    rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr enable_sub_;
+    bool enabled_{true};
 
     // Path and robot state
     double robot_x_;
