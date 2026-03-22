@@ -4,9 +4,9 @@ costmap_node:
     costmap_topic: "/costmap"
 
     costmap:
-      resolution: 0.20        # meters per cell
-      width: 100               # cells (100 * 0.2 = 20m coverage)
-      height: 100              # cells
+      resolution: 0.30        # meters per cell
+      width: 67                # cells (67 * 0.3 ≈ 20m coverage)
+      height: 67               # cells
       inflation_radius: 0.5    # meters — buffer around obstacles
       step_threshold: 0.3      # meters — height change that counts as obstacle
       max_range: 10.0          # meters — ignore points beyond this distance

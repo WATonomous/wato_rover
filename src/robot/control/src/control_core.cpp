@@ -62,14 +62,15 @@ geometry_msgs::msg::Twist ControlCore::calculateControlCommand(double robot_x, d
     steering_angle += 2 * M_PI;
   }
 
-  // If the steering angle is greater than the limit, we do not move linearly
-  if (std::abs(steering_angle) > std::abs(max_steering_angle_)) {
+  double abs_steer = std::abs(steering_angle);
+  if (abs_steer > max_steering_angle_) {
     twist.linear.x = 0;
   } else {
-    twist.linear.x = linear_velocity_;
+    double scale = 1.0 - (abs_steer / max_steering_angle_) * 0.6;
+    twist.linear.x = linear_velocity_ * scale;
   }
 
-  // Limit the steering angle (optional, you could apply a controller here)
+  // Limit steering angle
   steering_angle = std::max(-max_steering_angle_, std::min(steering_angle, max_steering_angle_));
 
   // Set an angular velocity according to gain

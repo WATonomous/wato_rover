@@ -6,9 +6,9 @@ map_memory_node:
 
     # ms, rate at which the map should be published
     # for simplicity, this is also the rate the A* planner plans at
-    map_pub_rate: 3000
+    map_pub_rate: 1000
     # m, distance travelled by the robot at which the map will update
-    update_distance: 1.5
+    update_distance: 1.0
 
     global_map:
       resolution: 0.5
