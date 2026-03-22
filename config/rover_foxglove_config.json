@@ -260,7 +260,7 @@
           "label": "URDF",
           "layerId": "foxglove.Urdf",
           "sourceType": "url",
-          "url": "https://raw.githubusercontent.com/WATonomous/wato_rover/master/src/gazebo/launch/mars_env.urdf",
+          "url": "https://raw.githubusercontent.com/WATonomous/wato_rover/mar22_demo/src/gazebo/launch/mars_env.urdf",
           "filePath": "",
           "parameter": "",
           "topic": "",
