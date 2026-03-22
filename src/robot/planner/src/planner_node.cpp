@@ -115,11 +115,11 @@ void PlannerNode::timerCallback()
 
   // Check if we've timed out
   double elapsed = (now() - plan_start_time_).seconds();
-  // if (elapsed > plan_timeout_) {
-  //   RCLCPP_WARN(this->get_logger(), "Plan timed out after %.2f seconds. Resetting goal.", elapsed);
-  //   resetGoal();
-  //   return;
-  // }
+  if (elapsed > plan_timeout_) {
+    RCLCPP_WARN(this->get_logger(), "Plan timed out after %.2f seconds. Resetting goal.", elapsed);
+    resetGoal();
+    return;
+  }
 
   // Check if we reached the goal
   double distance = sqrt(pow(odom_x_ - current_goal_.point.x, 2) + pow(odom_y_ - current_goal_.point.y, 2));

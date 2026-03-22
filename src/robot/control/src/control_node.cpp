@@ -79,6 +79,7 @@ void ControlNode::followPath()
   if (control_.isPathEmpty())
   {
     RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 3000, "Path is empty. Waiting for new path.");
+    return;
   }
 
   // Calculate control commands
