@@ -677,9 +677,17 @@
                     </material>
                 </visual>
             </link>
-            <joint name='fl_whl_joint' type='fixed'>
+            <joint name='fl_whl_joint' type='revolute'>
+                <pose relative_to='fl_whl'/>
                 <parent>chassis</parent>
                 <child>fl_whl</child>
+                <axis>
+                    <xyz expressed_in='__model__'>0 1 0</xyz>
+                    <limit>
+                        <lower>-1.79769e+308</lower>
+                        <upper>1.79769e+308</upper>
+                    </limit>
+                </axis>
             </joint>
 
             <!-- Front-right visual wheel -->
@@ -703,9 +711,17 @@
                     </material>
                 </visual>
             </link>
-            <joint name='fr_whl_joint' type='fixed'>
+            <joint name='fr_whl_joint' type='revolute'>
+                <pose relative_to='fr_whl'/>
                 <parent>chassis</parent>
                 <child>fr_whl</child>
+                <axis>
+                    <xyz expressed_in='__model__'>0 1 0</xyz>
+                    <limit>
+                        <lower>-1.79769e+308</lower>
+                        <upper>1.79769e+308</upper>
+                    </limit>
+                </axis>
             </joint>
 
             <!-- Rear-left visual wheel -->
@@ -729,9 +745,17 @@
                     </material>
                 </visual>
             </link>
-            <joint name='rl_whl_joint' type='fixed'>
+            <joint name='rl_whl_joint' type='revolute'>
+                <pose relative_to='rl_whl'/>
                 <parent>chassis</parent>
                 <child>rl_whl</child>
+                <axis>
+                    <xyz expressed_in='__model__'>0 1 0</xyz>
+                    <limit>
+                        <lower>-1.79769e+308</lower>
+                        <upper>1.79769e+308</upper>
+                    </limit>
+                </axis>
             </joint>
 
             <!-- Rear-right visual wheel -->
@@ -755,9 +779,17 @@
                     </material>
                 </visual>
             </link>
-            <joint name='rr_whl_joint' type='fixed'>
+            <joint name='rr_whl_joint' type='revolute'>
+                <pose relative_to='rr_whl'/>
                 <parent>chassis</parent>
                 <child>rr_whl</child>
+                <axis>
+                    <xyz expressed_in='__model__'>0 1 0</xyz>
+                    <limit>
+                        <lower>-1.79769e+308</lower>
+                        <upper>1.79769e+308</upper>
+                    </limit>
+                </axis>
             </joint>
 
             <!--diff drive plugin-->
@@ -765,7 +797,11 @@
                 filename="ignition-gazebo-diff-drive-system"
                 name="ignition::gazebo::systems::DiffDrive">
                 <left_joint>left_wheel_joint</left_joint>
+                <left_joint>fl_whl_joint</left_joint>
+                <left_joint>rl_whl_joint</left_joint>
                 <right_joint>right_wheel_joint</right_joint>
+                <right_joint>fr_whl_joint</right_joint>
+                <right_joint>rr_whl_joint</right_joint>
                 <wheel_separation>1.2</wheel_separation>
                 <wheel_radius>0.10</wheel_radius>
                 <odom_publish_frequency>1</odom_publish_frequency>
