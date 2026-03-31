@@ -15,6 +15,9 @@
 #ifndef MAP_MEMORY_CORE_HPP_
 #define MAP_MEMORY_CORE_HPP_
 
+#include <string>
+#include <vector>
+
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "rclcpp/rclcpp.hpp"
 
@@ -33,12 +36,21 @@ public:
 
   bool robotToMap(double rx, double ry, int & mx, int & my);
 
+  // Load elevation cost grid from a preprocessed CSV file
+  void loadElevationGrid(const std::string & csv_path);
+
+  // Apply elevation costs as a base layer on the global map (call once after init)
+  void applyElevationLayer();
+
   // Retrieves map data
   nav_msgs::msg::OccupancyGrid::SharedPtr getMapData() const;
 
 private:
   nav_msgs::msg::OccupancyGrid::SharedPtr global_map_;
   rclcpp::Logger logger_;
+
+  std::vector<int8_t> elevation_grid_;
+  bool elevation_loaded_ = false;
 };
 
 }  // namespace robot

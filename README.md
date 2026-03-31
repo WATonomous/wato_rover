@@ -50,7 +50,7 @@ The `ros_gz_bridge` translates Ignition messages to ROS2 topics, bridging `/cmd_
 - **localization**: Runs an Extended Kalman Filter (EKF) to fuse (simulated) noisy GPS and IMU data into a smooth, filtered odometry estimate. Outputs robot pose for downstream modules.
 
 ### Perception & Mapping
-- **costmap**: Converts RGBD camera point clouds into a local 2D occupancy grid centered on the robot. Marks obstacles and inflates them for safety margins.
+- **costmap**: Converts RGBD camera point clouds into a local 2D occupancy grid centered on the robot. Marks obstacles and inflates them for safety margins. Includes elevated cost map of the URC terrain
 - **map_memory**: Stitches together local costmaps into a persistent global map as the rover explores. Only updates when the robot moves beyond a threshold distance to reduce computational load.
 - **yolo_inference**: Runs YOLOv8 object detection (ONNX runtime) on camera images to detect objects like bottles and mallets. Publishes annotated images with bounding boxes.
 

@@ -42,6 +42,14 @@ MapMemoryNode::MapMemoryNode()
 
   map_memory_.initMapMemory(resolution_, width_, height_, origin_);
 
+  // Load elevation cost layer if path is provided
+  this->declare_parameter<std::string>("elevation_grid_path", "");
+  std::string elev_path = this->get_parameter("elevation_grid_path").as_string();
+  if (!elev_path.empty()) {
+    map_memory_.loadElevationGrid(elev_path);
+    map_memory_.applyElevationLayer();
+  }
+
   RCLCPP_INFO(this->get_logger(), "Initialized Map Memory Core");
 }
 
