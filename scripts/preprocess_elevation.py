@@ -1,4 +1,17 @@
 #!/usr/bin/env python3
+# Copyright (c) 2025-present WATonomous. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 """Preprocess a .las elevation file into a CSV cost grid for the global costmap.
 
 Reads a LAS point cloud, bins points into a 2D grid, computes per-cell elevation
@@ -22,26 +35,38 @@ import numpy as np
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Convert .las to elevation cost grid CSV")
+    parser = argparse.ArgumentParser(
+        description="Convert .las to elevation cost grid CSV"
+    )
     parser.add_argument("--input", required=True, help="Path to .las file")
     parser.add_argument("--output", required=True, help="Output CSV path")
     parser.add_argument("--width", type=int, default=60, help="Grid width in cells")
     parser.add_argument("--height", type=int, default=60, help="Grid height in cells")
     parser.add_argument("--resolution", type=float, default=0.5, help="Meters per cell")
-    parser.add_argument("--origin_x", type=float, default=-15.0, help="Grid origin X in sim_world")
-    parser.add_argument("--origin_y", type=float, default=-15.0, help="Grid origin Y in sim_world")
-    
+    parser.add_argument(
+        "--origin_x", type=float, default=-15.0, help="Grid origin X in sim_world"
+    )
+    parser.add_argument(
+        "--origin_y", type=float, default=-15.0, help="Grid origin Y in sim_world"
+    )
+
     # Coordinates on LAS are UTM so we subtract the center of the LAS bounds to get sim_world coordinates in meters
     parser.add_argument(
-        "--las_offset_x", type=float, default=None,
+        "--las_offset_x",
+        type=float,
+        default=None,
         help="LAS X coordinate that maps to sim_world X=0. Default: center of LAS bounds.",
     )
     parser.add_argument(
-        "--las_offset_y", type=float, default=None,
+        "--las_offset_y",
+        type=float,
+        default=None,
         help="LAS Y coordinate that maps to sim_world Y=0. Default: center of LAS bounds.",
     )
     parser.add_argument(
-        "--max_slope", type=float, default=2.0,
+        "--max_slope",
+        type=float,
+        default=2.0,
         help="Elevation range (m) within a cell that saturates to max cost (89)",
     )
     args = parser.parse_args()
@@ -60,9 +85,19 @@ def main():
     print(f"  Z: {z.min():.2f} to {z.max():.2f}")
 
     # Determine LAS-to-sim_world offset (default: center of LAS bounding box)
-    las_offset_x = args.las_offset_x if args.las_offset_x is not None else (x.min() + x.max()) / 2.0
-    las_offset_y = args.las_offset_y if args.las_offset_y is not None else (y.min() + y.max()) / 2.0
-    print(f"LAS offset (sim_world origin in LAS coords): ({las_offset_x:.2f}, {las_offset_y:.2f})")
+    las_offset_x = (
+        args.las_offset_x
+        if args.las_offset_x is not None
+        else (x.min() + x.max()) / 2.0
+    )
+    las_offset_y = (
+        args.las_offset_y
+        if args.las_offset_y is not None
+        else (y.min() + y.max()) / 2.0
+    )
+    print(
+        f"LAS offset (sim_world origin in LAS coords): ({las_offset_x:.2f}, {las_offset_y:.2f})"
+    )
 
     # Transform LAS coordinates to sim_world frame
     sx = x - las_offset_x
@@ -88,7 +123,10 @@ def main():
 
     if mask.sum() == 0:
         print("WARNING: No LAS points fall within the grid bounds!", file=sys.stderr)
-        print("Check --las_offset_x/y, --origin_x/y, and grid dimensions.", file=sys.stderr)
+        print(
+            "Check --las_offset_x/y, --origin_x/y, and grid dimensions.",
+            file=sys.stderr,
+        )
 
     # Compute per-cell elevation range (max_z - min_z) as slope proxy
     flat_idx = cell_y * width + cell_x
@@ -121,8 +159,10 @@ def main():
     # Stats
     cells_with_data = has_points.sum()
     print(f"Cells with elevation data: {cells_with_data} / {total_cells}")
-    print(f"Cost distribution: min={cost_grid.min()}, max={cost_grid.max()}, "
-          f"mean={cost_grid[has_points].mean():.1f}")
+    print(
+        f"Cost distribution: min={cost_grid.min()}, max={cost_grid.max()}, "
+        f"mean={cost_grid[has_points].mean():.1f}"
+    )
 
     # Write CSV output
     with open(args.output, "w") as f:
