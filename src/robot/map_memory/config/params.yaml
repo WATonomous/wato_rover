@@ -4,6 +4,9 @@ map_memory_node:
     # odom_topic: "/odom/filtered" # odometry topic with which map memory node subscribes to
     map_topic: "/map" # map topic with which the map will be published to
 
+    # path to preprocessed elevation cost grid CSV (empty string to disable)
+    elevation_grid_path: "/elevation_grid.csv"
+
     # ms, rate at which the map should be published
     # for simplicity, this is also the rate the A* planner plans at
     map_pub_rate: 3000

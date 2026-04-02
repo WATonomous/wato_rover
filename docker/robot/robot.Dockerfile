@@ -48,6 +48,22 @@ RUN apt-get -qq autoremove -y && apt-get -qq autoclean && apt-get -qq clean && \
 ################################ Build ################################
 FROM dependencies AS build
 
+# Install Python deps and preprocess elevation data into a cost grid CSV
+RUN apt-get update && apt-get install -y --no-install-recommends python3-pip && \
+    rm -rf /var/lib/apt/lists/*
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY assets/fargate_utah_mdrs.las /tmp/fargate_utah_mdrs.las
+COPY scripts/preprocess_elevation.py /tmp/preprocess_elevation.py
+RUN python3 /tmp/preprocess_elevation.py \
+    --input /tmp/fargate_utah_mdrs.las \
+    --output /elevation_grid.csv \
+    --width 60 --height 60 --resolution 0.5 \
+    --origin_x -15.0 --origin_y -15.0 \
+    --max_slope 2.0 \
+    && rm -f /tmp/fargate_utah_mdrs.las /tmp/preprocess_elevation.py
+
 # Build ROS2 packages
 WORKDIR ${AMENT_WS}
 RUN . /opt/ros/"$ROS_DISTRO"/setup.sh && \

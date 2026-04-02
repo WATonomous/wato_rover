@@ -15,6 +15,9 @@
 #include "map_memory/map_memory_core.hpp"
 
 #include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 namespace robot
 {
@@ -83,11 +86,16 @@ void MapMemoryCore::updateMap(
       int current_global_cost = (global_val < 0) ? 0 : global_val;
       int local_cost = static_cast<int>(occ_val);
 
-      // Merge by taking the maximum:
+      // Merge by taking the maximum of obstacle cost, local cost, and elevation cost
       int merged_cost = std::max(current_global_cost, local_cost);
 
-      // If merged_cost is still 0 but occ_val is not, it means local cost was 0 or unknown
-      // In that case, we might want to handle it differently; for simple max, we just do this:
+      // Ensure elevation costs are never erased by free-space local readings
+      if (elevation_loaded_) {
+        int global_idx = gy * global_map_->info.width + gx;
+        int elev_cost = static_cast<int>(elevation_grid_[global_idx]);
+        merged_cost = std::max(merged_cost, elev_cost);
+      }
+
       global_val = static_cast<int8_t>(merged_cost);
     }
   }
@@ -114,6 +122,92 @@ bool MapMemoryCore::robotToMap(double rx, double ry, int & mx, int & my)
     return false;
   }
   return true;
+}
+
+void MapMemoryCore::loadElevationGrid(const std::string & csv_path)
+{
+  std::ifstream file(csv_path);
+  // Checking if the file was opened successfully
+  if (!file.is_open()) {
+    RCLCPP_ERROR(logger_, "Failed to open elevation grid file: %s", csv_path.c_str());
+    return;
+  }
+
+  // Read header: width,height,resolution,origin_x,origin_y
+  std::string header_line;
+  std::getline(file, header_line);  // loads the file first line (header) into a string
+  std::istringstream header_ss(
+    header_line);  // like ifstream but for strings, allows us to parse the header line easily
+
+  int csv_width;
+  int csv_height;
+
+  double csv_res;
+  double csv_ox;
+  double csv_oy;
+
+  char comma;
+
+  header_ss >> csv_width >> comma >> csv_height >> comma >> csv_res >> comma >> csv_ox >> comma >> csv_oy;
+
+  int map_width = static_cast<int>(global_map_->info.width);
+  int map_height = static_cast<int>(global_map_->info.height);
+
+  // Check if dimensions match the global map
+  if (csv_width != map_width || csv_height != map_height) {
+    RCLCPP_ERROR(
+      logger_,
+      "Elevation grid dimensions (%d x %d) don't match global map (%d x %d)",
+      csv_width,
+      csv_height,
+      map_width,
+      map_height);
+    return;
+  }
+
+  // Read cost values
+  std::string data_line;
+  std::getline(file, data_line);
+  std::istringstream data_ss(data_line);
+
+  int total_cells = map_width * map_height;
+  elevation_grid_.resize(total_cells, 0);
+
+  for (int i = 0; i < total_cells;
+       i++)  // Do you think this formatting is better than the original? I find it more readable. --- IGNORE ---
+  // Nah lowkey this looks so ahh but this is what M Stachowsky used to do
+  {
+    int val;
+    data_ss >> val;
+    if (i < total_cells - 1) {
+      data_ss >> comma;
+    }
+    elevation_grid_[i] = static_cast<int8_t>(val);
+  }
+
+  elevation_loaded_ = true;
+  RCLCPP_INFO(logger_, "Loaded elevation grid (%d x %d) from %s", csv_width, csv_height, csv_path.c_str());
+}
+
+// Apply elevation costs as a base layer on the global map (call once after init)
+void MapMemoryCore::applyElevationLayer()
+{
+  // Check if elevation grid is loaded
+  if (!elevation_loaded_) {
+    RCLCPP_WARN(logger_, "Cannot apply elevation layer: no elevation grid loaded");
+    return;
+  }
+
+  int total_cells = global_map_->info.width * global_map_->info.height;
+
+  for (int i = 0; i < total_cells; ++i) {
+    // Some have -100 so we need to not update those
+    if (elevation_grid_[i] > 0) {
+      global_map_->data[i] = elevation_grid_[i];
+    }
+  }
+
+  RCLCPP_INFO(logger_, "Applied elevation cost layer to global map");
 }
 
 // Retrieves map data
