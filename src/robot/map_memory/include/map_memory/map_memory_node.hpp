@@ -55,6 +55,8 @@ private:
   std::string local_costmap_topic_;
   std::string odom_topic_;
   std::string map_topic_;
+  std::string expected_local_costmap_frame_;
+  std::string fusion_frame_;
 
   int map_pub_rate_;
 
@@ -64,15 +66,19 @@ private:
   geometry_msgs::msg::Pose origin_;
 
   double update_distance_;
+  int min_update_period_ms_;
+  double blend_alpha_;
 
   // To keep track of robot pose in sim frame
   double robot_x_;  // [m]
   double robot_y_;  // [m]
   double robot_theta_;  // [rad]
+  bool has_odom_;
 
   // Last position used to check if robot moved > distance_
   double last_robot_x_;
   double last_robot_y_;
+  rclcpp::Time last_update_time_;
 };
 
 #endif

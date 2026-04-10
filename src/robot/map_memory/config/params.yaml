@@ -4,21 +4,34 @@ map_memory_node:
     # odom_topic: "/odom/filtered" # odometry topic with which map memory node subscribes to
     map_topic: "/map" # map topic with which the map will be published to
 
+    map_fusion:
+      # local costmap frame expected by map_memory fusion logic
+      # leave empty to disable strict frame checking
+      expected_local_costmap_frame: ""
+      # world frame in which global map is fused and published
+      fusion_frame: "sim_world"
+      # Blend factor for fusing local costs into global memory map.
+      # Higher values follow costmap inflation faster, lower values smooth more.
+      blend_alpha: 0.35
+
     # ms, rate at which the map should be published
     # for simplicity, this is also the rate the A* planner plans at
     map_pub_rate: 3000
     # m, distance travelled by the robot at which the map will update
     update_distance: 1.5
+    # ms, force an update after this period even if robot has not moved
+    min_update_period_ms: 1500
 
     global_map:
-      resolution: 0.5
-      width: 60
-      height: 60
+      # Match local costmap geometry so /map visually aligns with /costmap.
+      resolution: 0.4
+      width: 120
+      height: 120
 
       origin:
         position:
-          x: -15.0 # given by -1 * width * resolution / 2
-          y: -15.0 # given by -1 * height * resolution / 2
+          x: -24.0 # given by -1 * width * resolution / 2
+          y: -24.0 # given by -1 * height * resolution / 2
           z: 0.3 # height offset to render map above URDF mesh (in meters)
         orientation:
           w: 1.0

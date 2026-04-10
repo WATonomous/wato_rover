@@ -15,6 +15,8 @@
 #include "map_memory/map_memory_core.hpp"
 
 #include <algorithm>
+#include <cmath>
+#include <vector>
 
 namespace robot
 {
@@ -22,7 +24,13 @@ namespace robot
 MapMemoryCore::MapMemoryCore(const rclcpp::Logger & logger)
 : global_map_(std::make_shared<nav_msgs::msg::OccupancyGrid>())
 , logger_(logger)
+, blend_alpha_(0.35)
 {}
+
+void MapMemoryCore::setFusionParameters(double blend_alpha)
+{
+  blend_alpha_ = std::clamp(blend_alpha, 0.0, 1.0);
+}
 
 void MapMemoryCore::initMapMemory(double resolution, int width, int height, geometry_msgs::msg::Pose origin)
 {
@@ -46,6 +54,10 @@ void MapMemoryCore::updateMap(
   unsigned int local_w = local_costmap->info.width;
   unsigned int local_h = local_costmap->info.height;
   const auto & local_data = local_costmap->data;
+
+  const size_t global_cells = static_cast<size_t>(global_map_->info.width) * global_map_->info.height;
+  std::vector<int> observed_sum(global_cells, 0);
+  std::vector<int> observed_count(global_cells, 0);
 
   // For each cell in local costmap, transform to sim_world
   for (unsigned int j = 0; j < local_h; ++j) {
@@ -76,20 +88,22 @@ void MapMemoryCore::updateMap(
         continue;
       }
 
-      // --- Take the max cost instead of direct overwrite ---
-      int8_t & global_val = global_map_->data[gy * global_map_->info.width + gx];
-
-      // If the global cell is unknown (-1), treat that as 0 when taking max.
-      int current_global_cost = (global_val < 0) ? 0 : global_val;
-      int local_cost = static_cast<int>(occ_val);
-
-      // Merge by taking the maximum:
-      int merged_cost = std::max(current_global_cost, local_cost);
-
-      // If merged_cost is still 0 but occ_val is not, it means local cost was 0 or unknown
-      // In that case, we might want to handle it differently; for simple max, we just do this:
-      global_val = static_cast<int8_t>(merged_cost);
+      const size_t global_index = static_cast<size_t>(gy) * global_map_->info.width + gx;
+      observed_sum[global_index] += static_cast<int>(occ_val);
+      observed_count[global_index] += 1;
     }
+  }
+
+  // Blend each observed cell toward the local costmap value, preserving inflation gradients.
+  for (size_t idx = 0; idx < global_cells; ++idx) {
+    if (observed_count[idx] == 0) {
+      continue;
+    }
+
+    const double observed_cost = static_cast<double>(observed_sum[idx]) / observed_count[idx];
+    const double current_cost = std::max(0, static_cast<int>(global_map_->data[idx]));
+    const double fused_cost = (1.0 - blend_alpha_) * current_cost + blend_alpha_ * observed_cost;
+    global_map_->data[idx] = static_cast<int8_t>(std::round(std::clamp(fused_cost, 0.0, 100.0)));
   }
 }
 

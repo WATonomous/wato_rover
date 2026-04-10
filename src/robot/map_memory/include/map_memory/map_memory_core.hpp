@@ -31,6 +31,8 @@ public:
   void updateMap(
     nav_msgs::msg::OccupancyGrid::SharedPtr local_costmap, double robot_x, double robot_y, double robot_theta);
 
+  void setFusionParameters(double blend_alpha);
+
   bool robotToMap(double rx, double ry, int & mx, int & my);
 
   // Retrieves map data
@@ -39,6 +41,7 @@ public:
 private:
   nav_msgs::msg::OccupancyGrid::SharedPtr global_map_;
   rclcpp::Logger logger_;
+  double blend_alpha_;
 };
 
 }  // namespace robot

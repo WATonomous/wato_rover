@@ -95,7 +95,7 @@ void CostmapCore::updateCostmapFromPointCloud(const sensor_msgs::msg::PointCloud
 
   // Downsample: only process every Nth point to reduce computation
   // A 640x480 cloud has 307k points, we only need ~256-500 for a laser-scan-like result
-  const int point_skip = 20;  // Process every 20th point (307k/20 ≈ 15k points checked)
+  const int point_skip = 10;  // Process every 10th point (307k/10 ≈ 30k points checked)
 
   int point_count = 0;
 
